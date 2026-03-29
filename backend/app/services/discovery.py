@@ -5,6 +5,7 @@ from collections.abc import Iterable
 from sqlalchemy.orm import Session
 
 from app.core.enums import BusinessState, ChannelType, SendEligibility, SourceType, VerificationStatus
+from app.integrations.discovery.directories import DirectoryClient
 from app.integrations.discovery.search import SearchClient, SearchResult
 from app.integrations.discovery.websites import WebsiteClient
 from app.models.domain import Business, BusinessLocation, ContactPoint, LeadSegment, SourceRecord, Website
@@ -258,9 +259,11 @@ async def enrich_business_from_secondary_sources(
     business: Business,
     search_client: SearchClient | None = None,
     website_client: WebsiteClient | None = None,
+    directory_client: DirectoryClient | None = None,
 ) -> dict[str, int]:
     search_client = search_client or SearchClient()
     website_client = website_client or WebsiteClient()
+    directory_client = directory_client or DirectoryClient()
 
     queries = _search_queries(business)
     seen_urls: set[str] = set()
@@ -325,6 +328,59 @@ async def enrich_business_from_secondary_sources(
                         source_url=social_link,
                         raw_payload={"discovered_from": extraction.final_url},
                         parser_version="website-social-v1",
+                    )
+                    source_count += 1
+            elif source_type in {SourceType.JUSTDIAL, SourceType.INDIAMART, SourceType.SEARCH} and is_directory_domain(result.url):
+                extraction = await directory_client.extract(result.url)
+                if extraction is None:
+                    continue
+
+                _upsert_source(
+                    db,
+                    business=business,
+                    source_type=source_type,
+                    source_id=None,
+                    source_url=extraction.final_url,
+                    raw_payload={
+                        "title": result.title,
+                        "snippet": result.snippet,
+                        "query": query,
+                        "notes": extraction.notes,
+                    },
+                    parser_version="directory-v1",
+                )
+                for email in extraction.emails:
+                    _upsert_contact(db, business=business, channel=ChannelType.EMAIL, value=email, source_url=extraction.final_url, confidence=0.75)
+                    contact_count += 1
+                for phone in extraction.phones:
+                    _upsert_contact(db, business=business, channel=ChannelType.PHONE, value=phone, source_url=extraction.final_url, confidence=0.7)
+                    contact_count += 1
+                for phone in extraction.whatsapp_numbers:
+                    _upsert_contact(
+                        db,
+                        business=business,
+                        channel=ChannelType.WHATSAPP,
+                        value=phone,
+                        source_url=extraction.final_url,
+                        whatsapp_likely=True,
+                        confidence=0.8,
+                    )
+                    contact_count += 1
+                for website_url in extraction.website_urls:
+                    _upsert_website(db, business=business, url=website_url, audit_summary=extraction.notes)
+                    website_count += 1
+                    business.normalized_domain = business.normalized_domain or normalize_domain(website_url)
+                    if business.state == BusinessState.NO_WEBSITE:
+                        business.state = BusinessState.HAS_WEBSITE_WEAK
+                for social_link in extraction.social_links:
+                    _upsert_source(
+                        db,
+                        business=business,
+                        source_type=_source_type_from_url(social_link),
+                        source_id=None,
+                        source_url=social_link,
+                        raw_payload={"discovered_from": extraction.final_url},
+                        parser_version="directory-social-v1",
                     )
                     source_count += 1
 

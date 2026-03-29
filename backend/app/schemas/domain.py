@@ -37,6 +37,19 @@ class PlacesIngestResponse(BaseModel):
     total_places: int
 
 
+class PlacesMatrixRequest(BaseModel):
+    cities: list[str]
+    categories: list[str]
+    page_size: int = 10
+
+
+class PlacesMatrixResponse(BaseModel):
+    queries_run: int
+    imported: int
+    updated: int
+    total_places: int
+
+
 class BusinessRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
