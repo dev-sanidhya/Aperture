@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+from urllib.parse import urlparse
 
 
 SPACE_RE = re.compile(r"\s+")
@@ -28,3 +29,31 @@ def normalize_domain(url_or_domain: str) -> str:
     value = value.split("/", 1)[0]
     return value.removeprefix("www.")
 
+
+DIRECTORY_DOMAINS = {
+    "justdial.com",
+    "indiamart.com",
+    "sulekha.com",
+    "tradeindia.com",
+}
+
+SOCIAL_DOMAINS = {
+    "instagram.com",
+    "facebook.com",
+    "linkedin.com",
+}
+
+
+def hostname(url: str) -> str:
+    host = urlparse(url).netloc.lower()
+    if host.startswith("www."):
+        host = host[4:]
+    return host
+
+
+def is_directory_domain(url: str) -> bool:
+    return hostname(url) in DIRECTORY_DOMAINS
+
+
+def is_social_domain(url: str) -> bool:
+    return hostname(url) in SOCIAL_DOMAINS

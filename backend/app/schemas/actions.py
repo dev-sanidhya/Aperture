@@ -11,3 +11,16 @@ class DraftSendRequest(BaseModel):
     draft_message_id: str
     approve: bool = True
 
+
+class EnrichmentResponse(BaseModel):
+    sources_added: int
+    contacts_added: int
+    websites_added: int
+
+
+class PipelineRunResponse(BaseModel):
+    sources_added: int
+    contacts_added: int
+    websites_added: int
+    score: float
+    evidence_pack_id: str

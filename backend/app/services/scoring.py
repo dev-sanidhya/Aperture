@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from sqlalchemy.orm import Session
 
-from app.core.enums import BusinessState, ChannelType
-from app.models.domain import Business, ContactPoint, OpportunityScore
+from app.core.enums import BusinessState, ChannelType, SourceType
+from app.models.domain import Business, ContactPoint, OpportunityScore, SourceRecord, Website
 
 
 def compute_score(db: Session, business: Business) -> OpportunityScore:
     contacts = db.query(ContactPoint).filter(ContactPoint.business_id == business.id).all()
+    sources = db.query(SourceRecord).filter(SourceRecord.business_id == business.id).all()
+    websites = db.query(Website).filter(Website.business_id == business.id).all()
     reasons: dict[str, float] = {}
     total = 0.0
 
@@ -26,9 +28,17 @@ def compute_score(db: Session, business: Business) -> OpportunityScore:
         reasons["whatsapp_ready"] = 12
         total += 12
 
+    if any(source.source_type in {SourceType.JUSTDIAL, SourceType.INDIAMART} for source in sources):
+        reasons["directory_presence"] = 8
+        total += 8
+
     if business.category:
         reasons["category_present"] = 8
         total += 8
+
+    if websites and any(website.audit_summary for website in websites):
+        reasons["site_audit_available"] = 10
+        total += 10
 
     score = db.query(OpportunityScore).filter(OpportunityScore.business_id == business.id).one_or_none()
     if score is None:
@@ -41,4 +51,3 @@ def compute_score(db: Session, business: Business) -> OpportunityScore:
     business.priority_score = total
     db.flush()
     return score
-

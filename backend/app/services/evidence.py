@@ -2,16 +2,22 @@ from __future__ import annotations
 
 from sqlalchemy.orm import Session
 
-from app.models.domain import Business, ContactPoint, EvidencePack, Website
+from app.core.enums import SourceType
+from app.models.domain import Business, ContactPoint, EvidencePack, SourceRecord, Website
 
 
 def build_basic_evidence_pack(db: Session, business: Business) -> EvidencePack:
     contacts = db.query(ContactPoint).filter(ContactPoint.business_id == business.id).all()
     websites = db.query(Website).filter(Website.business_id == business.id).all()
+    sources = db.query(SourceRecord).filter(SourceRecord.business_id == business.id).all()
+    has_directory_presence = any(source.source_type in {SourceType.JUSTDIAL, SourceType.INDIAMART} for source in sources)
 
     if business.state.value == "NO_WEBSITE":
         observed_issue = "The business does not appear to have a direct website presence."
-        consequence = "Customers depend on third-party listings instead of contacting the business directly."
+        if has_directory_presence:
+            consequence = "Customers depend on directory listings instead of reaching the business through a direct branded channel."
+        else:
+            consequence = "Customers depend on third-party listings instead of contacting the business directly."
     elif websites:
         observed_issue = websites[0].audit_summary or "The website likely creates friction for enquiries or trust."
         consequence = "Visitors may drop without converting into direct enquiries."
@@ -31,6 +37,8 @@ def build_basic_evidence_pack(db: Session, business: Business) -> EvidencePack:
         evidence_json={
             "website_count": len(websites),
             "contact_count": len(contacts),
+            "source_count": len(sources),
+            "directory_presence": has_directory_presence,
             "category": business.category,
             "city": business.city,
         },
@@ -39,4 +47,3 @@ def build_basic_evidence_pack(db: Session, business: Business) -> EvidencePack:
     db.add(evidence)
     db.flush()
     return evidence
-

@@ -7,6 +7,7 @@ from app.core.db import session_scope
 from app.core.enums import AIRunJobType
 from app.models.domain import Business, Campaign, DraftMessage, ReplyEvent
 from app.services.campaigns import materialize_campaign_members
+from app.services.discovery import enrich_business_by_id
 from app.services.dispatch import dispatch_draft
 from app.services.evidence import build_basic_evidence_pack
 from app.services.openclaw_jobs import run_openclaw_job
@@ -46,6 +47,14 @@ def run_lead_enrichment(business_id: str) -> None:
 
 
 @dramatiq.actor(broker=broker)
+def enrich_secondary_sources(business_id: str) -> None:
+    with session_scope() as db:
+        import asyncio
+
+        asyncio.run(enrich_business_by_id(db, business_id))
+
+
+@dramatiq.actor(broker=broker)
 def compute_business_score(business_id: str) -> None:
     with session_scope() as db:
         business = db.query(Business).filter(Business.id == business_id).one()
@@ -61,6 +70,22 @@ def create_evidence_pack(business_id: str) -> None:
             .filter(Business.id == business_id)
             .one()
         )
+        build_basic_evidence_pack(db, business)
+
+
+@dramatiq.actor(broker=broker)
+def run_full_lead_pipeline(business_id: str) -> None:
+    with session_scope() as db:
+        import asyncio
+
+        business = (
+            db.query(Business)
+            .options(joinedload(Business.segment), joinedload(Business.contacts), joinedload(Business.websites))
+            .filter(Business.id == business_id)
+            .one()
+        )
+        asyncio.run(enrich_business_by_id(db, business_id))
+        compute_score(db, business)
         build_basic_evidence_pack(db, business)
 
 

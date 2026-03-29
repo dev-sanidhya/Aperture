@@ -10,10 +10,11 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }
 authors = [
-  { name = "OpenAI Codex" },
+  { name = "wannabeaquant" },
 ]
 dependencies = [
   "alembic>=1.16.0",
+  "beautifulsoup4>=4.12.3",
   "boto3>=1.38.18",
   "dramatiq>=1.17.1",
   "fastapi>=0.115.12",
