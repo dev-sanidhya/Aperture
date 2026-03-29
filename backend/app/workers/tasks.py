@@ -7,6 +7,7 @@ from app.core.db import session_scope
 from app.core.enums import AIRunJobType
 from app.models.domain import Business, Campaign, DraftMessage, ReplyEvent
 from app.services.campaigns import materialize_campaign_members
+from app.services.campaign_execution import process_campaign
 from app.services.discovery import enrich_business_by_id
 from app.services.dispatch import dispatch_draft
 from app.services.evidence import build_basic_evidence_pack
@@ -94,6 +95,13 @@ def launch_campaign_members(campaign_id: str) -> None:
     with session_scope() as db:
         campaign = db.query(Campaign).filter(Campaign.id == campaign_id).one()
         materialize_campaign_members(db, campaign)
+
+
+@dramatiq.actor(broker=broker)
+def process_campaign_queue(campaign_id: str) -> None:
+    with session_scope() as db:
+        campaign = db.query(Campaign).filter(Campaign.id == campaign_id).one()
+        process_campaign(db, campaign)
 
 
 @dramatiq.actor(broker=broker)

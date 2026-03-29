@@ -8,6 +8,7 @@ from app.core.enums import CampaignStatus
 from app.models.domain import Campaign
 from app.schemas.api import GenericMessage
 from app.schemas.domain import CampaignCreate, CampaignRead
+from app.services.campaign_execution import process_campaign
 from app.services.campaigns import materialize_campaign_members
 
 
@@ -43,3 +44,15 @@ def launch_campaign(campaign_id: str, db: Session = Depends(get_db)) -> GenericM
     campaign.status = CampaignStatus.READY
     db.commit()
     return GenericMessage(message=f"Campaign {campaign.name} queued for launch with {count} members.")
+
+
+@router.post("/{campaign_id}/process", response_model=GenericMessage)
+def process_campaign_route(campaign_id: str, db: Session = Depends(get_db)) -> GenericMessage:
+    campaign = db.query(Campaign).filter(Campaign.id == campaign_id).one_or_none()
+    if campaign is None:
+        raise HTTPException(status_code=404, detail="Campaign not found.")
+    result = process_campaign(db, campaign)
+    db.commit()
+    return GenericMessage(
+        message=f"Campaign {campaign.name} processed: {result['processed']} handled, {result['sent']} sent, {result['blocked']} blocked."
+    )

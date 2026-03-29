@@ -155,6 +155,9 @@ class CampaignMember(Base, UUIDMixin, TimestampMixin):
     business_id: Mapped[str] = mapped_column(ForeignKey("businesses.id", ondelete="CASCADE"), nullable=False)
     sequence_step: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     state: Mapped[str] = mapped_column(String(64), default="queued", nullable=False)
+    next_due_at: Mapped[str | None] = mapped_column(DateTime(timezone=True))
+    last_sent_at: Mapped[str | None] = mapped_column(DateTime(timezone=True))
+    last_reply_at: Mapped[str | None] = mapped_column(DateTime(timezone=True))
 
 
 class MessageTemplate(Base, UUIDMixin, TimestampMixin):
@@ -187,6 +190,7 @@ class DraftMessage(Base, UUIDMixin, TimestampMixin):
     evidence_pack_id: Mapped[str] = mapped_column(ForeignKey("evidence_packs.id", ondelete="CASCADE"), nullable=False)
     ai_run_id: Mapped[str | None] = mapped_column(ForeignKey("ai_runs.id", ondelete="SET NULL"))
     channel: Mapped[CampaignChannel] = mapped_column(Enum(CampaignChannel), nullable=False)
+    sequence_step: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     subject: Mapped[str | None] = mapped_column(String(255))
     body: Mapped[str] = mapped_column(Text, nullable=False)
     template_version: Mapped[str] = mapped_column(String(64), nullable=False)

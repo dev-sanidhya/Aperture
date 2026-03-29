@@ -14,7 +14,9 @@ def dispatch_draft(business: Business, draft: DraftMessage) -> SendAttempt:
     key = idempotency_key(business, draft)
     if draft.channel == CampaignChannel.EMAIL:
         email_contact = next((c for c in business.contacts if c.channel.value == "email"), None)
-        to_email = email_contact.value if email_contact else "unknown@example.com"
+        if email_contact is None:
+            raise ValueError("No eligible email contact found for business.")
+        to_email = email_contact.value
         result = SESClient().send_email(SESDispatchRequest(to_email=to_email, subject=draft.subject or "", body=draft.body))
         return SendAttempt(
             draft_message_id=draft.id,
@@ -28,7 +30,9 @@ def dispatch_draft(business: Business, draft: DraftMessage) -> SendAttempt:
         )
 
     phone_contact = next((c for c in business.contacts if c.channel.value == "whatsapp"), None)
-    to_number = phone_contact.value if phone_contact else ""
+    if phone_contact is None:
+        raise ValueError("No eligible WhatsApp contact found for business.")
+    to_number = phone_contact.value
     result = TwilioWhatsAppClient().send_whatsapp(TwilioWhatsAppDispatchRequest(to_number=to_number, body=draft.body))
     return SendAttempt(
         draft_message_id=draft.id,

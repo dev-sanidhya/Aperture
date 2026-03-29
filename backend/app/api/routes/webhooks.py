@@ -5,17 +5,33 @@ from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_db
 from app.core.enums import ProviderKind, ReplyIntent
-from app.models.domain import ReplyEvent
+from app.models.domain import ReplyEvent, SendAttempt
 from app.schemas.api import GenericMessage
 
 
 router = APIRouter(prefix="/webhooks", tags=["webhooks"])
 
 
+def _resolve_business_id(db: Session, payload: dict, provider_kind: ProviderKind) -> str | None:
+    if payload.get("business_id"):
+        return payload["business_id"]
+
+    provider_message_id = payload.get("provider_message_id") or payload.get("MessageSid") or payload.get("messageId")
+    if provider_message_id:
+        attempt = (
+            db.query(SendAttempt)
+            .filter(SendAttempt.provider_kind == provider_kind, SendAttempt.provider_message_id == provider_message_id)
+            .one_or_none()
+        )
+        if attempt is not None:
+            return str(attempt.business_id)
+    return None
+
+
 @router.post("/email", response_model=GenericMessage)
 async def email_webhook(request: Request, db: Session = Depends(get_db)) -> GenericMessage:
     payload = await request.json()
-    business_id = payload.get("business_id")
+    business_id = _resolve_business_id(db, payload, ProviderKind.SES)
     if business_id:
         db.add(
             ReplyEvent(
@@ -33,7 +49,7 @@ async def email_webhook(request: Request, db: Session = Depends(get_db)) -> Gene
 @router.post("/whatsapp", response_model=GenericMessage)
 async def whatsapp_webhook(request: Request, db: Session = Depends(get_db)) -> GenericMessage:
     payload = await request.json()
-    business_id = payload.get("business_id")
+    business_id = _resolve_business_id(db, payload, ProviderKind.TWILIO)
     if business_id:
         db.add(
             ReplyEvent(
