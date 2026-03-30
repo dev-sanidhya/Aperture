@@ -32,7 +32,7 @@ class Settings(BaseSettings):
 
     openclaw_command: str = "openclaw"
     openclaw_config: str = ""
-    openclaw_status_timeout_seconds: int = 5
+    openclaw_status_timeout_seconds: int = 15
     openclaw_agent_timeout_seconds: int = 90
     openclaw_agent_enrichment: str = "lead-enrichment"
     openclaw_agent_contact_discovery: str = "contact-discovery"
@@ -52,6 +52,10 @@ class Settings(BaseSettings):
     def openclaw_env(self) -> dict[str, str]:
         env: dict[str, str] = {}
         if self.openclaw_config:
+            # Current OpenClaw releases resolve the config file from
+            # OPENCLAW_CONFIG_PATH; keep OPENCLAW_CONFIG as a fallback for
+            # older installs.
+            env["OPENCLAW_CONFIG_PATH"] = self.openclaw_config
             env["OPENCLAW_CONFIG"] = self.openclaw_config
         return env
 

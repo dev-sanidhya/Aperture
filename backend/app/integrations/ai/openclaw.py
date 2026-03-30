@@ -5,6 +5,7 @@ import os
 import subprocess
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 
 from app.core.config import Settings, get_settings
@@ -28,8 +29,11 @@ class OpenClawRuntime:
     def _run(self, args: list[str], timeout_seconds: int) -> subprocess.CompletedProcess[str]:
         env = os.environ.copy()
         env.update(self.settings.openclaw_env)
+        command = self.settings.openclaw_command
+        if any(separator in command for separator in ("/", "\\")) or command.endswith((".cmd", ".bat", ".exe")):
+            command = str(Path(command).resolve())
         return subprocess.run(
-            [self.settings.openclaw_command, *args],
+            [command, *args],
             check=False,
             capture_output=True,
             text=True,

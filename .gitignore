@@ -13,4 +13,8 @@ build/
 backend/.pytest_cache/
 backend/.coverage
 *.sqlite3
+.openclaw-cli/
+.openclaw-runtime/
+openclaw/local/*.bak
+openclaw/local/*.bak.*
 

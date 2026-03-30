@@ -16,7 +16,8 @@ function Invoke-Checked {
 }
 
 function Ensure-DockerDesktop {
-    cmd /c "docker info >nul 2>nul"
+    $cmdExe = "C:\Windows\System32\cmd.exe"
+    & $cmdExe /c "docker info >nul 2>nul"
     if ($LASTEXITCODE -eq 0) {
         return
     }
@@ -31,7 +32,7 @@ function Ensure-DockerDesktop {
 
     for ($i = 0; $i -lt 24; $i++) {
         Start-Sleep -Seconds 5
-        cmd /c "docker info >nul 2>nul"
+        & $cmdExe /c "docker info >nul 2>nul"
         if ($LASTEXITCODE -eq 0) {
             Write-Host "Docker Desktop is ready."
             return
@@ -41,13 +42,43 @@ function Ensure-DockerDesktop {
     throw "Docker Desktop did not become ready within 120 seconds."
 }
 
+function Resolve-PythonExe {
+    $candidates = @(
+        "C:\Users\$env:USERNAME\AppData\Local\Programs\Python\Python313\python.exe",
+        "C:\Users\$env:USERNAME\AppData\Local\Programs\Python\Python312\python.exe",
+        "python"
+    )
+
+    foreach ($candidate in $candidates) {
+        if ($candidate -eq "python") {
+            try {
+                $versionOutput = & python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')" 2>$null
+                if ($LASTEXITCODE -eq 0 -and [version]$versionOutput -ge [version]"3.12") {
+                    return "python"
+                }
+            } catch {
+                continue
+            }
+            continue
+        }
+
+        if (Test-Path $candidate) {
+            return $candidate
+        }
+    }
+
+    throw "Python 3.12+ was not found. Install Python 3.12+ or update ops\\windows\\bootstrap-local.ps1 candidates."
+}
+
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $backendDir = Join-Path $repoRoot "backend"
 $venvDir = Join-Path $backendDir ".venv"
 $dockerComposeFile = Join-Path $repoRoot "ops\\docker\\docker-compose.yml"
 $alembicIni = Join-Path $repoRoot "alembic.ini"
+$pythonBootstrapExe = Resolve-PythonExe
 
 Write-Host "Aperture local bootstrap starting..."
+Write-Host "Using Python bootstrap executable:" $pythonBootstrapExe
 
 if (-not (Test-Path (Join-Path $repoRoot ".env"))) {
     throw "Expected .env at $repoRoot\.env"
@@ -64,7 +95,7 @@ Invoke-Checked -Description "Starting local Postgres and Redis via Docker..." -S
 
 if (-not (Test-Path $venvDir)) {
     Invoke-Checked -Description "Creating virtual environment..." -Script {
-        python -m venv $venvDir
+        & $pythonBootstrapExe -m venv $venvDir
     }
 }
 

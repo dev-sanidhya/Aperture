@@ -2,33 +2,60 @@
   agents: {
     defaults: {
       model: {
-        primary: "openai-codex/gpt-5.4",
-        fallbacks: ["github-copilot/gpt-5-mini"],
+        primary: "github-copilot/claude-sonnet-4.5",
+        fallbacks: ["openai-codex/gpt-5.4"],
       },
       models: {
+        "github-copilot/claude-sonnet-4.5": { alias: "cheap_fast" },
         "openai-codex/gpt-5.4": { alias: "quality_draft" },
-        "github-copilot/gpt-5-mini": { alias: "cheap_fast" },
         "openai-codex/gpt-5.4-browser": { alias: "browser_agent" },
       },
     },
-    "lead-enrichment": {
-      description: "Summarize raw lead signals, classify website state, and recommend a primary service lane.",
-    },
-    "contact-discovery": {
-      description: "Extract public business contact points from websites and directory pages.",
-    },
-    "site-audit": {
-      description: "Audit weak websites and produce a compact evidence pack for outreach.",
-    },
-    "draft-email": {
-      description: "Create short plain-text outreach email drafts from evidence packs only.",
-    },
-    "draft-whatsapp": {
-      description: "Create approved-template-aligned WhatsApp openers and permitted follow-up suggestions.",
-    },
-    "reply-classifier": {
-      description: "Classify inbound replies and recommend next CRM actions.",
-    },
+    list: [
+      {
+        id: "main",
+        default: true,
+        name: "Aperture Main",
+        workspace: ".openclaw-runtime/workspaces/main",
+        agentDir: ".openclaw-runtime/agents/main/agent",
+      },
+      {
+        id: "lead-enrichment",
+        name: "Lead Enrichment",
+        workspace: ".openclaw-runtime/workspaces/lead-enrichment",
+        agentDir: ".openclaw-runtime/agents/lead-enrichment/agent",
+      },
+      {
+        id: "contact-discovery",
+        name: "Contact Discovery",
+        workspace: ".openclaw-runtime/workspaces/contact-discovery",
+        agentDir: ".openclaw-runtime/agents/contact-discovery/agent",
+      },
+      {
+        id: "site-audit",
+        name: "Site Audit",
+        workspace: ".openclaw-runtime/workspaces/site-audit",
+        agentDir: ".openclaw-runtime/agents/site-audit/agent",
+      },
+      {
+        id: "draft-email",
+        name: "Draft Email",
+        workspace: ".openclaw-runtime/workspaces/draft-email",
+        agentDir: ".openclaw-runtime/agents/draft-email/agent",
+      },
+      {
+        id: "draft-whatsapp",
+        name: "Draft WhatsApp",
+        workspace: ".openclaw-runtime/workspaces/draft-whatsapp",
+        agentDir: ".openclaw-runtime/agents/draft-whatsapp/agent",
+      },
+      {
+        id: "reply-classifier",
+        name: "Reply Classifier",
+        workspace: ".openclaw-runtime/workspaces/reply-classifier",
+        agentDir: ".openclaw-runtime/agents/reply-classifier/agent",
+      },
+    ],
   },
 }
 
