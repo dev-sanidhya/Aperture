@@ -12,24 +12,25 @@ depends_on = None
 
 
 def upgrade() -> None:
-    channeltype = sa.Enum("EMAIL", "PHONE", "WHATSAPP", "CONTACT_FORM", "SOCIAL_DM", "CALL_REVIEW", name="channeltype")
-    businessstate = sa.Enum("NO_WEBSITE", "HAS_WEBSITE_WEAK", "HAS_WEBSITE_OK", name="businessstate")
-    servicelane = sa.Enum(
+    channeltype = postgresql.ENUM("EMAIL", "PHONE", "WHATSAPP", "CONTACT_FORM", "SOCIAL_DM", "CALL_REVIEW", name="channeltype", create_type=False)
+    businessstate = postgresql.ENUM("NO_WEBSITE", "HAS_WEBSITE_WEAK", "HAS_WEBSITE_OK", name="businessstate", create_type=False)
+    servicelane = postgresql.ENUM(
         "new_web_presence",
         "website_rebuild_cro",
         "local_seo_maps",
         "ai_automation",
         "lead_capture_booking",
         name="servicelane",
+        create_type=False,
     )
-    verificationstatus = sa.Enum("unverified", "observed_public", "verified_live", "invalid", name="verificationstatus")
-    sendeligibility = sa.Enum("eligible", "hold", "blocked", name="sendeligibility")
-    sourcetype = sa.Enum("google_places", "website", "justdial", "indiamart", "social", "search", name="sourcetype")
-    campaignchannel = sa.Enum("email", "whatsapp", name="campaignchannel")
-    campaignstatus = sa.Enum("draft", "ready", "running", "paused", "completed", name="campaignstatus")
-    providerkind = sa.Enum("openclaw", "ses", "twilio", name="providerkind")
-    providerhealth = sa.Enum("healthy", "degraded", "offline", name="providerhealth")
-    airunjobtype = sa.Enum(
+    verificationstatus = postgresql.ENUM("unverified", "observed_public", "verified_live", "invalid", name="verificationstatus", create_type=False)
+    sendeligibility = postgresql.ENUM("eligible", "hold", "blocked", name="sendeligibility", create_type=False)
+    sourcetype = postgresql.ENUM("google_places", "website", "justdial", "indiamart", "social", "search", name="sourcetype", create_type=False)
+    campaignchannel = postgresql.ENUM("email", "whatsapp", name="campaignchannel", create_type=False)
+    campaignstatus = postgresql.ENUM("draft", "ready", "running", "paused", "completed", name="campaignstatus", create_type=False)
+    providerkind = postgresql.ENUM("openclaw", "ses", "twilio", name="providerkind", create_type=False)
+    providerhealth = postgresql.ENUM("healthy", "degraded", "offline", name="providerhealth", create_type=False)
+    airunjobtype = postgresql.ENUM(
         "lead_enrichment",
         "contact_discovery",
         "site_audit",
@@ -38,10 +39,11 @@ def upgrade() -> None:
         "reply_classifier",
         "opportunity_scoring",
         name="airunjobtype",
+        create_type=False,
     )
-    airunstatus = sa.Enum("pending", "succeeded", "failed", name="airunstatus")
-    messagedirection = sa.Enum("OUTBOUND", "INBOUND", name="messagedirection")
-    replyintent = sa.Enum(
+    airunstatus = postgresql.ENUM("pending", "succeeded", "failed", name="airunstatus", create_type=False)
+    messagedirection = postgresql.ENUM("OUTBOUND", "INBOUND", name="messagedirection", create_type=False)
+    replyintent = postgresql.ENUM(
         "interested",
         "not_now",
         "not_relevant",
@@ -51,8 +53,9 @@ def upgrade() -> None:
         "spam_signal",
         "unknown",
         name="replyintent",
+        create_type=False,
     )
-    suppressionreason = sa.Enum("unsubscribe", "complaint", "global_block", "channel_block", "cooldown", name="suppressionreason")
+    suppressionreason = postgresql.ENUM("unsubscribe", "complaint", "global_block", "channel_block", "cooldown", name="suppressionreason", create_type=False)
 
     bind = op.get_bind()
     enums = [
@@ -405,3 +408,23 @@ def downgrade() -> None:
         "businesses",
     ]:
         op.drop_table(table)
+
+    bind = op.get_bind()
+    for enum_name in [
+        "suppressionreason",
+        "replyintent",
+        "messagedirection",
+        "airunstatus",
+        "airunjobtype",
+        "providerhealth",
+        "providerkind",
+        "campaignstatus",
+        "campaignchannel",
+        "sourcetype",
+        "sendeligibility",
+        "verificationstatus",
+        "servicelane",
+        "businessstate",
+        "channeltype",
+    ]:
+        postgresql.ENUM(name=enum_name).drop(bind, checkfirst=True)

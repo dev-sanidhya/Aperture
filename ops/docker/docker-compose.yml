@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: aperture
       POSTGRES_DB: aperture
     ports:
-      - "5432:5432"
+      - "${APERTURE_LOCAL_POSTGRES_PORT:-5433}:5432"
     volumes:
       - aperture-postgres:/var/lib/postgresql/data
 
@@ -15,7 +15,7 @@ services:
     image: redis:7
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - "${APERTURE_LOCAL_REDIS_PORT:-6380}:6379"
     volumes:
       - aperture-redis:/data
 
