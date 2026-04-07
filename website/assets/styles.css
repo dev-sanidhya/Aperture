@@ -2080,9 +2080,13 @@ textarea {
     border-radius: 24px;
     align-items: stretch;
     gap: 14px;
+    display: grid;
+    grid-template-columns: 1fr;
   }
 
   .bottom-bar-copy {
+    display: grid;
+    gap: 4px;
     font-size: 0.9rem;
   }
 
@@ -2130,5 +2134,9 @@ textarea {
   .contact-link {
     font-size: 0.82rem;
     padding: 9px 12px;
+  }
+
+  .bottom-bar-copy {
+    font-size: 0.86rem;
   }
 }
