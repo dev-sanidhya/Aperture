@@ -972,7 +972,7 @@ main {
 
 .mobile-surface {
   position: relative;
-  min-height: 340px;
+  min-height: 300px;
   overflow: hidden;
   border-radius: 32px;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -983,9 +983,10 @@ main {
 }
 
 .mobile-surface-glow,
-.mobile-surface-line,
-.mobile-surface-dot,
-.mobile-surface-panel {
+.mobile-surface-head,
+.mobile-surface-stage,
+.mobile-band,
+.mobile-node {
   position: absolute;
 }
 
@@ -1009,21 +1010,16 @@ main {
   background: radial-gradient(circle at center, rgba(143, 211, 196, 0.18), transparent 72%);
 }
 
-.mobile-surface-panel {
-  left: 20px;
-  right: 20px;
-  padding: 18px 18px 20px;
-  border-radius: 24px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)),
-    rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px);
+.mobile-surface-head {
+  left: 22px;
+  right: 22px;
+  top: 22px;
+  display: grid;
+  gap: 10px;
 }
 
-.mobile-surface-panel span {
+.mobile-surface-head span {
   display: inline-flex;
-  margin-bottom: 10px;
   color: var(--accent-2);
   text-transform: uppercase;
   letter-spacing: 0.16em;
@@ -1031,71 +1027,80 @@ main {
   font-weight: 800;
 }
 
-.mobile-surface-panel strong {
+.mobile-surface-head strong {
   display: block;
   color: var(--text);
-  font-size: 1rem;
-  line-height: 1.35;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  line-height: 0.98;
+  max-width: 10ch;
 }
 
-.panel-top {
-  top: 18px;
+.mobile-surface-stage {
+  left: 22px;
+  right: 22px;
+  bottom: 22px;
+  height: 148px;
+  border-radius: 26px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015)),
+    rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
 }
 
-.panel-mid {
-  top: 114px;
-  left: 40px;
-  right: 40px;
+.mobile-band {
+  left: 18px;
+  right: 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
 }
 
-.panel-bottom {
-  bottom: 18px;
+.band-one {
+  top: 24px;
+  height: 28px;
+  transform: rotate(-9deg);
 }
 
-.mobile-surface-line {
-  width: 1px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
+.band-two {
+  top: 60px;
+  left: 34px;
+  right: 34px;
+  height: 40px;
+  transform: rotate(7deg);
 }
 
-.line-left {
-  left: 42px;
-  top: 26px;
-  height: 230px;
+.band-three {
+  bottom: 20px;
+  height: 22px;
+  transform: rotate(-4deg);
 }
 
-.line-right {
-  right: 44px;
-  top: 70px;
-  height: 180px;
-}
-
-.mobile-surface-dot {
-  width: 10px;
-  height: 10px;
+.mobile-node {
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  box-shadow: 0 0 22px currentColor;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 20px currentColor;
 }
 
-.dot-a {
-  top: 76px;
-  left: 37px;
+.node-one {
+  left: 26px;
+  top: 28px;
   color: rgba(209, 162, 106, 0.95);
-  background: currentColor;
 }
 
-.dot-b {
-  top: 154px;
-  right: 39px;
+.node-two {
+  right: 34px;
+  top: 74px;
   color: rgba(143, 211, 196, 0.92);
-  background: currentColor;
 }
 
-.dot-c {
-  bottom: 76px;
-  left: 50%;
-  transform: translateX(-50%);
+.node-three {
+  left: 44%;
+  bottom: 26px;
   color: rgba(255, 255, 255, 0.9);
-  background: currentColor;
 }
 
 .mobile-capability-list {
@@ -1656,6 +1661,7 @@ textarea {
 
   .hero-mobile-showcase {
     display: block;
+    margin-top: -4px;
   }
 
   .hero-visual-desktop {
@@ -1827,6 +1833,71 @@ textarea {
   .hero-bullets span {
     font-size: 0.78rem;
     padding: 8px 12px;
+  }
+
+  .hero-mobile-showcase {
+    margin-top: 4px;
+  }
+
+  .mobile-surface {
+    min-height: 264px;
+    border-radius: 26px;
+  }
+
+  .mobile-surface-head {
+    left: 16px;
+    right: 16px;
+    top: 16px;
+    gap: 8px;
+  }
+
+  .mobile-surface-head strong {
+    font-size: clamp(1.55rem, 8vw, 2.1rem);
+    max-width: 11ch;
+  }
+
+  .mobile-surface-stage {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    height: 116px;
+    border-radius: 20px;
+  }
+
+  .band-one {
+    top: 18px;
+    height: 22px;
+  }
+
+  .band-two {
+    top: 48px;
+    height: 30px;
+    left: 24px;
+    right: 24px;
+  }
+
+  .band-three {
+    bottom: 16px;
+    height: 18px;
+  }
+
+  .mobile-node {
+    width: 10px;
+    height: 10px;
+  }
+
+  .node-one {
+    left: 20px;
+    top: 22px;
+  }
+
+  .node-two {
+    right: 24px;
+    top: 58px;
+  }
+
+  .node-three {
+    bottom: 18px;
   }
 
   .hero-metrics {
@@ -2027,24 +2098,25 @@ textarea {
   }
 
   .mobile-surface {
-    min-height: 312px;
+    min-height: 238px;
   }
 
-  .mobile-surface-panel {
+  .mobile-surface-head {
     left: 14px;
     right: 14px;
-    padding: 14px 14px 16px;
-    border-radius: 20px;
+    top: 14px;
   }
 
-  .panel-mid {
-    left: 26px;
-    right: 26px;
-    top: 104px;
+  .mobile-surface-head strong {
+    font-size: 1.45rem;
   }
 
-  .mobile-surface-panel strong {
-    font-size: 0.92rem;
+  .mobile-surface-stage {
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+    height: 102px;
+    border-radius: 18px;
   }
 
   .mobile-capability-list div {
