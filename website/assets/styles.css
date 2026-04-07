@@ -1457,12 +1457,16 @@ textarea {
   }
 
   .hero-visual {
-    min-height: 540px;
+    min-height: 500px;
   }
 
   .manifesto-grid,
   .service-row {
     grid-template-columns: 1fr;
+  }
+
+  .hero-copy {
+    gap: 0;
   }
 
   .service-row-tags {
@@ -1487,6 +1491,7 @@ textarea {
   .nav {
     width: 100%;
     justify-content: flex-start;
+    gap: 6px;
   }
 
   .phase-index {
@@ -1497,6 +1502,10 @@ textarea {
   .bottom-bar .container {
     border-radius: 24px;
   }
+
+  .ticker-band {
+    padding-bottom: 18px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -1504,80 +1513,381 @@ textarea {
     width: min(calc(100% - 24px), var(--max-width));
   }
 
+  main {
+    padding-bottom: 44px;
+  }
+
+  .site-header {
+    position: sticky;
+  }
+
+  .site-header .container {
+    min-height: auto;
+    padding: 14px 0 12px;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .brand {
+    gap: 10px;
+    font-size: 0.76rem;
+  }
+
+  .brand-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+  }
+
+  .brand-mark::before {
+    width: 15px;
+    height: 15px;
+  }
+
+  .nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: calc(100% + 4px);
+    padding-bottom: 2px;
+    justify-content: flex-start;
+    scrollbar-width: none;
+  }
+
+  .nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav a {
+    flex: 0 0 auto;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+  }
+
   .hero {
-    padding-top: 64px;
+    padding-top: 36px;
+    padding-bottom: 22px;
   }
 
   .hero h1,
   .page-hero h1 {
-    font-size: clamp(3rem, 18vw, 4.8rem);
+    font-size: clamp(2.6rem, 14vw, 4.1rem);
+    max-width: 100%;
+  }
+
+  .lead {
+    font-size: 0.98rem;
+    line-height: 1.65;
+  }
+
+  .hero-actions,
+  .page-hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  .hero-actions .button,
+  .page-hero-actions .button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero-bullets {
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .hero-bullets span {
+    font-size: 0.78rem;
+    padding: 8px 12px;
   }
 
   .hero-metrics {
     grid-template-columns: 1fr;
+    margin-top: 24px;
   }
 
   .ticker-track {
     animation-duration: 36s;
   }
 
+  .ticker-track span {
+    padding: 10px 13px;
+    font-size: 0.8rem;
+  }
+
+  .hero-visual {
+    min-height: 360px;
+  }
+
   .canvas-caption {
-    font-size: 0.62rem;
+    font-size: 0.58rem;
+    padding: 8px 10px;
   }
 
-  .floating-card {
-    position: relative;
-    inset: auto;
-    width: 100%;
-    margin: 18px 0 0;
+  .beam-a {
+    left: -18%;
+    right: 18%;
+    top: 26%;
+    height: 74px;
   }
 
-  .hero-frame {
-    padding: 18px;
-    display: grid;
-    align-content: end;
+  .beam-b {
+    left: 8%;
+    right: -12%;
+    top: 54%;
+    height: 60px;
   }
 
-  .hero-orbit {
-    inset: 20% 12%;
+  .beam-c {
+    left: 18%;
+    right: 2%;
+    bottom: 12%;
+    height: 30px;
+  }
+
+  .disc-a,
+  .disc-b {
+    width: 180px;
+    height: 180px;
+  }
+
+  .disc-c {
+    width: 220px;
+    height: 220px;
+    left: 24%;
+  }
+
+  .line-a,
+  .line-b,
+  .line-c {
+    height: 120px;
+  }
+
+  .caption-a {
+    left: 10%;
+    bottom: 14%;
+  }
+
+  .caption-b {
+    right: 10%;
+    top: 14%;
+  }
+
+  .caption-c {
+    right: 8%;
+    bottom: 10%;
+  }
+
+  .section {
+    padding: 34px 0;
+  }
+
+  .section-heading {
+    margin-bottom: 20px;
+  }
+
+  .section-heading h2,
+  .manifesto-title {
+    max-width: 100%;
+    font-size: clamp(2.3rem, 12vw, 3.4rem);
+  }
+
+  .section-heading p {
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+
+  .service-row {
+    gap: 14px;
+    padding: 18px 0;
+  }
+
+  .service-row-index {
+    padding-top: 0;
+  }
+
+  .service-row-copy h3 {
+    font-size: clamp(1.8rem, 10vw, 2.5rem);
+  }
+
+  .service-row-tags span {
+    font-size: 0.78rem;
+    padding: 8px 12px;
+  }
+
+  .manifesto-list div {
+    padding-bottom: 14px;
+  }
+
+  .story-card,
+  .service-card,
+  .phase-card,
+  .founder-card,
+  .signal-card,
+  .timeline-card,
+  .contact-card,
+  .work-card,
+  .metric-card {
+    padding: 20px;
+  }
+
+  .founder-card {
+    padding-top: 76px;
+  }
+
+  .founder-avatar {
+    top: 20px;
+    left: 20px;
+  }
+
+  .contact-grid {
+    gap: 14px;
+  }
+
+  .footer-band {
+    padding: 16px 0 30px;
+  }
+
+  .footer-card {
+    padding: 20px;
+    gap: 20px;
+    border-radius: 24px;
+  }
+
+  .contact-person {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .contact-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+  }
+
+  .contact-meta {
+    gap: 8px;
+  }
+
+  .contact-meta span {
+    font-size: 0.77rem;
+    padding: 8px 11px;
   }
 
   .footer-form {
-    padding: 22px;
+    padding: 18px;
+    border-radius: 24px;
   }
 
-  .plane-a {
-    inset: 14% 10% 46% 6%;
+  .footer-form h2 {
+    font-size: clamp(2rem, 11vw, 2.8rem);
   }
 
-  .plane-b {
-    inset: 40% 6% 14% 24%;
+  .intent-row {
+    gap: 8px;
   }
 
-  .plane-c {
-    inset: 22% 18% 24% 18%;
+  .intent-chip {
+    font-size: 0.78rem;
+    padding: 9px 12px;
   }
 
-  .ribbon-a {
-    left: 4%;
-    right: 8%;
+  label {
+    font-size: 0.9rem;
   }
 
-  .ribbon-b {
-    left: 12%;
-    right: 18%;
+  input,
+  textarea {
+    padding: 14px 15px;
+    border-radius: 16px;
   }
 
-  .ribbon-c {
-    left: 22%;
-    right: 4%;
+  textarea {
+    min-height: 132px;
+  }
+
+  .form-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+
+  .form-status {
+    max-width: none;
+    font-size: 0.85rem;
+  }
+
+  .site-footer {
+    padding-bottom: 24px;
+  }
+
+  .site-footer .container {
+    gap: 8px;
+    font-size: 0.84rem;
   }
 
   .bottom-bar {
-    inset: auto 12px 12px;
+    position: static;
+    padding: 0 0 24px;
+  }
+
+  .bottom-bar {
+    inset: auto;
   }
 
   .bottom-bar .container {
     padding: 16px;
+    border-radius: 24px;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .bottom-bar-copy {
+    font-size: 0.9rem;
+  }
+
+  .bottom-bar .button {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .container {
+    width: min(calc(100% - 20px), var(--max-width));
+  }
+
+  .hero-visual {
+    min-height: 320px;
+  }
+
+  .canvas-caption {
+    display: none;
+  }
+
+  .disc-a,
+  .disc-b {
+    width: 150px;
+    height: 150px;
+  }
+
+  .disc-c {
+    width: 190px;
+    height: 190px;
+  }
+
+  .contact-person strong {
+    font-size: 0.92rem;
+  }
+
+  .contact-link {
+    font-size: 0.82rem;
+    padding: 9px 12px;
   }
 }
