@@ -98,25 +98,25 @@ img {
 }
 
 .brand-mark {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 14px;
   display: grid;
   place-items: center;
-  background:
-    linear-gradient(145deg, rgba(209, 162, 106, 0.3), rgba(143, 211, 196, 0.16)),
-    rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: hidden;
 }
 
-.brand-mark::before {
-  content: "";
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 2px solid var(--accent);
-  box-shadow: 0 0 0 4px rgba(143, 211, 196, 0.16);
+.brand-svg {
+  width: 36px;
+  height: 36px;
+  transition: filter 0.3s ease;
+}
+
+.brand:hover .brand-svg {
+  filter: drop-shadow(0 0 8px rgba(209, 162, 106, 0.55));
 }
 
 .nav {
@@ -1910,25 +1910,36 @@ textarea {
 }
 
 .aptr-svg {
-  width: 140px;
-  height: 140px;
-  animation: aptr-breathe 5s ease-in-out infinite;
-  filter: drop-shadow(0 0 18px rgba(209, 162, 106, 0.22));
+  width: 160px;
+  height: 160px;
+  animation: aptr-breathe 6s ease-in-out infinite;
 }
 
+/* Gold blades — clockwise */
 .aptr-blades {
-  animation: aptr-spin 22s linear infinite;
-  transform-origin: 60px 60px;
+  animation: aptr-spin-cw 28s linear infinite;
+  transform-origin: 80px 80px;
 }
 
-@keyframes aptr-spin {
+/* Teal accent blades — counter-clockwise, slower */
+.aptr-blades-reverse {
+  animation: aptr-spin-ccw 40s linear infinite;
+  transform-origin: 80px 80px;
+}
+
+@keyframes aptr-spin-cw {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
 
+@keyframes aptr-spin-ccw {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
 @keyframes aptr-breathe {
-  0%, 100% { filter: drop-shadow(0 0 14px rgba(209, 162, 106, 0.2)); }
-  50%       { filter: drop-shadow(0 0 36px rgba(209, 162, 106, 0.55)); }
+  0%, 100% { filter: drop-shadow(0 0 16px rgba(209, 162, 106, 0.18)); }
+  50%       { filter: drop-shadow(0 0 48px rgba(209, 162, 106, 0.5)); }
 }
 
 /* ── Card fly-in states — JS scroll-scrub owns transforms ─── */
