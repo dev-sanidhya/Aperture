@@ -1781,6 +1781,278 @@ textarea {
 .hero-bullets span:nth-child(4) { animation-delay: 0.94s; }
 .hero-bullets span:nth-child(5) { animation-delay: 1.07s; }
 
+/* ── Orbit bento section ──────────────────────────────────── */
+.orbit-section {
+  overflow: hidden;
+}
+
+.orbit-stage {
+  display: grid;
+  grid-template-columns: 1fr 220px 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "tl center tr"
+    "bl center br";
+  gap: 20px;
+  max-width: calc(var(--max-width) + 40px);
+  margin: 52px auto 0;
+  padding: 0 20px;
+  min-height: 540px;
+}
+
+/* ── Orbit cards ──────────────────────────────────────────── */
+.orbit-card {
+  padding: 32px;
+  border-radius: var(--radius);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+  will-change: transform, opacity;
+}
+
+.orbit-card:hover {
+  transform: translateY(-6px) scale(1.015) !important;
+  box-shadow: 0 48px 96px rgba(0, 0, 0, 0.36), 0 0 0 1px rgba(209, 162, 106, 0.14);
+  border-color: rgba(209, 162, 106, 0.18);
+}
+
+.ocard-tl { grid-area: tl; }
+.ocard-tr { grid-area: tr; }
+.ocard-bl { grid-area: bl; }
+.ocard-br { grid-area: br; }
+
+.ocard-num {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 3rem;
+  font-weight: 600;
+  line-height: 1;
+  color: rgba(209, 162, 106, 0.28);
+  letter-spacing: -0.04em;
+  transition: color 0.3s ease;
+}
+
+.orbit-card:hover .ocard-num {
+  color: rgba(209, 162, 106, 0.55);
+}
+
+.orbit-card h3 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.orbit-card p {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.7;
+  margin: 0;
+  flex: 1;
+}
+
+.ocard-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.ocard-tags span {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+/* ── Orbit center focal point ─────────────────────────────── */
+.orbit-center {
+  grid-area: center;
+  grid-row: 1 / 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  gap: 16px;
+}
+
+.orbit-mark-lg {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(145deg, rgba(209, 162, 106, 0.22), rgba(143, 211, 196, 0.12)),
+    rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(209, 162, 106, 0.45);
+  box-shadow:
+    0 0 0 12px rgba(209, 162, 106, 0.06),
+    0 0 60px rgba(209, 162, 106, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: orbit-mark-breathe 4s ease-in-out infinite;
+  position: relative;
+  z-index: 2;
+}
+
+.orbit-mark-core {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2.5px solid var(--accent);
+  box-shadow: 0 0 0 6px rgba(143, 211, 196, 0.12), 0 0 20px rgba(209, 162, 106, 0.4);
+}
+
+.orbit-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.7;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Spinning rings ───────────────────────────────────────── */
+.orbit-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(209, 162, 106, 0.14);
+  pointer-events: none;
+}
+
+.orbit-ring::before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.orbit-ring-outer {
+  width: 180px;
+  height: 180px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-color: rgba(209, 162, 106, 0.12);
+  animation: orbit-spin 16s linear infinite;
+}
+
+.orbit-ring-outer::before {
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(209, 162, 106, 0.8);
+}
+
+.orbit-ring-inner {
+  width: 260px;
+  height: 260px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-color: rgba(143, 211, 196, 0.08);
+  animation: orbit-spin 28s linear infinite reverse;
+}
+
+.orbit-ring-inner::before {
+  background: var(--accent-2);
+  box-shadow: 0 0 8px rgba(143, 211, 196, 0.8);
+  bottom: -4px;
+  top: auto;
+}
+
+/* ── Card fly-in states — JS scroll-scrub owns transforms ─── */
+[data-orbit-card] {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+[data-orbit-center] {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* hover is safe — JS won't fight it because it uses !important on hover only */
+.orbit-card:hover {
+  box-shadow: 0 48px 96px rgba(0, 0, 0, 0.36), 0 0 0 1px rgba(209, 162, 106, 0.14) !important;
+  border-color: rgba(209, 162, 106, 0.18) !important;
+}
+
+/* ── Keyframes ────────────────────────────────────────────── */
+@keyframes orbit-mark-breathe {
+  0%, 100% {
+    box-shadow: 0 0 0 12px rgba(209, 162, 106, 0.06), 0 0 50px rgba(209, 162, 106, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(209, 162, 106, 0.04), 0 0 90px rgba(209, 162, 106, 0.35);
+    transform: scale(1.06);
+  }
+}
+
+@keyframes orbit-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 980px) {
+  .orbit-stage {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "center center"
+      "tl tr"
+      "bl br";
+    min-height: auto;
+    gap: 16px;
+  }
+
+  .orbit-center {
+    grid-row: auto;
+    padding: 32px 0;
+  }
+
+  .orbit-ring-outer { width: 140px; height: 140px; }
+  .orbit-ring-inner { width: 200px; height: 200px; }
+}
+
+@media (max-width: 640px) {
+  .orbit-stage {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "center"
+      "tl"
+      "tr"
+      "bl"
+      "br";
+  }
+
+  .orbit-card {
+    padding: 22px;
+  }
+
+  .ocard-num {
+    font-size: 2.2rem;
+  }
+}
+
 /* ── Scroll parallax data attributes ─────────────────────── */
 [data-parallax] {
   will-change: transform;

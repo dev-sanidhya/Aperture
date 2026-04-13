@@ -109,6 +109,76 @@ const observer = new IntersectionObserver(
 
 revealElements.forEach((element) => observer.observe(element));
 
+// ── Orbit bento — scroll-scrub engine ────────────────────────
+// Each card has a start position (off-screen) + rotation.
+// As you scroll the section into view, progress 0→1 drives
+// every card smoothly to its final resting place — just like
+// MetaMask's scroll-driven bento grid.
+(function () {
+  const section  = document.querySelector(".orbit-section");
+  const cards    = [...document.querySelectorAll("[data-orbit-card]")];
+  const center   = document.querySelector("[data-orbit-center]");
+  if (!section || !cards.length) return;
+
+  // Starting offsets + rotation for each card (tl, tr, bl, br)
+  const CONFIGS = [
+    { x: -200, y: -140, r: -14 },
+    { x:  200, y: -140, r:  14 },
+    { x: -200, y:  140, r:  14 },
+    { x:  200, y:  140, r: -14 },
+  ];
+
+  // Stagger: each card starts animating a little later than previous
+  const STAGGER = 0.07;
+
+  function easeOutQuart(t) {
+    return 1 - Math.pow(1 - t, 4);
+  }
+
+  function getProgress() {
+    const rect = section.getBoundingClientRect();
+    const vh   = window.innerHeight;
+    // 0 = section bottom just enters viewport
+    // 1 = section top is at 25% of viewport height
+    const raw = (vh - rect.top) / (vh * 0.75 + rect.height * 0.5);
+    return Math.max(0, Math.min(1, raw));
+  }
+
+  function tick() {
+    const progress = getProgress();
+
+    // Center mark — pops in first
+    if (center) {
+      const cp = easeOutQuart(Math.min(1, progress * 2));
+      center.style.opacity   = cp;
+      center.style.transform = `scale(${0.55 + cp * 0.45})`;
+    }
+
+    // Cards — each one chases progress with its own stagger delay
+    cards.forEach((card, i) => {
+      const cfg = CONFIGS[i] || CONFIGS[0];
+      const delay = i * STAGGER;
+      const p = Math.max(0, Math.min(1, (progress - delay) / (1 - delay * cards.length * 0.5 + 0.001)));
+      const e = easeOutQuart(p);
+
+      card.style.opacity   = Math.min(1, e * 1.6);
+      card.style.transform = `translate(${cfg.x * (1 - e)}px, ${cfg.y * (1 - e)}px) rotate(${cfg.r * (1 - e)}deg)`;
+    });
+  }
+
+  // RAF-throttled scroll listener
+  let rafPending = false;
+  window.addEventListener("scroll", () => {
+    if (!rafPending) {
+      rafPending = true;
+      requestAnimationFrame(() => { tick(); rafPending = false; });
+    }
+  }, { passive: true });
+
+  // Run once immediately in case section is already in view
+  tick();
+})();
+
 // ── Manifesto list line-by-line reveal ───────────────────────
 const manifestoList = document.querySelector(".manifesto-list");
 if (manifestoList) {
