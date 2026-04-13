@@ -1,3 +1,44 @@
+// ── Unified hero parallax (scroll + mouse, single RAF loop) ──
+const heroSection = document.querySelector(".hero");
+const orbA = document.querySelector(".orb-a");
+const orbB = document.querySelector(".orb-b");
+const orbC = document.querySelector(".orb-c");
+const heroCopyEl = document.querySelector(".hero-copy");
+const heroBullets = document.querySelector(".hero-bullets");
+const heroActions = document.querySelector(".hero-actions");
+
+// Mouse state (normalised -0.5 → +0.5)
+let mx = 0, my = 0, tmx = 0, tmy = 0;
+// Track latest scrollY for RAF
+let latestScroll = window.scrollY;
+
+if (heroSection) {
+  heroSection.addEventListener("mousemove", (e) => {
+    const rect = heroSection.getBoundingClientRect();
+    tmx = (e.clientX - rect.left) / rect.width - 0.5;
+    tmy = (e.clientY - rect.top) / rect.height - 0.5;
+  });
+  heroSection.addEventListener("mouseleave", () => { tmx = 0; tmy = 0; });
+}
+
+window.addEventListener("scroll", () => { latestScroll = window.scrollY; }, { passive: true });
+
+const tickParallax = () => {
+  mx += (tmx - mx) * 0.06;
+  my += (tmy - my) * 0.06;
+  const sy = latestScroll;
+
+  if (orbA) orbA.style.transform = `translate(${sy * 0.08 + mx * -32}px, ${sy * 0.14 + my * -24}px)`;
+  if (orbB) orbB.style.transform = `translate(${sy * -0.06 + mx * 26}px, ${sy * 0.10 + my * -20}px)`;
+  if (orbC) orbC.style.transform = `translate(${sy * 0.04 + mx * -16}px, ${sy * -0.08 + my * 22}px)`;
+  if (heroCopyEl) heroCopyEl.style.transform = `translateY(${sy * 0.10}px)`;
+  if (heroBullets) heroBullets.style.transform = `translate(${mx * 9}px, ${my * 7}px)`;
+  if (heroActions) heroActions.style.transform = `translate(${mx * 6}px, ${my * 5}px)`;
+
+  requestAnimationFrame(tickParallax);
+};
+tickParallax();
+
 // ── Cursor glow ─────────────────────────────────────────────
 const cursorGlow = document.querySelector(".cursor-glow");
 if (cursorGlow && window.matchMedia("(pointer: fine)").matches) {
@@ -51,6 +92,7 @@ document.querySelectorAll(".button-primary").forEach((btn) => {
   });
 });
 
+// ── Scroll reveal ────────────────────────────────────────────
 const revealElements = document.querySelectorAll("[data-reveal]");
 
 const observer = new IntersectionObserver(
@@ -62,10 +104,53 @@ const observer = new IntersectionObserver(
       }
     });
   },
-  { threshold: 0.16 }
+  { threshold: 0.12 }
 );
 
 revealElements.forEach((element) => observer.observe(element));
+
+// ── Manifesto list line-by-line reveal ───────────────────────
+const manifestoList = document.querySelector(".manifesto-list");
+if (manifestoList) {
+  const manifestoObs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("revealed");
+          manifestoObs.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.2 }
+  );
+  manifestoObs.observe(manifestoList);
+}
+
+// ── Service row index count-up ───────────────────────────────
+document.querySelectorAll(".service-row-index").forEach((el, i) => {
+  const target = i + 1;
+  const countObs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        countObs.unobserve(entry.target);
+        let start = 0;
+        const duration = 900;
+        const startTime = performance.now();
+        const tick = (now) => {
+          const p = Math.min((now - startTime) / duration, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          const val = Math.round(eased * target);
+          entry.target.textContent = String(val).padStart(2, "0");
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    },
+    { threshold: 0.5 }
+  );
+  countObs.observe(el);
+});
 
 const yearNode = document.querySelector("[data-year]");
 if (yearNode) {

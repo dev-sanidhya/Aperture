@@ -1587,14 +1587,23 @@ textarea {
 
 [data-reveal] {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 700ms ease, transform 700ms ease;
+  transform: translateY(44px) scale(0.97);
+  filter: blur(6px);
+  transition:
+    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-reveal].revealed {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  filter: blur(0px);
 }
+
+[data-reveal]:nth-child(2) { transition-delay: 0.08s; }
+[data-reveal]:nth-child(3) { transition-delay: 0.16s; }
+[data-reveal]:nth-child(4) { transition-delay: 0.24s; }
 
 /* ── Cursor glow ──────────────────────────────────────────── */
 .cursor-glow {
@@ -1771,6 +1780,83 @@ textarea {
 .hero-bullets span:nth-child(3) { animation-delay: 0.81s; }
 .hero-bullets span:nth-child(4) { animation-delay: 0.94s; }
 .hero-bullets span:nth-child(5) { animation-delay: 1.07s; }
+
+/* ── Scroll parallax data attributes ─────────────────────── */
+[data-parallax] {
+  will-change: transform;
+}
+
+/* ── Mouse parallax layers ────────────────────────────────── */
+.hero-layer {
+  will-change: transform;
+  transition: transform 0.05s linear;
+}
+
+/* ── Service row number reveal ────────────────────────────── */
+.service-row-index {
+  transition: color 0.4s ease;
+}
+
+.service-row:hover .service-row-index {
+  color: var(--accent);
+}
+
+/* ── Manifesto list stagger ───────────────────────────────── */
+.manifesto-list div {
+  opacity: 0;
+  transform: translateX(-24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.manifesto-list.revealed div:nth-child(1) { opacity: 1; transform: translateX(0); transition-delay: 0.05s; }
+.manifesto-list.revealed div:nth-child(2) { opacity: 1; transform: translateX(0); transition-delay: 0.18s; }
+.manifesto-list.revealed div:nth-child(3) { opacity: 1; transform: translateX(0); transition-delay: 0.31s; }
+
+/* ── Section label animated underline ────────────────────── */
+.section-label,
+.eyebrow {
+  transition: letter-spacing 0.4s ease;
+}
+
+/* ── Ticker band enhanced ─────────────────────────────────── */
+.ticker-band {
+  position: relative;
+  overflow: hidden;
+}
+
+.ticker-band::before,
+.ticker-band::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 120px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ticker-band::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--bg), transparent);
+}
+
+.ticker-band::after {
+  right: 0;
+  background: linear-gradient(-90deg, var(--bg), transparent);
+}
+
+/* ── Hero copy parallax wrapper ───────────────────────────── */
+.hero-copy-inner {
+  will-change: transform;
+}
+
+/* ── Count-up number style ────────────────────────────────── */
+.service-row-index[data-count] {
+  font-variant-numeric: tabular-nums;
+  min-width: 2ch;
+}
 
 /* ── Noise grain overlay ──────────────────────────────────── */
 .shell::after {
