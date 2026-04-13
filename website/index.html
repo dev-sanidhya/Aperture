@@ -189,12 +189,45 @@
               </div>
             </article>
 
-            <!-- Center focal point -->
+            <!-- Center focal point — Aperture iris logo -->
             <div class="orbit-center" data-orbit-center>
-              <div class="orbit-ring orbit-ring-outer"></div>
-              <div class="orbit-ring orbit-ring-inner"></div>
-              <div class="orbit-mark-lg">
-                <div class="orbit-mark-core"></div>
+              <div class="aptr-logo-wrap">
+                <svg class="aptr-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <filter id="core-glow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="3" result="blur"/>
+                      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                    <radialGradient id="center-fill" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="rgba(209,162,106,0.14)"/>
+                      <stop offset="100%" stop-color="rgba(209,162,106,0)"/>
+                    </radialGradient>
+                  </defs>
+
+                  <!-- Outer ambient ring -->
+                  <circle cx="60" cy="60" r="56" stroke="rgba(209,162,106,0.1)" stroke-width="0.8"/>
+
+                  <!-- Six aperture-blade arcs — slowly rotate -->
+                  <g class="aptr-blades">
+                    <path d="M106,60 A46,46 0 0,1 89.6,95.2"  stroke="rgba(209,162,106,0.88)" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M83,99.8 A46,46 0 0,1 44.3,103.2" stroke="rgba(209,162,106,0.88)" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M37,99.8 A46,46 0 0,1 14.7,68"    stroke="rgba(209,162,106,0.88)" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M14,60 A46,46 0 0,1 30.4,24.8"    stroke="rgba(209,162,106,0.88)" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M37,20.2 A46,46 0 0,1 75.7,16.8"  stroke="rgba(209,162,106,0.88)" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M83,20.2 A46,46 0 0,1 105.3,52"   stroke="rgba(209,162,106,0.88)" stroke-width="3" stroke-linecap="round"/>
+                  </g>
+
+                  <!-- Subtle inner hexagon -->
+                  <polygon points="60,34 81,47 81,73 60,86 39,73 39,47"
+                           stroke="rgba(143,211,196,0.18)" stroke-width="0.8" fill="none"/>
+
+                  <!-- Center iris ring -->
+                  <circle cx="60" cy="60" r="19" fill="url(#center-fill)"
+                          stroke="rgba(209,162,106,0.5)" stroke-width="1.5"/>
+
+                  <!-- Core dot -->
+                  <circle cx="60" cy="60" r="7" fill="rgba(209,162,106,0.95)" filter="url(#core-glow)"/>
+                </svg>
               </div>
               <span class="orbit-label">Aperture</span>
             </div>

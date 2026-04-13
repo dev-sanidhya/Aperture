@@ -31,7 +31,7 @@ const tickParallax = () => {
   if (orbA) orbA.style.transform = `translate(${sy * 0.08 + mx * -32}px, ${sy * 0.14 + my * -24}px)`;
   if (orbB) orbB.style.transform = `translate(${sy * -0.06 + mx * 26}px, ${sy * 0.10 + my * -20}px)`;
   if (orbC) orbC.style.transform = `translate(${sy * 0.04 + mx * -16}px, ${sy * -0.08 + my * 22}px)`;
-  if (heroCopyEl) heroCopyEl.style.transform = `translateY(${sy * 0.10}px)`;
+  // Orbs only — hero copy no longer parallaxes (was pushing content into ticker)
   if (heroBullets) heroBullets.style.transform = `translate(${mx * 9}px, ${my * 7}px)`;
   if (heroActions) heroActions.style.transform = `translate(${mx * 6}px, ${my * 5}px)`;
 
