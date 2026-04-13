@@ -1,3 +1,56 @@
+// ── Cursor glow ─────────────────────────────────────────────
+const cursorGlow = document.querySelector(".cursor-glow");
+if (cursorGlow && window.matchMedia("(pointer: fine)").matches) {
+  let cx = -9999, cy = -9999;
+  let tx = -9999, ty = -9999;
+  let rafId;
+
+  document.addEventListener("mousemove", (e) => {
+    tx = e.clientX;
+    ty = e.clientY;
+  });
+
+  document.addEventListener("mouseleave", () => {
+    tx = -9999;
+    ty = -9999;
+  });
+
+  const lerp = (a, b, t) => a + (b - a) * t;
+
+  const tickGlow = () => {
+    cx = lerp(cx, tx, 0.07);
+    cy = lerp(cy, ty, 0.07);
+    cursorGlow.style.transform = `translate(${cx - 350}px, ${cy - 350}px)`;
+    rafId = requestAnimationFrame(tickGlow);
+  };
+  tickGlow();
+}
+
+// ── Hero h1 word-reveal ─────────────────────────────────────
+const heroH1 = document.querySelector(".hero h1");
+if (heroH1) {
+  const words = heroH1.textContent.trim().split(/\s+/);
+  heroH1.innerHTML = words
+    .map(
+      (w, i) =>
+        `<span class="word-wrap"><span class="word" style="animation-delay:${i * 85}ms">${w}</span></span>`
+    )
+    .join(" ");
+}
+
+// ── Magnetic primary buttons ────────────────────────────────
+document.querySelectorAll(".button-primary").forEach((btn) => {
+  btn.addEventListener("mousemove", (e) => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    btn.style.transform = `translate(${x * 0.18}px, ${y * 0.28}px) translateY(-1px)`;
+  });
+  btn.addEventListener("mouseleave", () => {
+    btn.style.transform = "";
+  });
+});
+
 const revealElements = document.querySelectorAll("[data-reveal]");
 
 const observer = new IntersectionObserver(
