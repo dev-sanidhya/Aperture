@@ -1910,31 +1910,20 @@ textarea {
 }
 
 .aptr-svg {
-  width: 160px;
-  height: 160px;
+  width: 140px;
+  height: 140px;
   animation: aptr-breathe 6s ease-in-out infinite;
 }
 
 /* Gold blades — clockwise */
 .aptr-blades {
   animation: aptr-spin-cw 28s linear infinite;
-  transform-origin: 80px 80px;
-}
-
-/* Teal accent blades — counter-clockwise, slower */
-.aptr-blades-reverse {
-  animation: aptr-spin-ccw 40s linear infinite;
-  transform-origin: 80px 80px;
+  transform-origin: 60px 60px;
 }
 
 @keyframes aptr-spin-cw {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
-}
-
-@keyframes aptr-spin-ccw {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(-360deg); }
 }
 
 @keyframes aptr-breathe {
