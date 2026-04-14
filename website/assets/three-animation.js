@@ -97,10 +97,11 @@
   window.addEventListener('load', () => {
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
       // Storytelling Scroll sequence: smoothly pushes orb to the side as you scroll
+      const isMobile = window.innerWidth <= 768;
       gsap.to(globalGroup.position, {
-        x: 3.8, // Shift right into negative space
-        y: 1.2, // Move slightly up
-        z: -2.5, // Push slightly back
+        x: isMobile ? 0.8 : 3.8, // Shift right into negative space, less on mobile
+        y: isMobile ? 0.6 : 1.2, // Move slightly up
+        z: isMobile ? -4 : -2.5, // Push slightly back (further back on mobile to fit)
         ease: 'none',
         scrollTrigger: {
           trigger: document.body,

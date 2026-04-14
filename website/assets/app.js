@@ -142,12 +142,21 @@ gsap.utils.toArray('[data-reveal]').forEach((el) => {
   const center  = document.querySelector('[data-orbit-center]');
   if (!section || !cards.length) return;
 
-  const CONFIGS = [
-    { x: -200, y: -150, rotation: -14 }, // TL
-    { x:  200, y: -150, rotation:  14 }, // TR
-    { x: -200, y:  150, rotation:  14 }, // BL
-    { x:  200, y:  150, rotation: -14 }, // BR
-  ];
+  const isMobile = window.innerWidth <= 640;
+  
+  const CONFIGS = isMobile 
+    ? [
+        { x: -50, y: -50, rotation: -10 },
+        { x:  50, y: -50, rotation:  10 },
+        { x: -50, y:  50, rotation:  10 },
+        { x:  50, y:  50, rotation: -10 },
+      ]
+    : [
+        { x: -200, y: -150, rotation: -14 }, // TL
+        { x:  200, y: -150, rotation:  14 }, // TR
+        { x: -200, y:  150, rotation:  14 }, // BL
+        { x:  200, y:  150, rotation: -14 }, // BR
+      ];
 
   // Set hidden starting state
   gsap.set(cards, { autoAlpha: 0 });
