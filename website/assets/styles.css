@@ -332,6 +332,8 @@ main {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .metric-card {
@@ -366,11 +368,12 @@ main {
   overflow: hidden;
   border-radius: 34px;
   background:
-    radial-gradient(circle at 15% 20%, rgba(209, 162, 106, 0.28), transparent 24%),
-    radial-gradient(circle at 80% 18%, rgba(143, 211, 196, 0.2), transparent 18%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+    radial-gradient(circle at 15% 20%, rgba(209, 162, 106, 0.1), transparent 44%),
+    radial-gradient(circle at 80% 18%, rgba(143, 211, 196, 0.05), transparent 38%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
 }
 
 .tech-canvas {

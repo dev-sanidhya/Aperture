@@ -215,26 +215,7 @@ if (brandBlades) {
   });
 }
 
-// ── 11. Tilt canvas ───────────────────────────────────────────
-document.querySelectorAll('[data-tilt-scene]').forEach((scene) => {
-  const reset = () => {
-    scene.style.setProperty('--scene-rotate-x', '-12deg');
-    scene.style.setProperty('--scene-rotate-y', '14deg');
-    scene.style.setProperty('--scene-shift-x', '0px');
-    scene.style.setProperty('--scene-shift-y', '0px');
-  };
-  reset();
-  scene.addEventListener('pointermove', (e) => {
-    const r = scene.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width  - 0.5;
-    const y = (e.clientY - r.top)  / r.height - 0.5;
-    scene.style.setProperty('--scene-rotate-x', `${-12 - y * 18}deg`);
-    scene.style.setProperty('--scene-rotate-y', `${14  + x * 22}deg`);
-    scene.style.setProperty('--scene-shift-x',  `${x * 28}px`);
-    scene.style.setProperty('--scene-shift-y',  `${y * 28}px`);
-  });
-  scene.addEventListener('pointerleave', reset);
-});
+// ── 11. Tilt canvas (Removed in favor of WebGL 3D) ──────────────
 
 // ── 12. Functional: year, nav active, mobile menu ────────────
 const yearNode = document.querySelector('[data-year]');
