@@ -24,6 +24,11 @@
     <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/assets/logo.svg" />
     <link rel="stylesheet" href="/assets/styles.css" />
+    <!-- GSAP + ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- Lenis smooth scroll -->
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
     <script defer src="/assets/app.js"></script>
   </head>
   <body>
@@ -34,21 +39,15 @@
           <a class="brand" href="/">
             <span class="brand-mark">
               <!--
-                Aperture iris — 6 annular sector "blades"
+                Aperture iris — 6 clean blade sectors
+                Flat gold, no gradients, no filters. Professional minimal.
                 center(18,18) outer-r=14 inner-r=5.5
-                sectors: 0-40°, 60-100°, 120-160°, 180-220°, 240-280°, 300-340°
               -->
               <svg class="brand-svg" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="bg-sm" gradientUnits="userSpaceOnUse" x1="18" y1="4" x2="18" y2="32">
-                    <stop offset="0%" stop-color="#eecf86"/>
-                    <stop offset="100%" stop-color="#b07830"/>
-                  </linearGradient>
-                </defs>
-                <!-- outer guide ring -->
-                <circle cx="18" cy="18" r="14" stroke="rgba(209,162,106,0.3)" stroke-width="0.6"/>
-                <!-- 6 blade sectors -->
-                <g fill="url(#bg-sm)">
+                <!-- Outer guide ring -->
+                <circle cx="18" cy="18" r="14" stroke="rgba(209,162,106,0.22)" stroke-width="0.7" fill="none"/>
+                <!-- 6 blade sectors — flat gold, no gradient, no filter -->
+                <g class="brand-blades" fill="#d1a26a">
                   <path d="M23.5,18 L32,18 A14,14 0 0,1 28.7,27 L22.6,21.9 A5.5,5.5 0 0,0 23.5,18 Z"/>
                   <path d="M21,23.2 L25,30.1 A14,14 0 0,1 15.6,31.8 L16.95,23.9 A5.5,5.5 0 0,0 21,23.2 Z"/>
                   <path d="M15,23.2 L11,30.1 A14,14 0 0,1 4.84,22.8 L12.36,20.05 A5.5,5.5 0 0,0 15,23.2 Z"/>
@@ -56,9 +55,9 @@
                   <path d="M15,12.8 L11,5.9 A14,14 0 0,1 20.4,4.2 L19.04,12.1 A5.5,5.5 0 0,0 15,12.8 Z"/>
                   <path d="M21,12.8 L25,5.9 A14,14 0 0,1 31.16,13.2 L23.64,15.95 A5.5,5.5 0 0,0 21,12.8 Z"/>
                 </g>
-                <!-- center iris opening -->
-                <circle cx="18" cy="18" r="5.5" fill="rgba(13,17,23,0.96)" stroke="rgba(209,162,106,0.55)" stroke-width="0.8"/>
-                <circle cx="18" cy="18" r="1.8" fill="#d1a26a"/>
+                <!-- Center iris -->
+                <circle cx="18" cy="18" r="5.5" fill="#0d1117" stroke="rgba(209,162,106,0.4)" stroke-width="0.8"/>
+                <circle cx="18" cy="18" r="2" fill="#d1a26a"/>
               </svg>
             </span>
             <span>Aperture</span>
@@ -84,18 +83,18 @@
             <div class="hero-orb orb-c"></div>
           </div>
           <div class="container hero-grid">
-            <div class="hero-copy" data-reveal>
-              <span class="eyebrow">Aperture Studio</span>
-              <h1>Crazy clean tech for companies that want more signal.</h1>
-              <p class="lead">
+            <div class="hero-copy">
+              <span class="eyebrow js-hero-eyebrow">Aperture Studio</span>
+              <h1 class="js-hero-h1">Crazy clean tech for companies that want more signal.</h1>
+              <p class="lead js-hero-lead">
                 We build sharp digital presence, product surfaces, AI systems, automations, and integrations that make
                 a company feel modern end to end.
               </p>
-              <div class="hero-actions">
+              <div class="hero-actions js-hero-actions">
                 <a class="button button-primary" href="/contact.html">Start a project</a>
                 <a class="button button-secondary" href="/services.html">View full scope</a>
               </div>
-              <div class="hero-bullets">
+              <div class="hero-bullets js-hero-bullets">
                 <span>Websites</span>
                 <span>Apps</span>
                 <span>AI</span>
@@ -104,7 +103,7 @@
               </div>
             </div>
 
-            <div class="hero-mobile-showcase" data-reveal>
+            <div class="hero-mobile-showcase js-hero-showcase" data-reveal>
               <div class="mobile-surface">
                 <div class="mobile-surface-glow glow-left"></div>
                 <div class="mobile-surface-glow glow-right"></div>
@@ -221,50 +220,32 @@
             <div class="orbit-center" data-orbit-center>
               <div class="aptr-logo-wrap">
                 <!--
-                  Aperture iris — 6 annular sector blades
-                  center(60,60) outer-r=48 inner-r=20
-                  sectors: 0-40°, 60-100°, 120-160°, 180-220°, 240-280°, 300-340°
+                  Aperture iris — 6 blade sectors, flat gold, no gradients.
+                  Clean, professional, minimal. Rotates on idle.
+                  center(60,60) outer-r=48 inner-r=19
                 -->
                 <svg class="aptr-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="blade-fill" gradientUnits="userSpaceOnUse" x1="60" y1="12" x2="60" y2="108">
-                      <stop offset="0%"   stop-color="#f5e0a8"/>
-                      <stop offset="40%"  stop-color="#d1a26a"/>
-                      <stop offset="100%" stop-color="#7a4e1e"/>
-                    </linearGradient>
-                    <filter id="blade-soft" x="-8%" y="-8%" width="116%" height="116%">
-                      <feGaussianBlur stdDeviation="0.8" result="b"/>
-                      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                    </filter>
-                    <filter id="core-f" x="-60%" y="-60%" width="220%" height="220%">
-                      <feGaussianBlur stdDeviation="4" result="b"/>
-                      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                    </filter>
-                  </defs>
+                  <!-- Ambient halo rings -->
+                  <circle cx="60" cy="60" r="57" stroke="rgba(209,162,106,0.06)" stroke-width="0.8" fill="none"/>
+                  <circle cx="60" cy="60" r="51" stroke="rgba(209,162,106,0.1)" stroke-width="0.8" fill="none"/>
+                  <circle cx="60" cy="60" r="48" stroke="rgba(209,162,106,0.2)" stroke-width="1" fill="none"/>
 
-                  <!-- Ambient halos -->
-                  <circle cx="60" cy="60" r="57" stroke="rgba(209,162,106,0.07)" stroke-width="0.8"/>
-                  <circle cx="60" cy="60" r="50" stroke="rgba(209,162,106,0.14)" stroke-width="0.8"/>
-                  <circle cx="60" cy="60" r="48" stroke="rgba(209,162,106,0.28)" stroke-width="1.2"/>
-
-                  <!-- 6 blade sectors (rotating group) -->
-                  <g class="aptr-blades" fill="url(#blade-fill)" filter="url(#blade-soft)">
-                    <path d="M80,60 L108,60 A48,48 0 0,1 96.8,90.9 L75.3,72.9 A20,20 0 0,0 80,60 Z"/>
-                    <path d="M70,77.3 L84,101.6 A48,48 0 0,1 51.6,107.3 L56.5,79.7 A20,20 0 0,0 70,77.3 Z"/>
-                    <path d="M50,77.3 L36,101.6 A48,48 0 0,1 14.9,76.4 L41.2,66.8 A20,20 0 0,0 50,77.3 Z"/>
-                    <path d="M40,60 L12,60 A48,48 0 0,1 23.2,29.1 L44.7,47.1 A20,20 0 0,0 40,60 Z"/>
-                    <path d="M50,42.7 L36,18.4 A48,48 0 0,1 68.4,12.7 L63.5,40.3 A20,20 0 0,0 50,42.7 Z"/>
-                    <path d="M70,42.7 L84,18.4 A48,48 0 0,1 105.1,43.6 L78.8,53.2 A20,20 0 0,0 70,42.7 Z"/>
+                  <!-- 6 blade sectors — flat gold, no gradient, no filter -->
+                  <g class="aptr-blades" fill="#d1a26a">
+                    <path d="M79,60 L108,60 A48,48 0 0,1 96.8,90.9 L75.3,72.9 A19,19 0 0,0 79,60 Z"/>
+                    <path d="M69.5,76.5 L84,101.6 A48,48 0 0,1 51.6,107.3 L56.5,79.7 A19,19 0 0,0 69.5,76.5 Z"/>
+                    <path d="M50.5,76.5 L36,101.6 A48,48 0 0,1 14.9,76.4 L41.2,66.8 A19,19 0 0,0 50.5,76.5 Z"/>
+                    <path d="M41,60 L12,60 A48,48 0 0,1 23.2,29.1 L44.7,47.1 A19,19 0 0,0 41,60 Z"/>
+                    <path d="M50.5,43.5 L36,18.4 A48,48 0 0,1 68.4,12.7 L63.5,40.3 A19,19 0 0,0 50.5,43.5 Z"/>
+                    <path d="M69.5,43.5 L84,18.4 A48,48 0 0,1 105.1,43.6 L78.8,53.2 A19,19 0 0,0 69.5,43.5 Z"/>
                   </g>
 
                   <!-- Center iris opening -->
-                  <circle cx="60" cy="60" r="20" fill="rgba(10,13,18,0.97)"/>
-                  <circle cx="60" cy="60" r="20" stroke="rgba(209,162,106,0.55)" stroke-width="1.5" fill="none"/>
-                  <circle cx="60" cy="60" r="11" stroke="rgba(209,162,106,0.18)" stroke-width="0.8" fill="none"/>
-
-                  <!-- Core glow -->
-                  <circle cx="60" cy="60" r="5" fill="#d1a26a" filter="url(#core-f)"/>
-                  <circle cx="60" cy="60" r="3" fill="#f0d496"/>
+                  <circle cx="60" cy="60" r="19" fill="rgba(10,13,18,0.96)" stroke="rgba(209,162,106,0.45)" stroke-width="1.2"/>
+                  <circle cx="60" cy="60" r="10" stroke="rgba(209,162,106,0.15)" stroke-width="0.7" fill="none"/>
+                  <!-- Core dot -->
+                  <circle cx="60" cy="60" r="4.5" fill="#d1a26a"/>
+                  <circle cx="60" cy="60" r="2.5" fill="#f0d496"/>
                 </svg>
               </div>
               <span class="orbit-label">Aperture</span>

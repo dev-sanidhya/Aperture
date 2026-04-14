@@ -21,7 +21,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior handled by Lenis smooth scroll */
 }
 
 body {
@@ -1585,25 +1585,12 @@ textarea {
   text-align: center;
 }
 
+/* [data-reveal] — GSAP ScrollTrigger handles all reveal animation.
+   Keep opacity:0 only to prevent flash-of-unstyled-content before GSAP fires. */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(44px) scale(0.97);
-  filter: blur(6px);
-  transition:
-    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
 }
-
-[data-reveal].revealed {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  filter: blur(0px);
-}
-
-[data-reveal]:nth-child(2) { transition-delay: 0.08s; }
-[data-reveal]:nth-child(3) { transition-delay: 0.16s; }
-[data-reveal]:nth-child(4) { transition-delay: 0.24s; }
 
 /* ── Cursor glow ──────────────────────────────────────────── */
 .cursor-glow {
@@ -1912,13 +1899,15 @@ textarea {
 .aptr-svg {
   width: 140px;
   height: 140px;
-  animation: aptr-breathe 6s ease-in-out infinite;
+  animation: aptr-breathe 7s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(209, 162, 106, 0.15));
 }
 
-/* Gold blades — clockwise */
+/* Orbit center blades — slow clockwise CSS rotation */
 .aptr-blades {
-  animation: aptr-spin-cw 28s linear infinite;
+  animation: aptr-spin-cw 32s linear infinite;
   transform-origin: 60px 60px;
+  transform-box: fill-box;
 }
 
 @keyframes aptr-spin-cw {
@@ -1927,8 +1916,14 @@ textarea {
 }
 
 @keyframes aptr-breathe {
-  0%, 100% { filter: drop-shadow(0 0 16px rgba(209, 162, 106, 0.18)); }
-  50%       { filter: drop-shadow(0 0 48px rgba(209, 162, 106, 0.5)); }
+  0%, 100% { filter: drop-shadow(0 0 18px rgba(209, 162, 106, 0.14)); }
+  50%       { filter: drop-shadow(0 0 42px rgba(209, 162, 106, 0.38)); }
+}
+
+/* Header brand-mark blades — GSAP ticker drives rotation via inline transform */
+.brand-blades {
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 /* ── Card fly-in states — JS scroll-scrub owns transforms ─── */

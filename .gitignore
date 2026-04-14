@@ -18,3 +18,10 @@ backend/.coverage
 openclaw/local/*.bak
 openclaw/local/*.bak.*
 
+# scroll-story dev artifacts
+scroll-story/node_modules/
+scroll-story/dist/
+
+# Claude Code project config
+.claude/
+
