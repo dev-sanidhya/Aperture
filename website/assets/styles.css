@@ -20,9 +20,7 @@
   box-sizing: border-box;
 }
 
-html {
-  /* scroll-behavior handled by Lenis smooth scroll */
-}
+/* scroll-behavior handled by Lenis smooth scroll */
 
 body {
   margin: 0;
@@ -2249,6 +2247,11 @@ textarea {
 }
 
 @media (max-width: 640px) {
+  .aptr-svg {
+    width: 90px;
+    height: 90px;
+  }
+
   body.menu-open {
     overflow: hidden;
   }
