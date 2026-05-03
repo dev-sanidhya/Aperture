@@ -11,6 +11,7 @@ This file is a routing index. Keep it short and treat referenced files as source
 
 ## Conditional Routing
 
+- If discussing agency strategy, ICP, offer, outreach, prospecting, or sales motion: read [docs/agency-strategy-context.md](docs/agency-strategy-context.md).
 - If touching backend code (`backend/app/**`): read [rules/backend-rules.md](rules/backend-rules.md).
 - If touching database models or migrations (`backend/app/models/**`, `backend/alembic/**`): read [rules/data-rules.md](rules/data-rules.md).
 - If touching discovery, outreach, provider integrations, or external APIs: read [rules/integration-rules.md](rules/integration-rules.md).

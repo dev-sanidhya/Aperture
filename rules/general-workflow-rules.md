@@ -4,6 +4,7 @@
 
 - Aperture is an outbound agency engine for discovering, qualifying, enriching, routing, and contacting business prospects.
 - The current commercial direction is AI-assisted workflow implementation for recruiting/staffing agencies; preserve support for broader outbound infrastructure unless the task explicitly narrows it.
+- For business strategy, outreach, ICP, offer, and current batch context, use `docs/agency-strategy-context.md` as the source of truth.
 - Keep the system grounded in public business evidence, compliant contact handling, and measurable outreach operations.
 
 ## Research vs Implementation
