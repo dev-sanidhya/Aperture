@@ -242,6 +242,7 @@ class Candidate:
     snippet: str
     source_type: str
     source_query: str
+    source_url: str = ""
 
 
 def clean_text(value: str) -> str:
@@ -360,13 +361,16 @@ def load_csv_candidates(path: Path) -> list[Candidate]:
                 continue
             company = first_present(row, ("company_name", "company", "name", "account name", "organization"))
             notes = first_present(row, ("description", "services", "industry", "notes"))
+            source_query = first_present(row, ("source_query", "query", "segment", "campaign"))
+            source_url = first_present(row, ("source_url", "best_source_url", "url_source"))
             candidates.append(
                 Candidate(
                     title=company or root_domain(website),
                     url=website,
                     snippet=notes,
                     source_type="csv",
-                    source_query=str(path.name),
+                    source_query=source_query or str(path.name),
+                    source_url=source_url,
                 )
             )
     return candidates
@@ -657,7 +661,7 @@ def analyze_site(candidate: Candidate, max_pages: int, request_delay: float) -> 
         "linkedin_url": linkedin_url,
         "source_type": candidate.source_type,
         "source_query": candidate.source_query,
-        "source_url": candidate.url,
+        "source_url": candidate.source_url or candidate.url,
         "b2b_signal": b2b_signal,
         "pain_angle": pain_angle,
         "pain_evidence": pain_evidence,

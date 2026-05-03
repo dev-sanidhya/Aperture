@@ -37,6 +37,53 @@ How to get it:
 6. Create an API key.
 7. Restrict the key to the Places API and to your server IP if possible.
 
+## Search Discovery Providers
+
+These are optional for automated B2B agency discovery. The pipeline can still run from seed URLs and imported CSVs without them.
+
+### Brave Search
+
+Set:
+
+```env
+APERTURE_BRAVE_SEARCH_API_KEY=
+```
+
+Use with:
+
+```powershell
+python ops\prospecting\discover_agencies.py --source brave --max-queries 20
+```
+
+### SerpAPI
+
+Set:
+
+```env
+APERTURE_SERPAPI_API_KEY=
+```
+
+Use with:
+
+```powershell
+python ops\prospecting\discover_agencies.py --source serpapi --max-queries 20
+```
+
+### Google Programmable Search
+
+Set:
+
+```env
+APERTURE_GOOGLE_CSE_API_KEY=
+APERTURE_GOOGLE_CSE_ID=
+```
+
+Use with:
+
+```powershell
+python ops\prospecting\discover_agencies.py --source google-cse --max-queries 20
+```
+
 ## Amazon SES
 
 ### What you need

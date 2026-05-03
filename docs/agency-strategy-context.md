@@ -83,8 +83,10 @@ Do not mass blast unverified seed lists. Verify company fit, decision maker, con
 
 Tracked workflow files:
 
+- `ops/prospecting/discover_agencies.py`
 - `ops/prospecting/build_agency_pipeline.py`
 - `ops/prospecting/agency-lead-pipeline.md`
+- `ops/prospecting/agency_discovery_sources.example.txt`
 - `ops/prospecting/agency_seed_urls.example.txt`
 
 Generated local files are intentionally ignored under `data/prospects/`.
@@ -92,7 +94,9 @@ Generated local files are intentionally ignored under `data/prospects/`.
 Regenerate prospects with:
 
 ```powershell
-python ops\prospecting\build_agency_pipeline.py --query-limit 3 --max-sites 30
+python ops\prospecting\discover_agencies.py --source seed --seed-file ops\prospecting\agency_seed_urls.example.txt --max-results 50 --min-score 45
+$today = Get-Date -Format yyyy-MM-dd
+python ops\prospecting\build_agency_pipeline.py --no-search --input-csv "data\prospects\agency_research_queue_$today.csv" --max-sites 30
 ```
 
 Run a no-network smoke check with:
@@ -105,7 +109,9 @@ python ops\prospecting\build_agency_pipeline.py --dry-run
 
 The pipeline is not agent-owned. Python owns:
 
-- search/query execution
+- search/API query execution
+- source fanout
+- domain extraction
 - seed URL loading
 - CSV import
 - website fetching
@@ -125,6 +131,14 @@ OpenClaw owns optional top-lead enrichment only:
 OpenClaw is disabled by default. Use `--openclaw-top-n 5` only after the deterministic list is already scored.
 
 Search is opportunistic, not the only source. Public search engines can throttle HTML results, so the startup pipeline must keep working from the built-in seed list and CSV imports. Add paid search/data APIs only after the first reply or pilot signal justifies spend.
+
+Preferred discovery source order:
+
+1. Seed/list sources for free reproducible runs.
+2. Brave Search API for low-cost web-search fanout.
+3. SerpAPI when Google-style result quality is worth the cost.
+4. Google Programmable Search when already configured.
+5. Apollo/Hunter/Tomba only after reply quality justifies credits.
 
 Recommended startup route:
 

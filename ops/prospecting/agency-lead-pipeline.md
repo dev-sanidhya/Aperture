@@ -35,11 +35,18 @@ Use the script's `pain_angle` field to decide the first message.
 Run from the repo root:
 
 ```powershell
-python ops\prospecting\build_agency_pipeline.py
+python ops\prospecting\discover_agencies.py --source seed --seed-file ops\prospecting\agency_seed_urls.example.txt --max-results 50 --min-score 45
+$today = Get-Date -Format yyyy-MM-dd
+python ops\prospecting\build_agency_pipeline.py --no-search --input-csv "data\prospects\agency_research_queue_$today.csv" --max-sites 30
 ```
 
 Generated files are written under ignored `data/prospects/`:
 
+- `agency_discovery_raw_<date>.csv`: raw API/search/list/seed results
+- `agency_accounts_discovered_<date>.csv`: deduped discovered accounts
+- `agency_research_queue_<date>.csv`: qualified accounts to enrich
+- `agency_discovered_seed_urls_<date>.txt`: URL-only queue for seed-based runs
+- `agency_discovery_runbook_<date>.md`: discovery run notes
 - `agency_pipeline_<date>.csv`: all researched agencies
 - `agency_outreach_approval_<date>.csv`: high-score leads for manual review
 - `agency_pipeline_runbook_<date>.md`: daily operating notes and top candidates
@@ -51,6 +58,7 @@ Default mode uses:
 - the built-in public agency seed list
 - public agency websites
 - opportunistic DuckDuckGo HTML search when it is not blocked
+- optional Brave Search, SerpAPI, or Google Programmable Search for API-backed discovery
 - optional CSV import from Apollo/Sales Navigator/manual lists
 - deterministic scoring
 
@@ -60,8 +68,13 @@ Useful commands:
 
 ```powershell
 python ops\prospecting\build_agency_pipeline.py --dry-run
+python ops\prospecting\discover_agencies.py --dry-run
+python ops\prospecting\discover_agencies.py --source seed --seed-file ops\prospecting\agency_seed_urls.example.txt --max-results 50 --min-score 45
+python ops\prospecting\discover_agencies.py --source brave --segment b2b-lead-gen --country "United States" --max-queries 20
 python ops\prospecting\build_agency_pipeline.py --query-limit 3 --max-sites 20
 python ops\prospecting\build_agency_pipeline.py --no-search --seed-file ops\prospecting\agency_seed_urls.example.txt
+$today = Get-Date -Format yyyy-MM-dd
+python ops\prospecting\build_agency_pipeline.py --no-search --input-csv "data\prospects\agency_research_queue_$today.csv" --max-sites 30
 python ops\prospecting\build_agency_pipeline.py --input-csv path\to\apollo_export.csv
 ```
 

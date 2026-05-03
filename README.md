@@ -23,16 +23,22 @@ The first motion is simple:
 Run from the repo root:
 
 ```powershell
+python ops\prospecting\discover_agencies.py --dry-run
+python ops\prospecting\discover_agencies.py --source seed --seed-file ops\prospecting\agency_seed_urls.example.txt --max-results 50 --min-score 45
 python ops\prospecting\build_agency_pipeline.py --dry-run
-python ops\prospecting\build_agency_pipeline.py --query-limit 3 --max-sites 30
+$today = Get-Date -Format yyyy-MM-dd
+python ops\prospecting\build_agency_pipeline.py --no-search --input-csv "data\prospects\agency_research_queue_$today.csv" --max-sites 30
 ```
 
 Generated prospect files are written to ignored `data/prospects/`.
 
+API-backed discovery is optional. Configure Brave, SerpAPI, or Google Programmable Search keys in `.env` when you want automated web-search fanout.
+
 OpenClaw enrichment is off by default. Use it only for the best deterministic leads:
 
 ```powershell
-python ops\prospecting\build_agency_pipeline.py --query-limit 3 --max-sites 30 --openclaw-top-n 5
+$today = Get-Date -Format yyyy-MM-dd
+python ops\prospecting\build_agency_pipeline.py --no-search --input-csv "data\prospects\agency_research_queue_$today.csv" --max-sites 30 --openclaw-top-n 5
 ```
 
 The operating runbook is in [ops/prospecting/agency-lead-pipeline.md](ops/prospecting/agency-lead-pipeline.md).

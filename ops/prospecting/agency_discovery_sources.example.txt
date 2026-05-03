@@ -1,0 +1,6 @@
+# Optional public list pages for discovery.
+# These are treated as weak sources. The script extracts outbound domains, dedupes them,
+# and sends likely agency domains to the research queue for verification.
+https://www.callboxinc.com/top-b2b-lead-generation-companies-usa/
+https://leadhaste.com/blog/how-to-use-clay-for-lead-generation
+https://gtm-scaler.com/how-to-use-clay-for-b2b-outbound-a-practical-playbook/
