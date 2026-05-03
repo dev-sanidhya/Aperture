@@ -702,8 +702,48 @@ def parse_json_like_output(raw: str) -> dict[str, object]:
     return {"raw": text}
 
 
+def shell_safe_openclaw_text(value: str) -> str:
+    replacements = {
+        "&": " and ",
+        "|": " ",
+        "<": " ",
+        ">": " ",
+        "^": " ",
+        "%": " percent ",
+    }
+    safe = value
+    for needle, replacement in replacements.items():
+        safe = safe.replace(needle, replacement)
+    return clean_text(safe)
+
+
+def shell_safe_payload(value: object) -> object:
+    if isinstance(value, dict):
+        return {str(key): shell_safe_payload(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [shell_safe_payload(item) for item in value]
+    if isinstance(value, str):
+        return shell_safe_openclaw_text(value)
+    return value
+
+
+def openclaw_output_payload(response: dict[str, object]) -> dict[str, object]:
+    if isinstance(response.get("output"), dict):
+        return response["output"]  # type: ignore[return-value]
+    payloads = response.get("payloads")
+    if isinstance(payloads, list):
+        for payload in payloads:
+            if not isinstance(payload, dict):
+                continue
+            text = payload.get("text")
+            if isinstance(text, str) and text.strip():
+                parsed = parse_json_like_output(text)
+                return parsed if isinstance(parsed, dict) else {"raw": text}
+    return response
+
+
 def enrich_with_openclaw(row: dict[str, str], args: argparse.Namespace) -> dict[str, str]:
-    payload = {
+    payload = shell_safe_payload({
         "task": "enrich_b2b_agency_lead",
         "instructions": (
             "Use only the provided evidence. Return strict JSON with keys: "
@@ -721,7 +761,7 @@ def enrich_with_openclaw(row: dict[str, str], args: argparse.Namespace) -> dict[
             "pain_evidence": row["pain_evidence"],
             "notes_excerpt": row["notes"][:OPENCLAW_TEXT_CHARS],
         },
-    }
+    })
     session_safe_domain = re.sub(r"[^a-zA-Z0-9_-]+", "-", row["domain"])[:80]
     command = [
         args.openclaw_command,
@@ -750,7 +790,7 @@ def enrich_with_openclaw(row: dict[str, str], args: argparse.Namespace) -> dict[
         return row
 
     response = parse_json_like_output(result.stdout)
-    output = response.get("output") if isinstance(response.get("output"), dict) else response
+    output = openclaw_output_payload(response)
     if not isinstance(output, dict):
         row["ai_risk"] = "OpenClaw returned non-dict output"
         return row
