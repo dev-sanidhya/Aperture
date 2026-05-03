@@ -4,73 +4,78 @@ This file is the handoff context for future chats about the agency direction, ou
 
 ## Current Direction
 
-Aperture is being repositioned from a generic automated agency into an AI recruiting ops implementation agency.
+Aperture is being repositioned from a recruiting-only prospecting setup into a B2B agency lead pipeline for selling practical AI workflow implementation.
 
 The target business is:
 
-> AI-assisted recruiting operations systems for founder-led recruiting/staffing agencies.
+> AI workflow systems for B2B agencies that are losing time on manual lead intake, client reporting, proposal drafting, CRM updates, research, and delivery handoffs.
 
-The practical offer is not "AI agency", "websites", or "marketing". Those are implementation details. The external offer is a workflow system that helps recruiting teams reduce repetitive manual work and create more candidate/client conversations.
+The external offer is not "AI agency", "agents", or "automation". Those are implementation details. The client-facing promise is a contained workflow sprint that saves team hours, improves follow-up speed, and gives agency operators more delivery capacity.
 
 ## Target ICP
 
-- Geography: United States, United Kingdom, Australia
-- Company type: recruiting agency, staffing agency, executive search firm
-- Size: roughly 5-50 employees
-- Buyer: founder, CEO, managing director, owner, head of operations, head of recruitment
-- Best niches: healthcare, technology, engineering, finance, sales recruitment, executive search
-- Avoid initially: generic local SMBs, huge enterprise staffing brands, low-margin local labor agencies, job boards, directories, solo recruiters without budget signal
+- Geography: United States, United Kingdom, Canada, Australia
+- Company type: B2B lead-generation, growth, paid media, SEO, HubSpot/RevOps, recruiting/staffing, product/dev, or specialist marketing agencies
+- Size: roughly 10-50 employees, with room to test 5-100
+- Buyer: founder, CEO, managing director, COO, head of client services, head of operations, head of RevOps, head of recruitment
+- Best initial segments: B2B lead-generation/growth agencies, paid media or SEO agencies serving SaaS/B2B clients, HubSpot/RevOps agencies, and recruiting/staffing agencies as a sub-segment
+- Avoid initially: random local SMBs, huge enterprises, directories, agencies without B2B client signal, agencies with no visible service complexity, and solo operators without budget signal
 
 ## Offer
 
 Initial wedge:
 
-> AI Recruiting Ops Sprint
+> AI Workflow Sprint for B2B Agencies
 
 Typical workflow components:
 
-- sourcing/enrichment workflow
-- outreach personalization workflow
-- follow-up workflow
-- CRM/ATS update workflow
-- candidate/client summary workflow
-- SOP and team handoff
+- call transcript to CRM notes, follow-up, proposal outline, and internal tasks
+- lead intake to enrichment, qualification, CRM update, and follow-up drafts
+- campaign/reporting data to client-ready insights and account-manager drafts
+- client intake to project brief, tasks, owners, and handoff updates
+- recruiting notes to candidate/client summaries, shortlists, outreach drafts, follow-ups, and ATS updates
 
 Early pilot pricing:
 
 - First pilots: `$1.5k-$3k`
-- Standard sprint after proof: `$5k-$10k`
-- Potential retainer after trust: `$1k-$3k/month`
+- Standard sprint after proof: `$3k-$7.5k`
+- Larger workflow/dashboard sprint after proof: `$7.5k-$15k`
+- Potential retainer after trust: `$750-$2k/month`
 
 ## Positioning
 
 Use:
 
-> We build AI-assisted recruiting ops systems that remove repetitive sourcing/outreach/admin work while keeping recruiters focused on candidate and client conversations.
+> We build practical AI workflows for B2B agencies that turn calls, briefs, reports, and lead forms into follow-ups, CRM updates, proposals, tasks, and client-ready insights.
+
+Short version:
+
+> We help B2B agencies remove manual ops from lead intake, reporting, proposals, CRM updates, and delivery handoffs.
 
 Do not lead with:
 
 - generic AI automation
 - websites
-- marketing services
-- decks
+- chatbots
 - "agents" as the main pitch
 - unrealistic metrics or unearned case studies
+- fully autonomous outbound claims
 
 ## Outreach Motion
 
-Use a manual, founder-led, teardown-first motion.
+Use a founder-led, teardown-first motion.
 
 Preferred channel order:
 
 1. LinkedIn personal account for trust and conversations
-2. Email for follow-up and scale
-3. X only as authority/content support if the audience is active there
-4. Agency website/page as credibility layer, not the primary acquisition engine
+2. Email for follow-up and controlled scale
+3. Loom teardown for high-fit prospects
+4. X only as authority/content support if the audience is active there
+5. Agency website/page as credibility layer, not the primary acquisition engine
 
 First CTA:
 
-> Want me to send over 2-3 specific places where AI could remove manual sourcing/outreach/admin work from your recruiting workflow?
+> Open to me sending 2-3 specific automation ideas for your agency?
 
 Do not mass blast unverified seed lists. Verify company fit, decision maker, contact, and copy first.
 
@@ -78,46 +83,56 @@ Do not mass blast unverified seed lists. Verify company fit, decision maker, con
 
 Tracked workflow files:
 
-- `ops/prospecting/build_recruiting_prospects.py`
-- `ops/prospecting/recruiting-prospect-pipeline.md`
-- `ops/prospecting/recruiting_seed_urls.example.txt`
+- `ops/prospecting/build_agency_pipeline.py`
+- `ops/prospecting/agency-lead-pipeline.md`
+- `ops/prospecting/agency_seed_urls.example.txt`
 
 Generated local files are intentionally ignored under `data/prospects/`.
 
-As of 2026-05-02, the local generated outreach assets were:
-
-- `data/prospects/recruiting_prospects_2026-05-02.csv`
-- `data/prospects/outreach_batch_recruiting_2026-05-02.csv`
-- `data/prospects/send_ready_recruiting_batch_2026-05-02.csv`
-- `data/prospects/manual_outreach_runbook_2026-05-02.md`
-
-These generated files may not exist in a fresh clone because `data/` is ignored. Regenerate prospects with:
+Regenerate prospects with:
 
 ```powershell
-python ops\prospecting\build_recruiting_prospects.py
+python ops\prospecting\build_agency_pipeline.py --query-limit 3 --max-sites 30
 ```
 
-## Send-Ready Batch Status
+Run a no-network smoke check with:
 
-A first 10-prospect manual-review batch was prepared locally on 2026-05-02.
+```powershell
+python ops\prospecting\build_agency_pipeline.py --dry-run
+```
 
-Ready after manual review:
+## AI Runtime Strategy
 
-- Medfuture Healthcare
-- RADAAS
-- Evolve Talent
-- RCS Staffing
-- GHS Recruiting
-- HCRC Staffing
-- K & K Technical Group
-- Infotech Staffing
+The pipeline is not agent-owned. Python owns:
 
-Not ready without more contact research:
+- search/query execution
+- seed URL loading
+- CSV import
+- website fetching
+- extraction
+- dedupe
+- deterministic scoring
+- approval-batch state
 
-- Fifthhost Consulting
-- Agility Health
+OpenClaw owns optional top-lead enrichment only:
 
-No outreach was sent by the agent.
+- summarize observed evidence
+- identify the likely workflow pain
+- recommend the first outreach angle
+- flag risks or uncertainty
+- return strict JSON
+
+OpenClaw is disabled by default. Use `--openclaw-top-n 5` only after the deterministic list is already scored.
+
+Search is opportunistic, not the only source. Public search engines can throttle HTML results, so the startup pipeline must keep working from the built-in seed list and CSV imports. Add paid search/data APIs only after the first reply or pilot signal justifies spend.
+
+Recommended startup route:
+
+- Use the existing OpenClaw/Codex setup if it is already authenticated locally.
+- Prefer mini routes first.
+- Keep enrichment payloads compact.
+- Do not use unofficial ChatGPT web automation to bypass product/API boundaries.
+- Do not add Hermes for v1 unless OpenClaw fails in practice.
 
 ## Sending Rules
 
@@ -128,6 +143,7 @@ Before sending commercial cold email, require:
 - opt-out language
 - final approval of exact recipients and copy
 - public business contact or verified decision-maker contact
+- suppression tracking
 
 Recommended opt-out footer:
 
@@ -150,22 +166,23 @@ Useful infrastructure:
 
 Needed product pivot:
 
-- India-local SMB category sourcing should become international recruiting/staffing account sourcing.
-- Website-funnel pitch should become AI recruiting ops/workflow pitch.
-- Google Maps sourcing should be supplemented or replaced with public search, directories, Sales Navigator/manual verification, and compliant enrichment providers.
-- Gmail one-off sending should not become production infrastructure; use authenticated sender tooling such as SES, Instantly, Smartlead, or another proper sequencing provider.
+- India-local SMB category sourcing becomes international B2B agency account sourcing.
+- Website-funnel pitch becomes AI workflow implementation pitch.
+- Google Maps sourcing becomes public search, seed URLs, optional Apollo/Sales Navigator CSV imports, and compliant enrichment providers later.
+- Gmail one-off sending should not become production infrastructure; use authenticated sender tooling such as SES, Instantly, Smartlead, or another proper sequencing provider once sending volume matters.
 
 ## Near-Term Plan
 
-1. Manually verify the first 10 prospects.
-2. Fill decision-maker name, title, LinkedIn, email, source URLs, and confidence.
-3. Send only approved LinkedIn/email touches.
-4. Track every touch and reply in the outreach CSV or CRM.
-5. If replies ask for more detail, send a short workflow teardown, not a deck.
-6. Sell a contained pilot sprint before proposing a retainer.
+1. Generate 30-100 agencies.
+2. Manually verify the top 20.
+3. Fill decision-maker name, title, LinkedIn, email, source URLs, and confidence.
+4. Send LinkedIn-first touches to approved prospects.
+5. Record replies and objections in the CSV or CRM.
+6. For interested replies, send a short workflow teardown or Loom, not a deck.
+7. Sell a contained pilot sprint before proposing a retainer.
 
 ## Operating Principle
 
-The goal is signal, not volume.
+The goal is signal, not raw volume.
 
 Do not scale outreach until reply quality, objection patterns, and at least one paid pilot validate the niche and offer.

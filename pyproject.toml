@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "aperture"
 version = "0.1.0"
-description = "Aperture is an India-focused outbound agency engine powered by OpenClaw."
+description = "Aperture is a low-cost B2B agency lead pipeline with optional OpenClaw enrichment."
 readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }

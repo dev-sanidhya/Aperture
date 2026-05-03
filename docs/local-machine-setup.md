@@ -64,7 +64,7 @@ If Aperture has not been logged in yet, run this once first:
 powershell -ExecutionPolicy Bypass -File .\ops\windows\setup-openclaw.ps1
 ```
 
-That script uses the Aperture-specific config and state dir, runs Codex OAuth, runs the Copilot device login, and then sets `openai-codex/gpt-5.4` as the default model for the company runtime.
+That script uses the Aperture-specific config and state dir, runs Codex OAuth, runs the Copilot device login, and then sets `openai-codex/gpt-5.1-codex-mini` as the default model for the company runtime.
 
 Terminal 2:
 
@@ -94,10 +94,10 @@ If you want Aperture to keep running:
 
 ## What you still need to fill in
 
-Before real provider usage, add the provider values to [\.env](C:\CS\Agency\Aperture\.env):
-- Google Places API key
-- SES credentials
-- WhatsApp provider credentials
+Before real provider usage, add only the provider values you actually plan to use to [\.env](C:\CS\Agency\Aperture\.env):
+- SES credentials when production email sending is enabled
+- WhatsApp provider credentials only after explicit compliance checks
 - outreach domain
+- Google Places API key only if you revive local SMB/place sourcing later
 
 The full variable list is documented in [provider-setup.md](C:\CS\Agency\Aperture\docs\provider-setup.md).

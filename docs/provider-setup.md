@@ -24,6 +24,8 @@ APERTURE_REDIS_URL=redis://localhost:6379/0
 
 ## Google Places
 
+This is optional legacy infrastructure for local SMB/place sourcing. The B2B agency lead pipeline does not need it.
+
 ### `APERTURE_GOOGLE_PLACES_API_KEY`
 
 How to get it:

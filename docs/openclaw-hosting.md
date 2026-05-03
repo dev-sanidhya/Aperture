@@ -1,26 +1,27 @@
 # Dedicated OpenClaw Hosting
 
-Do not point Aperture at a personal desktop OpenClaw runtime. Run a dedicated OpenClaw host for the agency.
+OpenClaw is optional for the first B2B agency prospecting motion. The deterministic pipeline can run without it.
 
-## Recommended shape
+Use OpenClaw only for capped enrichment on leads that have already passed deterministic scoring. Do not let an agent own discovery, dedupe, sender state, suppression, or outreach sending.
 
-- one VPS for the Aperture app stack
-- OpenClaw installed on that same VPS as a separate service user
+## Recommended Shape
+
+- local OpenClaw during first validation
+- one dedicated VPS later for the Aperture app stack
+- OpenClaw installed on that VPS as a separate service user
 - separate OpenClaw config, auth state, channels, and logs from any personal setup
 
 ## Why
 
 - isolates customer outreach from personal sessions and channels
 - makes provider health and auth state predictable
-- lets you rotate Copilot or Codex auth without touching your personal assistant
-- keeps WhatsApp and other outreach channels scoped to the agency runtime
+- lets you rotate Codex or Copilot auth without touching your personal assistant
+- keeps outreach channels scoped to the agency runtime
+- keeps model spend bounded by explicit pipeline flags such as `--openclaw-top-n`
 
-## Host setup
+## Local Startup Setup
 
-1. Create a dedicated UNIX user such as `aperture`.
-2. Install Node 22+ and `openclaw`.
-3. Store runtime config under `/home/aperture/.openclaw/`.
-4. Run:
+Use this only when you want optional AI enrichment:
 
 ```bash
 openclaw onboard --auth-choice openai-codex
@@ -28,9 +29,24 @@ openclaw models auth login --provider openai-codex
 openclaw models auth login --provider github-copilot
 ```
 
+Recommended first route:
+
+- primary: `openai-codex/gpt-5.1-codex-mini`
+- fallback: `github-copilot/gpt-5-mini`
+- thinking: `low`
+- top-lead cap: 5-10 leads per run
+
+Do not use unofficial ChatGPT web automation as production infrastructure. If a subscription-backed OpenClaw/Codex route is configured and allowed by the provider, keep it quota-limited and separate from outreach sending.
+
+## VPS Setup Later
+
+1. Create a dedicated UNIX user such as `aperture`.
+2. Install Node 22+ and `openclaw`.
+3. Store runtime config under `/home/aperture/.openclaw/`.
+4. Run the OpenClaw onboarding commands above.
 5. Install the Gateway daemon or run it under `systemd`.
 
-## Aperture app config
+## Aperture App Config
 
 Set:
 
@@ -40,3 +56,16 @@ Set:
 
 The backend will treat this host runtime as the agency OpenClaw instance.
 
+## Prospecting Usage
+
+Default run, no model spend:
+
+```powershell
+python ops\prospecting\build_agency_pipeline.py --query-limit 3 --max-sites 30
+```
+
+Capped enrichment run:
+
+```powershell
+python ops\prospecting\build_agency_pipeline.py --query-limit 3 --max-sites 30 --openclaw-top-n 5 --openclaw-thinking low
+```
