@@ -111,6 +111,28 @@ First CTA:
 
 > Open to me sending 2-3 specific automation ideas for your agency?
 
+## Contact + Pitch Pack Stage
+
+After generating `agency_outreach_approval_<date>.csv`, run the contact and pitch-pack stage:
+
+```powershell
+python ops\prospecting\enrich_agency_contacts.py --max-accounts 10 --max-contact-queries 4
+```
+
+This writes clean manual-review outputs under `data/prospects/`:
+
+- `agency_contacts_<date>.csv`: one row per public contact candidate, with source URL, confidence, and verification status.
+- `agency_pitch_pack_<date>.csv`: one row per account, with best contact, LinkedIn touch, cold email, follow-up, Loom plan, assumptions, and do-not-claim guardrails.
+- `agency_contact_pitch_review_<date>.md`: skim-friendly review file for the top accounts.
+
+OpenClaw pitch refinement is optional and should stay capped:
+
+```powershell
+python ops\prospecting\enrich_agency_contacts.py --max-accounts 10 --openclaw-top-n 3 --openclaw-command C:\Users\athar\AppData\Roaming\npm\openclaw.cmd
+```
+
+Do not send directly from these files. Use them to manually verify contact identity, source URLs, email deliverability, and final copy.
+
 ## Why This Shape
 
 The source of truth stays in CSV/CRM state, not inside an agent. Python owns discovery, dedupe, scoring, and state. AI is reserved for research and personalization where it gives leverage. This keeps costs and failure modes controlled while still removing manual internet scouring.
