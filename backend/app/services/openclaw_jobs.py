@@ -69,7 +69,7 @@ def run_openclaw_job(
     logical_agent = _logical_agent_name(runtime, job_type)
     prefer_copilot = _should_use_copilot(db, runtime)
     selected_provider = "copilot" if prefer_copilot else "codex"
-    selected_alias = "copilot_mini" if prefer_copilot else "codex_mini"
+    selected_alias = "copilot_best" if prefer_copilot else "codex_best"
     run = AIRun(
         business_id=business.id if business else None,
         provider_name="openclaw",
@@ -97,7 +97,7 @@ def run_openclaw_job(
                     session_id=_session_id(job_type, str(run.id), "copilot"),
                     message=json.dumps(message_payload, ensure_ascii=False),
                 )
-                run.model_alias = "copilot_mini"
+                run.model_alias = "copilot_best"
                 run.status = AIRunStatus.SUCCEEDED
                 run.output_json = response
             except Exception as retry_exc:  # pragma: no cover

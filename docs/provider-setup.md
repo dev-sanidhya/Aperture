@@ -69,6 +69,48 @@ Use with:
 python ops\prospecting\discover_agencies.py --source serpapi --max-queries 20
 ```
 
+### Serper
+
+Set:
+
+```env
+APERTURE_SERPER_API_KEY=
+```
+
+Use with:
+
+```powershell
+python ops\prospecting\discover_agencies.py --source serper --max-queries 20
+```
+
+### Tavily
+
+Set:
+
+```env
+APERTURE_TAVILY_API_KEY=
+```
+
+Use with:
+
+```powershell
+python ops\prospecting\discover_agencies.py --source tavily --max-queries 20
+```
+
+### Exa
+
+Set:
+
+```env
+APERTURE_EXA_API_KEY=
+```
+
+Use with:
+
+```powershell
+python ops\prospecting\discover_agencies.py --source exa --max-queries 20
+```
+
 ### Google Programmable Search
 
 Set:

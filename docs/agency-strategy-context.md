@@ -135,15 +135,16 @@ Search is opportunistic, not the only source. Public search engines can throttle
 Preferred discovery source order:
 
 1. Seed/list sources for free reproducible runs.
-2. Brave Search API for low-cost web-search fanout.
-3. SerpAPI when Google-style result quality is worth the cost.
-4. Google Programmable Search when already configured.
-5. Apollo/Hunter/Tomba only after reply quality justifies credits.
+2. Brave Search API or Serper for free/low-cost web-search fanout.
+3. Tavily or Exa as free-credit alternatives for AI-search style results.
+4. SerpAPI when Google-style result quality is worth the cost.
+5. Google Programmable Search when already configured.
+6. Apollo/Hunter/Tomba only after reply quality justifies credits.
 
 Recommended startup route:
 
 - Use the existing OpenClaw/Codex setup if it is already authenticated locally.
-- Prefer mini routes first.
+- Prefer the verified Codex `gpt-5.4` route and Copilot `gpt-5.3-codex` fallback.
 - Keep enrichment payloads compact.
 - Do not use unofficial ChatGPT web automation to bypass product/API boundaries.
 - Do not add Hermes for v1 unless OpenClaw fails in practice.

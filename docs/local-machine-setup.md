@@ -64,7 +64,7 @@ If Aperture has not been logged in yet, run this once first:
 powershell -ExecutionPolicy Bypass -File .\ops\windows\setup-openclaw.ps1
 ```
 
-That script uses the Aperture-specific config and state dir, runs Codex OAuth, runs the Copilot device login, and then sets `openai-codex/gpt-5.1-codex-mini` as the default model for the company runtime.
+That script uses the Aperture-specific config and state dir, runs Codex OAuth, runs the Copilot device login, and then sets `openai-codex/gpt-5.4` as the default model for the company runtime.
 
 Terminal 2:
 

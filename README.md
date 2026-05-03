@@ -32,7 +32,7 @@ python ops\prospecting\build_agency_pipeline.py --no-search --input-csv "data\pr
 
 Generated prospect files are written to ignored `data/prospects/`.
 
-API-backed discovery is optional. Configure Brave, SerpAPI, or Google Programmable Search keys in `.env` when you want automated web-search fanout.
+API-backed discovery is optional. Configure Brave, Serper, Tavily, Exa, SerpAPI, or Google Programmable Search keys in `.env` when you want automated web-search fanout.
 
 OpenClaw enrichment is off by default. Use it only for the best deterministic leads:
 

@@ -28,6 +28,9 @@ LIST_SOURCES_EXAMPLE_FILE = SCRIPT_DIR / "agency_discovery_sources.example.txt"
 BRAVE_SEARCH_URL = "https://api.search.brave.com/res/v1/web/search"
 SERPAPI_SEARCH_URL = "https://serpapi.com/search.json"
 GOOGLE_CSE_URL = "https://www.googleapis.com/customsearch/v1"
+SERPER_SEARCH_URL = "https://google.serper.dev/search"
+TAVILY_SEARCH_URL = "https://api.tavily.com/search"
+EXA_SEARCH_URL = "https://api.exa.ai/search"
 DUCKDUCKGO_HTML_URL = "https://html.duckduckgo.com/html/"
 
 USER_AGENT = (
@@ -411,6 +414,63 @@ def google_cse_search(query: str, *, api_key: str, cse_id: str, count: int, time
     ]
 
 
+def serper_search(query: str, *, api_key: str, count: int, timeout: float) -> list[dict[str, str]]:
+    headers = {"X-API-KEY": api_key, "Content-Type": "application/json"}
+    payload = {"q": query, "num": min(count, 20)}
+    with httpx.Client(timeout=timeout, headers=headers) as client:
+        response = client.post(SERPER_SEARCH_URL, json=payload)
+        response.raise_for_status()
+    data = response.json()
+    return [
+        {
+            "title": item.get("title", ""),
+            "url": item.get("link", ""),
+            "snippet": item.get("snippet", ""),
+        }
+        for item in data.get("organic", [])
+    ]
+
+
+def tavily_search(query: str, *, api_key: str, count: int, timeout: float) -> list[dict[str, str]]:
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    payload = {
+        "query": query,
+        "search_depth": "basic",
+        "max_results": min(count, 20),
+        "include_answer": False,
+        "include_raw_content": False,
+    }
+    with httpx.Client(timeout=timeout, headers=headers) as client:
+        response = client.post(TAVILY_SEARCH_URL, json=payload)
+        response.raise_for_status()
+    data = response.json()
+    return [
+        {
+            "title": item.get("title", ""),
+            "url": item.get("url", ""),
+            "snippet": item.get("content", ""),
+        }
+        for item in data.get("results", [])
+    ]
+
+
+def exa_search(query: str, *, api_key: str, count: int, timeout: float) -> list[dict[str, str]]:
+    headers = {"x-api-key": api_key, "Content-Type": "application/json"}
+    payload = {"query": query, "numResults": min(count, 20)}
+    with httpx.Client(timeout=timeout, headers=headers) as client:
+        response = client.post(EXA_SEARCH_URL, json=payload)
+        response.raise_for_status()
+    data = response.json()
+    return [
+        {
+            "title": item.get("title", ""),
+            "url": item.get("url", ""),
+            "snippet": item.get("text", "") or item.get("summary", "") or item.get("author", ""),
+        }
+        for item in data.get("results", [])
+    ]
+
+
 def normalize_duckduckgo_url(url: str) -> str:
     parsed = urlparse(url)
     if "duckduckgo.com/l/" not in url:
@@ -492,6 +552,12 @@ def discover_from_search(args: argparse.Namespace, source_type: str, queries: li
                     count=args.max_results_per_query,
                     timeout=args.timeout,
                 )
+            elif source_type == "serper":
+                results = serper_search(query, api_key=args.serper_api_key, count=args.max_results_per_query, timeout=args.timeout)
+            elif source_type == "tavily":
+                results = tavily_search(query, api_key=args.tavily_api_key, count=args.max_results_per_query, timeout=args.timeout)
+            elif source_type == "exa":
+                results = exa_search(query, api_key=args.exa_api_key, count=args.max_results_per_query, timeout=args.timeout)
             elif source_type == "duckduckgo":
                 results = duckduckgo_html_search(query, count=args.max_results_per_query, timeout=args.timeout)
             else:
@@ -801,6 +867,12 @@ def expand_sources(args: argparse.Namespace) -> list[str]:
         expanded.append("serpapi")
     if args.google_cse_api_key and args.google_cse_id:
         expanded.append("google-cse")
+    if args.serper_api_key:
+        expanded.append("serper")
+    if args.tavily_api_key:
+        expanded.append("tavily")
+    if args.exa_api_key:
+        expanded.append("exa")
     return expanded
 
 
@@ -812,13 +884,23 @@ def validate_sources(args: argparse.Namespace) -> None:
         missing.append("serpapi needs APERTURE_SERPAPI_API_KEY or --serpapi-api-key")
     if "google-cse" in args.source and (not args.google_cse_api_key or not args.google_cse_id):
         missing.append("google-cse needs APERTURE_GOOGLE_CSE_API_KEY and APERTURE_GOOGLE_CSE_ID")
+    if "serper" in args.source and not args.serper_api_key:
+        missing.append("serper needs APERTURE_SERPER_API_KEY or --serper-api-key")
+    if "tavily" in args.source and not args.tavily_api_key:
+        missing.append("tavily needs APERTURE_TAVILY_API_KEY or --tavily-api-key")
+    if "exa" in args.source and not args.exa_api_key:
+        missing.append("exa needs APERTURE_EXA_API_KEY or --exa-api-key")
     if missing:
         raise SystemExit("\n".join(missing))
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Discover B2B agency accounts from APIs, web search, seeds, and list pages.")
-    parser.add_argument("--source", action="append", choices=("all", "seed", "list-page", "brave", "serpapi", "google-cse", "duckduckgo"))
+    parser.add_argument(
+        "--source",
+        action="append",
+        choices=("all", "seed", "list-page", "brave", "serpapi", "google-cse", "serper", "tavily", "exa", "duckduckgo"),
+    )
     parser.add_argument("--segment", action="append", choices=tuple(SEGMENTS.keys()), default=[])
     parser.add_argument("--country", action="append", default=[])
     parser.add_argument("--seed-file", type=Path, default=None)
@@ -835,6 +917,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--serpapi-api-key", default=env_first("APERTURE_SERPAPI_API_KEY", "SERPAPI_API_KEY"))
     parser.add_argument("--google-cse-api-key", default=env_first("APERTURE_GOOGLE_CSE_API_KEY", "GOOGLE_CSE_API_KEY"))
     parser.add_argument("--google-cse-id", default=env_first("APERTURE_GOOGLE_CSE_ID", "GOOGLE_CSE_ID"))
+    parser.add_argument("--serper-api-key", default=env_first("APERTURE_SERPER_API_KEY", "SERPER_API_KEY"))
+    parser.add_argument("--tavily-api-key", default=env_first("APERTURE_TAVILY_API_KEY", "TAVILY_API_KEY"))
+    parser.add_argument("--exa-api-key", default=env_first("APERTURE_EXA_API_KEY", "EXA_API_KEY"))
     return parser.parse_args()
 
 
@@ -858,6 +943,9 @@ def main() -> None:
         print(f"Brave key configured: {bool(args.brave_api_key)}")
         print(f"SerpAPI key configured: {bool(args.serpapi_api_key)}")
         print(f"Google CSE configured: {bool(args.google_cse_api_key and args.google_cse_id)}")
+        print(f"Serper key configured: {bool(args.serper_api_key)}")
+        print(f"Tavily key configured: {bool(args.tavily_api_key)}")
+        print(f"Exa key configured: {bool(args.exa_api_key)}")
         return
 
     validate_sources(args)
@@ -868,7 +956,7 @@ def main() -> None:
     if "list-page" in args.source:
         hits.extend(discover_from_list_pages(list_file, args))
 
-    for source_type in ("brave", "serpapi", "google-cse", "duckduckgo"):
+    for source_type in ("brave", "serpapi", "google-cse", "serper", "tavily", "exa", "duckduckgo"):
         if source_type in args.source:
             remaining = max(0, args.max_results - len(hits)) if args.max_results else 0
             if args.max_results and remaining <= 0:

@@ -31,8 +31,8 @@ openclaw models auth login --provider github-copilot
 
 Recommended first route:
 
-- primary: `openai-codex/gpt-5.1-codex-mini`
-- fallback: `github-copilot/gpt-5-mini`
+- primary: `openai-codex/gpt-5.4`
+- fallback: `github-copilot/gpt-5.3-codex`
 - thinking: `low`
 - top-lead cap: 5-10 leads per run
 

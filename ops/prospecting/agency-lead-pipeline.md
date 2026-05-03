@@ -58,7 +58,7 @@ Default mode uses:
 - the built-in public agency seed list
 - public agency websites
 - opportunistic DuckDuckGo HTML search when it is not blocked
-- optional Brave Search, SerpAPI, or Google Programmable Search for API-backed discovery
+- optional Brave Search, Serper, Tavily, Exa, SerpAPI, or Google Programmable Search for API-backed discovery
 - optional CSV import from Apollo/Sales Navigator/manual lists
 - deterministic scoring
 
@@ -71,6 +71,7 @@ python ops\prospecting\build_agency_pipeline.py --dry-run
 python ops\prospecting\discover_agencies.py --dry-run
 python ops\prospecting\discover_agencies.py --source seed --seed-file ops\prospecting\agency_seed_urls.example.txt --max-results 50 --min-score 45
 python ops\prospecting\discover_agencies.py --source brave --segment b2b-lead-gen --country "United States" --max-queries 20
+python ops\prospecting\discover_agencies.py --source serper --segment b2b-lead-gen --country "United States" --max-queries 20
 python ops\prospecting\build_agency_pipeline.py --query-limit 3 --max-sites 20
 python ops\prospecting\build_agency_pipeline.py --no-search --seed-file ops\prospecting\agency_seed_urls.example.txt
 $today = Get-Date -Format yyyy-MM-dd
@@ -90,8 +91,8 @@ python ops\prospecting\build_agency_pipeline.py --query-limit 3 --max-sites 30 -
 
 Recommended first model route:
 
-- `openai-codex/gpt-5.1-codex-mini` through OpenClaw/Codex sign-in when available
-- fallback to GitHub Copilot mini if already configured
+- `openai-codex/gpt-5.4` through OpenClaw/Codex sign-in when available
+- fallback to `github-copilot/gpt-5.3-codex` if already configured
 - no API-key model by default
 
 Keep `--openclaw-top-n` low until outreach reply quality proves the angle. The agent receives a compact evidence payload and must return strict JSON. It should not browse broadly, invent facts, send messages, or own pipeline state.
