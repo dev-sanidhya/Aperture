@@ -143,8 +143,8 @@ Preferred discovery source order:
 
 Recommended startup route:
 
-- Use the existing OpenClaw/Codex setup if it is already authenticated locally.
-- Prefer the verified Codex `gpt-5.4` route and Copilot `gpt-5.3-codex` fallback.
+- Use the existing OpenClaw setup if Copilot and Codex are already authenticated locally.
+- Prefer Copilot `gpt-5.3-codex` as the default enrichment route and keep Codex `gpt-5.2-codex` as the cheaper fallback.
 - Keep enrichment payloads compact.
 - Do not use unofficial ChatGPT web automation to bypass product/API boundaries.
 - Do not add Hermes for v1 unless OpenClaw fails in practice.

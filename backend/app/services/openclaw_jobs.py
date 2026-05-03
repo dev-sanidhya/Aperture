@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import time
-from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from sqlalchemy.orm import Session
@@ -26,24 +25,18 @@ def _logical_agent_name(runtime: OpenClawRuntime, job_type: AIRunJobType) -> str
     return getattr(runtime.settings, JOB_TO_AGENT_SETTING[job_type])
 
 
-def _codex_window_threshold(runtime: OpenClawRuntime) -> int:
-    threshold = int(runtime.settings.codex_budget_max_runs_per_window * runtime.settings.codex_switch_threshold_percent / 100)
-    return max(1, threshold)
-
-
-def _recent_codex_run_count(db: Session, runtime: OpenClawRuntime) -> int:
-    cutoff = datetime.now(timezone.utc) - timedelta(hours=runtime.settings.codex_budget_window_hours)
-    runs = db.query(AIRun).filter(AIRun.created_at >= cutoff).all()
-    return sum(1 for run in runs if (run.model_alias or "").startswith("codex"))
-
-
-def _should_use_copilot(db: Session, runtime: OpenClawRuntime) -> bool:
-    return _recent_codex_run_count(db, runtime) >= _codex_window_threshold(runtime)
-
-
 def _quota_like_error(exc: Exception) -> bool:
     text = str(exc).lower()
-    markers = ("rate limit", "quota", "limit reached", "429", "included limits", "too many requests")
+    markers = (
+        "rate limit",
+        "quota",
+        "limit reached",
+        "429",
+        "included limits",
+        "too many requests",
+        "model is not supported",
+        "requested model is not supported",
+    )
     return any(marker in text for marker in markers)
 
 
@@ -67,9 +60,8 @@ def run_openclaw_job(
 ) -> AIRun:
     runtime = runtime or OpenClawRuntime()
     logical_agent = _logical_agent_name(runtime, job_type)
-    prefer_copilot = _should_use_copilot(db, runtime)
-    selected_provider = "copilot" if prefer_copilot else "codex"
-    selected_alias = "copilot_best" if prefer_copilot else "codex_best"
+    selected_provider = "copilot"
+    selected_alias = "copilot_best"
     run = AIRun(
         business_id=business.id if business else None,
         provider_name="openclaw",
@@ -90,14 +82,14 @@ def run_openclaw_job(
         run.status = AIRunStatus.SUCCEEDED
         run.output_json = response
     except Exception as exc:  # pragma: no cover - exercised in integration tests with monkeypatching
-        if selected_provider == "codex" and _quota_like_error(exc):
+        if selected_provider == "copilot" and _quota_like_error(exc):
             try:
                 response = runtime.invoke_agent(
-                    agent=_provider_agent(logical_agent, "copilot"),
-                    session_id=_session_id(job_type, str(run.id), "copilot"),
+                    agent=_provider_agent(logical_agent, "codex"),
+                    session_id=_session_id(job_type, str(run.id), "codex"),
                     message=json.dumps(message_payload, ensure_ascii=False),
                 )
-                run.model_alias = "copilot_best"
+                run.model_alias = "codex_fallback"
                 run.status = AIRunStatus.SUCCEEDED
                 run.output_json = response
             except Exception as retry_exc:  # pragma: no cover

@@ -91,8 +91,8 @@ python ops\prospecting\build_agency_pipeline.py --query-limit 3 --max-sites 30 -
 
 Recommended first model route:
 
-- `openai-codex/gpt-5.4` through OpenClaw/Codex sign-in when available
-- fallback to `github-copilot/gpt-5.3-codex` if already configured
+- `github-copilot/gpt-5.3-codex` through OpenClaw/Copilot sign-in when available
+- fallback to `openai-codex/gpt-5.2-codex` if Copilot is unavailable or quota-constrained
 - no API-key model by default
 
 Keep `--openclaw-top-n` low until outreach reply quality proves the angle. The agent receives a compact evidence payload and must return strict JSON. It should not browse broadly, invent facts, send messages, or own pipeline state.

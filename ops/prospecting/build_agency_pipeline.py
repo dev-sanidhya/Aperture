@@ -939,7 +939,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--request-delay", type=float, default=1.0, help="Delay between public requests.")
     parser.add_argument("--openclaw-top-n", type=int, default=0, help="Top qualified leads to enrich with OpenClaw. Default off.")
     parser.add_argument("--openclaw-command", default="openclaw", help="OpenClaw command path.")
-    parser.add_argument("--openclaw-agent", default="lead-enrichment-codex", help="OpenClaw agent id for enrichment.")
+    parser.add_argument("--openclaw-agent", default="lead-enrichment-copilot", help="OpenClaw agent id for enrichment.")
     parser.add_argument("--openclaw-thinking", default="low", choices=("low", "medium", "high"), help="OpenClaw thinking level.")
     parser.add_argument("--openclaw-timeout", type=int, default=90, help="OpenClaw invocation timeout in seconds.")
     return parser.parse_args()

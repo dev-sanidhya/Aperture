@@ -2,15 +2,15 @@
   agents: {
     defaults: {
       model: {
-        primary: "openai-codex/gpt-5.4",
-        fallbacks: ["github-copilot/gpt-5.3-codex"],
+        primary: "github-copilot/gpt-5.3-codex",
+        fallbacks: ["openai-codex/gpt-5.2-codex"],
       },
       models: {
-        "openai-codex/gpt-5.4": {
-          alias: "codex_best",
-        },
         "github-copilot/gpt-5.3-codex": {
           alias: "copilot_best",
+        },
+        "openai-codex/gpt-5.2-codex": {
+          alias: "codex_fallback",
         },
       },
       workspace: "C:\\CS\\Agency\\Aperture\\openclaw\\workspaces\\main",
@@ -32,7 +32,7 @@
         name: "Lead Enrichment Codex",
         workspace: "C:\\CS\\Agency\\Aperture\\openclaw\\workspaces\\lead-enrichment",
         agentDir: "C:\\CS\\Agency\\Aperture\\openclaw\\state\\local\\agents\\lead-enrichment-codex\\agent",
-        model: "openai-codex/gpt-5.4",
+        model: "openai-codex/gpt-5.2-codex",
       },
       {
         id: "lead-enrichment-copilot",
@@ -46,7 +46,7 @@
         name: "Contact Discovery Codex",
         workspace: "C:\\CS\\Agency\\Aperture\\openclaw\\workspaces\\contact-discovery",
         agentDir: "C:\\CS\\Agency\\Aperture\\openclaw\\state\\local\\agents\\contact-discovery-codex\\agent",
-        model: "openai-codex/gpt-5.4",
+        model: "openai-codex/gpt-5.2-codex",
       },
       {
         id: "contact-discovery-copilot",
@@ -60,7 +60,7 @@
         name: "Site Audit Codex",
         workspace: "C:\\CS\\Agency\\Aperture\\openclaw\\workspaces\\site-audit",
         agentDir: "C:\\CS\\Agency\\Aperture\\openclaw\\state\\local\\agents\\site-audit-codex\\agent",
-        model: "openai-codex/gpt-5.4",
+        model: "openai-codex/gpt-5.2-codex",
       },
       {
         id: "site-audit-copilot",
@@ -74,7 +74,7 @@
         name: "Draft Email Codex",
         workspace: "C:\\CS\\Agency\\Aperture\\openclaw\\workspaces\\draft-email",
         agentDir: "C:\\CS\\Agency\\Aperture\\openclaw\\state\\local\\agents\\draft-email-codex\\agent",
-        model: "openai-codex/gpt-5.4",
+        model: "openai-codex/gpt-5.2-codex",
       },
       {
         id: "draft-email-copilot",
@@ -88,7 +88,7 @@
         name: "Draft WhatsApp Codex",
         workspace: "C:\\CS\\Agency\\Aperture\\openclaw\\workspaces\\draft-whatsapp",
         agentDir: "C:\\CS\\Agency\\Aperture\\openclaw\\state\\local\\agents\\draft-whatsapp-codex\\agent",
-        model: "openai-codex/gpt-5.4",
+        model: "openai-codex/gpt-5.2-codex",
       },
       {
         id: "draft-whatsapp-copilot",
@@ -102,7 +102,7 @@
         name: "Reply Classifier Codex",
         workspace: "C:\\CS\\Agency\\Aperture\\openclaw\\workspaces\\reply-classifier",
         agentDir: "C:\\CS\\Agency\\Aperture\\openclaw\\state\\local\\agents\\reply-classifier-codex\\agent",
-        model: "openai-codex/gpt-5.4",
+        model: "openai-codex/gpt-5.2-codex",
       },
       {
         id: "reply-classifier-copilot",

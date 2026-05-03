@@ -3,8 +3,8 @@ from app.integrations.ai.openclaw import OpenClawRuntime
 
 
 def test_parse_json_like_output_dict() -> None:
-    payload = OpenClawRuntime._parse_json_like_output('{"defaultModel":"openai-codex/gpt-5.4"}')
-    assert payload["defaultModel"] == "openai-codex/gpt-5.4"
+    payload = OpenClawRuntime._parse_json_like_output('{"defaultModel":"github-copilot/gpt-5.3-codex"}')
+    assert payload["defaultModel"] == "github-copilot/gpt-5.3-codex"
 
 
 def test_probe_timeout_maps_to_degraded(monkeypatch) -> None:

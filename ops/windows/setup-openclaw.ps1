@@ -18,5 +18,5 @@ openclaw config file
 openclaw onboard --auth-choice openai-codex
 openclaw models auth login --provider openai-codex
 openclaw models auth login-github-copilot
-openclaw models set openai-codex/gpt-5.4
+openclaw models set github-copilot/gpt-5.3-codex
 openclaw models status --json

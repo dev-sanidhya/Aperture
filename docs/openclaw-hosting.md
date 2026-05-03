@@ -31,12 +31,12 @@ openclaw models auth login --provider github-copilot
 
 Recommended first route:
 
-- primary: `openai-codex/gpt-5.4`
-- fallback: `github-copilot/gpt-5.3-codex`
+- primary: `github-copilot/gpt-5.3-codex`
+- fallback: `openai-codex/gpt-5.2-codex`
 - thinking: `low`
 - top-lead cap: 5-10 leads per run
 
-Do not use unofficial ChatGPT web automation as production infrastructure. If a subscription-backed OpenClaw/Codex route is configured and allowed by the provider, keep it quota-limited and separate from outreach sending.
+Do not use unofficial ChatGPT web automation as production infrastructure. If subscription-backed OpenClaw routes are configured and allowed by the providers, keep them quota-limited and separate from outreach sending.
 
 ## VPS Setup Later
 
