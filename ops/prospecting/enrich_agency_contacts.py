@@ -752,15 +752,19 @@ def refine_pitch_with_openclaw(
         args.openclaw_thinking,
         "--json",
     ]
-    result = subprocess.run(
-        command,
-        check=False,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-        timeout=args.openclaw_timeout,
-    )
+    try:
+        result = subprocess.run(
+            command,
+            check=False,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=args.openclaw_timeout,
+        )
+    except subprocess.TimeoutExpired:
+        pitch["manual_checks"] = f"{pitch['manual_checks']} OpenClaw timed out after {args.openclaw_timeout}s."
+        return pitch
     if result.returncode != 0:
         pitch["manual_checks"] = f"{pitch['manual_checks']} OpenClaw failed: {clean_text(result.stderr)[:300]}"
         return pitch
