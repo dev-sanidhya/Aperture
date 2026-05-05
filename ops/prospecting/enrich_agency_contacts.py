@@ -19,6 +19,8 @@ from bs4 import BeautifulSoup
 REPO_ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_DIR = REPO_ROOT / "data" / "prospects"
 INTERNAL_OUTPUT_DIR = OUTPUT_DIR / "internal"
+APERTURE_OPENCLAW_CONFIG = REPO_ROOT / "openclaw" / "local" / "aperture.local.json5"
+APERTURE_OPENCLAW_STATE_DIR = REPO_ROOT / "openclaw" / "state" / "local"
 TODAY = date.today().isoformat()
 
 SERPER_SEARCH_URL = "https://google.serper.dev/search"
@@ -767,6 +769,21 @@ def compact_pitch_for_openclaw(pitch: dict[str, str]) -> dict[str, str]:
     }
 
 
+def openclaw_env(args: argparse.Namespace) -> dict[str, str]:
+    env = os.environ.copy()
+    config_path = args.openclaw_config or env.get("APERTURE_OPENCLAW_CONFIG") or env.get("OPENCLAW_CONFIG_PATH")
+    state_dir = args.openclaw_state_dir or env.get("APERTURE_OPENCLAW_STATE_DIR") or env.get("OPENCLAW_STATE_DIR")
+    if not config_path and APERTURE_OPENCLAW_CONFIG.exists():
+        config_path = str(APERTURE_OPENCLAW_CONFIG)
+    if not state_dir and APERTURE_OPENCLAW_STATE_DIR.exists():
+        state_dir = str(APERTURE_OPENCLAW_STATE_DIR)
+    if config_path:
+        env["OPENCLAW_CONFIG_PATH"] = config_path
+    if state_dir:
+        env["OPENCLAW_STATE_DIR"] = state_dir
+    return env
+
+
 def refine_pitch_with_openclaw(
     account: dict[str, str],
     contacts: list[dict[str, str]],
@@ -825,6 +842,7 @@ def refine_pitch_with_openclaw(
             encoding="utf-8",
             errors="replace",
             timeout=args.openclaw_timeout,
+            env=openclaw_env(args),
         )
     except subprocess.TimeoutExpired:
         pitch["manual_checks"] = f"{pitch['manual_checks']} OpenClaw timed out after {args.openclaw_timeout}s."
@@ -977,7 +995,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--serper-api-key", default=env_first("APERTURE_SERPER_API_KEY", "SERPER_API_KEY"))
     parser.add_argument("--openclaw-top-n", type=int, default=0)
     parser.add_argument("--openclaw-command", default="openclaw")
-    parser.add_argument("--openclaw-agent", default="draft-email-copilot")
+    parser.add_argument("--openclaw-agent", default="lead-enrichment-copilot")
+    parser.add_argument("--openclaw-config", default="", help="OpenClaw config path. Defaults to Aperture local config when present.")
+    parser.add_argument("--openclaw-state-dir", default="", help="OpenClaw state dir. Defaults to Aperture local state when present.")
     parser.add_argument("--openclaw-thinking", default="low", choices=("low", "medium", "high"))
     parser.add_argument("--openclaw-timeout", type=int, default=120)
     parser.add_argument("--output-dir", type=Path, default=OUTPUT_DIR)
