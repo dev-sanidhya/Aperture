@@ -91,6 +91,7 @@ Tracked workflow files:
 
 Generated local files are intentionally ignored under `data/prospects/`.
 The operator-facing files are `data/prospects/outreach.csv`, `data/prospects/review.md`, and `data/prospects/sources.csv`; internal stage files live under `data/prospects/internal/`.
+Source collection and contact enrichment append and dedupe by default. Contact-stage OpenClaw writes refined copy back into `outreach.csv` and marks rows with `ai_enrichment_status`.
 
 Regenerate prospects with:
 

@@ -29,7 +29,7 @@ DIRECTORY_FIELDS = [
     "company_name",
     "website",
     "domain",
-    "directory",
+    "source",
     "category",
     "profile_url",
     "rank",
@@ -397,7 +397,7 @@ def rows_from_profiles(
                 "company_name": profile.company_name,
                 "website": website,
                 "domain": domain,
-                "directory": profile.directory,
+                "source": profile.directory,
                 "category": profile.category,
                 "profile_url": profile.profile_url,
                 "rank": str(profile.rank),
@@ -415,6 +415,31 @@ def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
         writer = csv.DictWriter(handle, fieldnames=DIRECTORY_FIELDS)
         writer.writeheader()
         writer.writerows(rows)
+
+
+def row_key(row: dict[str, str]) -> str:
+    return row.get("domain") or row.get("profile_url") or row.get("company_name", "").lower()
+
+
+def merge_existing_rows(path: Path, rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    if not path.exists():
+        return rows
+    merged: dict[str, dict[str, str]] = {}
+    with path.open("r", newline="", encoding="utf-8-sig") as handle:
+        reader = csv.DictReader(handle)
+        for existing in reader:
+            key = row_key(existing)
+            if key:
+                existing_row = {field: existing.get(field, "") for field in DIRECTORY_FIELDS}
+                existing_row["source"] = existing_row.get("source") or existing.get("directory", "")
+                merged[key] = existing_row
+    for row in rows:
+        key = row_key(row)
+        if not key:
+            continue
+        current = merged.get(key, {})
+        merged[key] = {field: row.get(field) or current.get(field, "") for field in DIRECTORY_FIELDS}
+    return list(merged.values())
 
 
 def write_seed_file(path: Path, rows: list[dict[str, str]]) -> None:
@@ -439,6 +464,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--timeout", type=float, default=30)
     parser.add_argument("--output-csv", type=Path, default=OUTPUT_DIR / "sources.csv")
     parser.add_argument("--output-seed-file", type=Path, default=INTERNAL_OUTPUT_DIR / "seed_urls.txt")
+    parser.add_argument("--replace", action="store_true", help="Replace output CSV instead of appending and deduping.")
     return parser.parse_args()
 
 
@@ -480,9 +506,11 @@ def main() -> int:
                     continue
                 seen_domains.add(key)
                 all_rows.append(row)
-    write_csv(args.output_csv, all_rows)
-    write_seed_file(args.output_seed_file, all_rows)
-    print(f"Rows written: {len(all_rows)}")
+    output_rows = all_rows if args.replace else merge_existing_rows(args.output_csv, all_rows)
+    write_csv(args.output_csv, output_rows)
+    write_seed_file(args.output_seed_file, output_rows)
+    print(f"Rows found this run: {len(all_rows)}")
+    print(f"Rows written: {len(output_rows)}")
     print(f"CSV: {args.output_csv}")
     print(f"Seed URLs: {args.output_seed_file}")
     return 0

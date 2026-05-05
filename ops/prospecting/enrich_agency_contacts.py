@@ -133,6 +133,7 @@ PITCH_FIELDS = [
     "call_questions",
     "manual_checks",
     "do_not_claim",
+    "ai_enrichment_status",
     "pitch_status",
 ]
 
@@ -217,10 +218,71 @@ def read_csv(path: Path) -> list[dict[str, str]]:
 
 def write_csv(path: Path, fields: list[str], rows: list[dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8-sig", newline="") as handle:
+    try:
+        handle = path.open("w", encoding="utf-8-sig", newline="")
+    except PermissionError:
+        fallback = path.with_name(f"{path.stem}.pending{path.suffix}")
+        print(f"{path} is locked; writing pending output to {fallback}")
+        handle = fallback.open("w", encoding="utf-8-sig", newline="")
+    with handle:
         writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
         writer.writerows([{key: clean_output_value(str(value)) for key, value in row.items()} for row in rows])
+
+
+def row_key(row: dict[str, str]) -> str:
+    return clean_text(row.get("domain", "")) or clean_text(row.get("website", "")).lower() or clean_text(
+        row.get("company_name", "")
+    ).lower()
+
+
+def merge_existing_pitch_rows(path: Path, rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    if not path.exists():
+        return rows
+    merged: dict[str, dict[str, str]] = {}
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        for existing in reader:
+            key = row_key(existing)
+            if key:
+                merged[key] = {field: existing.get(field, "") for field in PITCH_FIELDS}
+    for row in rows:
+        key = row_key(row)
+        if not key:
+            continue
+        current = merged.get(key, {})
+        merged[key] = {field: row.get(field) or current.get(field, "") for field in PITCH_FIELDS}
+    return list(merged.values())
+
+
+def contact_key(row: dict[str, str]) -> str:
+    return "|".join(
+        [
+            clean_text(row.get("domain", "")),
+            clean_text(row.get("contact_name", "")).lower(),
+            clean_text(row.get("linkedin_url", "")).lower(),
+            clean_text(row.get("email", "")).lower(),
+        ]
+    )
+
+
+def merge_existing_contact_rows(path: Path, rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    if not path.exists():
+        return rows
+    merged: dict[str, dict[str, str]] = {}
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        for existing in reader:
+            key = contact_key(existing)
+            if key.strip("|"):
+                merged[key] = {field: existing.get(field, "") for field in CONTACT_FIELDS}
+    for row in rows:
+        key = contact_key(row)
+        if not key.strip("|"):
+            continue
+        current = merged.get(key, {})
+        merged[key] = {field: row.get(field) or current.get(field, "") for field in CONTACT_FIELDS}
+    return list(merged.values())
 
 
 def search_serper(query: str, *, api_key: str, count: int, timeout: float) -> list[SearchResult]:
@@ -619,6 +681,7 @@ def default_pitch_pack(account: dict[str, str], contacts: list[dict[str, str]], 
         ),
         "manual_checks": "Verify best contact, email deliverability, LinkedIn profile, and opt-out footer before outreach.",
         "do_not_claim": "Do not claim proven hours saved, internal tools used, current CRM/reporting stack, or confirmed founder pain.",
+        "ai_enrichment_status": "deterministic",
         "pitch_status": (
             "needs_manual_review"
             if contact and contact.get("contact_name") and contact.get("role_fit") != "business_contact"
@@ -765,13 +828,16 @@ def refine_pitch_with_openclaw(
         )
     except subprocess.TimeoutExpired:
         pitch["manual_checks"] = f"{pitch['manual_checks']} OpenClaw timed out after {args.openclaw_timeout}s."
+        pitch["ai_enrichment_status"] = "openclaw_timeout"
         return pitch
     if result.returncode != 0:
         pitch["manual_checks"] = f"{pitch['manual_checks']} OpenClaw failed: {clean_text(result.stderr)[:300]}"
+        pitch["ai_enrichment_status"] = "openclaw_failed"
         return pitch
     output = openclaw_output_payload(parse_json_like_output(result.stdout))
     if not isinstance(output, dict):
         pitch["manual_checks"] = f"{pitch['manual_checks']} OpenClaw returned non-dict output."
+        pitch["ai_enrichment_status"] = "openclaw_invalid_output"
         return pitch
     contact_owned_fields = {
         "best_contact_name",
@@ -779,6 +845,7 @@ def refine_pitch_with_openclaw(
         "best_contact_linkedin",
         "best_contact_email",
         "contact_confidence",
+        "ai_enrichment_status",
         "pitch_status",
     }
     for key in PITCH_FIELDS:
@@ -790,6 +857,7 @@ def refine_pitch_with_openclaw(
                 pitch[key] = "; ".join(clean_text(str(item)) for item in value if clean_text(str(item)))
             else:
                 pitch[key] = clean_text(str(value))
+    pitch["ai_enrichment_status"] = "openclaw_refined"
     return pitch
 
 
@@ -839,7 +907,12 @@ def write_review(path: Path, contacts: list[dict[str, str]], pitches: list[dict[
                 "",
             ]
         )
-    path.write_text("\n".join(clean_output_value(line) for line in lines), encoding="utf-8")
+    try:
+        path.write_text("\n".join(clean_output_value(line) for line in lines), encoding="utf-8")
+    except PermissionError:
+        fallback = path.with_name(f"{path.stem}.pending{path.suffix}")
+        print(f"{path} is locked; writing pending review to {fallback}")
+        fallback.write_text("\n".join(clean_output_value(line) for line in lines), encoding="utf-8")
 
 
 def build_outputs(args: argparse.Namespace) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
@@ -881,6 +954,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--openclaw-thinking", default="low", choices=("low", "medium", "high"))
     parser.add_argument("--openclaw-timeout", type=int, default=120)
     parser.add_argument("--output-dir", type=Path, default=OUTPUT_DIR)
+    parser.add_argument("--replace", action="store_true", help="Replace outreach/contact outputs instead of append+dedupe.")
     return parser.parse_args()
 
 
@@ -901,6 +975,9 @@ def main() -> None:
     contacts_csv = INTERNAL_OUTPUT_DIR / "contacts.csv"
     pitch_csv = output_dir / "outreach.csv"
     review_md = output_dir / "review.md"
+    if not args.replace:
+        contacts = merge_existing_contact_rows(contacts_csv, contacts)
+        pitches = merge_existing_pitch_rows(pitch_csv, pitches)
     write_csv(contacts_csv, CONTACT_FIELDS, contacts)
     write_csv(pitch_csv, PITCH_FIELDS, pitches)
     write_review(review_md, contacts, pitches, args)
