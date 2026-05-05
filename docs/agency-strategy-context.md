@@ -90,13 +90,13 @@ Tracked workflow files:
 - `ops/prospecting/agency_seed_urls.example.txt`
 
 Generated local files are intentionally ignored under `data/prospects/`.
-The active working batch uses stable filenames under `data/prospects/current/`.
+The operator-facing files are `data/prospects/outreach.csv`, `data/prospects/review.md`, and `data/prospects/sources.csv`; internal stage files live under `data/prospects/internal/`.
 
 Regenerate prospects with:
 
 ```powershell
 python ops\prospecting\import_agency_directories.py --source all --max-profiles 500 --max-sitemaps 1 --request-delay 0.2
-python ops\prospecting\build_agency_pipeline.py --no-search --input-csv data\prospects\current\01_directory_accounts.csv --max-sites 100 --max-pages-per-site 3 --min-score 70
+python ops\prospecting\build_agency_pipeline.py --no-search --input-csv data\prospects\sources.csv --max-sites 100 --max-pages-per-site 3 --min-score 70
 python ops\prospecting\enrich_agency_contacts.py --max-accounts 0 --max-contact-queries 4 --max-results-per-query 5 --source serper
 ```
 

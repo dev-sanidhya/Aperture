@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT_DIR = Path(__file__).resolve().parent
 OUTPUT_DIR = REPO_ROOT / "data" / "prospects"
-ACTIVE_OUTPUT_DIR = OUTPUT_DIR / "current"
+INTERNAL_OUTPUT_DIR = OUTPUT_DIR / "internal"
 TODAY = date.today().isoformat()
 
 SEED_URLS_FILE = SCRIPT_DIR / "agency_seed_urls.txt"
@@ -840,7 +840,7 @@ def write_runbook(path: Path, args: argparse.Namespace, accounts: list[AccountCa
         "## Next Command",
         "",
         "```powershell",
-        "python ops\\prospecting\\build_agency_pipeline.py --no-search --input-csv data\\prospects\\current\\02_research_queue.csv --max-sites 30 --max-pages-per-site 2 --request-delay 0.4 --min-score 70",
+        "python ops\\prospecting\\build_agency_pipeline.py --no-search --input-csv data\\prospects\\internal\\research_queue.csv --max-sites 30 --max-pages-per-site 2 --request-delay 0.4 --min-score 70",
         "```",
         "",
         "## Notes",
@@ -935,7 +935,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--serper-api-key", default=env_first("APERTURE_SERPER_API_KEY", "SERPER_API_KEY"))
     parser.add_argument("--tavily-api-key", default=env_first("APERTURE_TAVILY_API_KEY", "TAVILY_API_KEY"))
     parser.add_argument("--exa-api-key", default=env_first("APERTURE_EXA_API_KEY", "EXA_API_KEY"))
-    parser.add_argument("--output-dir", type=Path, default=ACTIVE_OUTPUT_DIR)
+    parser.add_argument("--output-dir", type=Path, default=INTERNAL_OUTPUT_DIR)
     return parser.parse_args()
 
 
@@ -987,11 +987,11 @@ def main() -> None:
     queue = [account for account in accounts if account.discovery_score >= args.min_score]
 
     output_dir = args.output_dir
-    raw_csv = output_dir / "02_discovery_raw.csv"
-    accounts_csv = output_dir / "02_accounts.csv"
-    queue_csv = output_dir / "02_research_queue.csv"
-    seed_out = output_dir / "02_seed_urls.txt"
-    runbook = output_dir / "02_discovery_runbook.md"
+    raw_csv = output_dir / "discovery_raw.csv"
+    accounts_csv = output_dir / "accounts.csv"
+    queue_csv = output_dir / "research_queue.csv"
+    seed_out = output_dir / "discovered_seed_urls.txt"
+    runbook = output_dir / "discovery_runbook.md"
 
     write_csv(raw_csv, RAW_FIELDS, [raw_row(hit) for hit in hits])
     write_csv(accounts_csv, ACCOUNT_FIELDS, [account_row(account) for account in accounts])

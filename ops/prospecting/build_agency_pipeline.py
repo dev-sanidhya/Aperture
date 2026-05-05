@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT_DIR = Path(__file__).resolve().parent
 OUTPUT_DIR = REPO_ROOT / "data" / "prospects"
-ACTIVE_OUTPUT_DIR = OUTPUT_DIR / "current"
+INTERNAL_OUTPUT_DIR = OUTPUT_DIR / "internal"
 TODAY = date.today().isoformat()
 
 SEED_URLS_FILE = SCRIPT_DIR / "agency_seed_urls.txt"
@@ -853,8 +853,8 @@ def write_runbook(path: Path, rows: list[dict[str, str]], approval_rows: list[di
         "",
         "## Output Files",
         "",
-        f"- Full pipeline CSV: `{path.parent / '03_pipeline.csv'}`",
-        f"- Approval CSV: `{path.parent / '03_approved.csv'}`",
+        f"- Full pipeline CSV: `{path.parent / 'pipeline.csv'}`",
+        f"- Approval CSV: `{path.parent / 'approved.csv'}`",
         "",
         "## Top Approval Candidates",
         "",
@@ -943,7 +943,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--openclaw-agent", default="lead-enrichment-copilot", help="OpenClaw agent id for enrichment.")
     parser.add_argument("--openclaw-thinking", default="low", choices=("low", "medium", "high"), help="OpenClaw thinking level.")
     parser.add_argument("--openclaw-timeout", type=int, default=90, help="OpenClaw invocation timeout in seconds.")
-    parser.add_argument("--output-dir", type=Path, default=ACTIVE_OUTPUT_DIR)
+    parser.add_argument("--output-dir", type=Path, default=INTERNAL_OUTPUT_DIR)
     return parser.parse_args()
 
 
@@ -961,9 +961,9 @@ def main() -> None:
 
     rows, approval_rows = build_pipeline(args)
     output_dir = args.output_dir
-    full_csv = output_dir / "03_pipeline.csv"
-    approval_csv = output_dir / "03_approved.csv"
-    runbook = output_dir / "03_runbook.md"
+    full_csv = output_dir / "pipeline.csv"
+    approval_csv = output_dir / "approved.csv"
+    runbook = output_dir / "pipeline_runbook.md"
     write_csv(full_csv, rows)
     write_csv(approval_csv, approval_rows)
     write_runbook(runbook, rows, approval_rows, args)

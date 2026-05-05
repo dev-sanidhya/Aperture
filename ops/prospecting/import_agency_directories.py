@@ -17,7 +17,7 @@ from bs4 import BeautifulSoup
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_DIR = REPO_ROOT / "data" / "prospects"
-ACTIVE_OUTPUT_DIR = OUTPUT_DIR / "current"
+INTERNAL_OUTPUT_DIR = OUTPUT_DIR / "internal"
 TODAY = date.today().isoformat()
 
 USER_AGENT = (
@@ -437,8 +437,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--no-profile-fetch", action="store_true", help="Do not fetch profile pages to resolve websites.")
     parser.add_argument("--request-delay", type=float, default=0.25)
     parser.add_argument("--timeout", type=float, default=30)
-    parser.add_argument("--output-csv", type=Path, default=ACTIVE_OUTPUT_DIR / "01_directory_accounts.csv")
-    parser.add_argument("--output-seed-file", type=Path, default=ACTIVE_OUTPUT_DIR / "01_seed_urls.txt")
+    parser.add_argument("--output-csv", type=Path, default=OUTPUT_DIR / "sources.csv")
+    parser.add_argument("--output-seed-file", type=Path, default=INTERNAL_OUTPUT_DIR / "seed_urls.txt")
     return parser.parse_args()
 
 
