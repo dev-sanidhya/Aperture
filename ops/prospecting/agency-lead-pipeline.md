@@ -35,23 +35,25 @@ Use the script's `pain_angle` field to decide the first message.
 Run from the repo root:
 
 ```powershell
-python ops\prospecting\discover_agencies.py --source seed --seed-file ops\prospecting\agency_seed_urls.example.txt --max-results 50 --min-score 45
-$today = Get-Date -Format yyyy-MM-dd
-python ops\prospecting\build_agency_pipeline.py --no-search --input-csv "data\prospects\agency_research_queue_$today.csv" --max-sites 30
+python ops\prospecting\import_agency_directories.py --source all --max-profiles 500 --max-sitemaps 1 --request-delay 0.2
+python ops\prospecting\build_agency_pipeline.py --no-search --input-csv data\prospects\current\01_directory_accounts.csv --max-sites 100 --max-pages-per-site 3 --min-score 70
+python ops\prospecting\enrich_agency_contacts.py --max-accounts 0 --max-contact-queries 4 --max-results-per-query 5 --source serper
 ```
 
-Generated files are written under ignored `data/prospects/`:
+The active batch is written under ignored `data/prospects/current/`:
 
-- `agency_directory_accounts_<date>.csv`: public directory account import.
-- `agency_directory_seed_urls_<date>.txt`: website-only seed file from public directory imports.
-- `agency_discovery_raw_<date>.csv`: raw API/search/list/seed results
-- `agency_accounts_discovered_<date>.csv`: deduped discovered accounts
-- `agency_research_queue_<date>.csv`: qualified accounts to enrich
-- `agency_discovered_seed_urls_<date>.txt`: URL-only queue for seed-based runs
-- `agency_discovery_runbook_<date>.md`: discovery run notes
-- `agency_pipeline_<date>.csv`: all researched agencies
-- `agency_outreach_approval_<date>.csv`: high-score leads for manual review
-- `agency_pipeline_runbook_<date>.md`: daily operating notes and top candidates
+- `01_directory_accounts.csv`: public directory account import.
+- `01_seed_urls.txt`: website-only seed file from public directory imports.
+- `02_discovery_raw.csv`: raw API/search/list/seed results, if search discovery is used.
+- `02_accounts.csv`: deduped discovered accounts, if search discovery is used.
+- `02_research_queue.csv`: qualified accounts to enrich, if search discovery is used.
+- `02_seed_urls.txt`: URL-only queue from search discovery, if used.
+- `03_pipeline.csv`: all researched agencies.
+- `03_approved.csv`: high-score leads for manual review and contact enrichment.
+- `03_runbook.md`: research-stage notes.
+- `04_contacts.csv`: one row per public contact candidate.
+- `04_pitch_pack.csv`: main outreach work file.
+- `04_review.md`: skim-friendly review file.
 
 ## Low-Cost Mode
 
@@ -77,8 +79,7 @@ python ops\prospecting\discover_agencies.py --source brave --segment b2b-lead-ge
 python ops\prospecting\discover_agencies.py --source serper --segment b2b-lead-gen --country "United States" --max-queries 20
 python ops\prospecting\build_agency_pipeline.py --query-limit 3 --max-sites 20
 python ops\prospecting\build_agency_pipeline.py --no-search --seed-file ops\prospecting\agency_seed_urls.example.txt
-$today = Get-Date -Format yyyy-MM-dd
-python ops\prospecting\build_agency_pipeline.py --no-search --input-csv "data\prospects\agency_research_queue_$today.csv" --max-sites 30
+python ops\prospecting\build_agency_pipeline.py --no-search --input-csv data\prospects\current\02_research_queue.csv --max-sites 30
 python ops\prospecting\build_agency_pipeline.py --input-csv path\to\apollo_export.csv
 ```
 
@@ -90,9 +91,8 @@ Use public directories before spending search/API credits:
 
 ```powershell
 python ops\prospecting\import_agency_directories.py --source all --max-profiles 500 --max-sitemaps 1 --request-delay 0.2
-$today = Get-Date -Format yyyy-MM-dd
-python ops\prospecting\build_agency_pipeline.py --no-search --input-csv "data\prospects\agency_directory_accounts_$today.csv" --max-sites 100 --max-pages-per-site 3 --min-score 70
-python ops\prospecting\enrich_agency_contacts.py --input-csv "data\prospects\agency_outreach_approval_$today.csv" --max-accounts 0 --max-contact-queries 4 --max-results-per-query 5 --source serper
+python ops\prospecting\build_agency_pipeline.py --no-search --input-csv data\prospects\current\01_directory_accounts.csv --max-sites 100 --max-pages-per-site 3 --min-score 70
+python ops\prospecting\enrich_agency_contacts.py --input-csv data\prospects\current\03_approved.csv --max-accounts 0 --max-contact-queries 4 --max-results-per-query 5 --source serper
 ```
 
 Current importer sources:
@@ -137,17 +137,17 @@ First CTA:
 
 ## Contact + Pitch Pack Stage
 
-After generating `agency_outreach_approval_<date>.csv`, run the contact and pitch-pack stage:
+After generating `03_approved.csv`, run the contact and pitch-pack stage:
 
 ```powershell
 python ops\prospecting\enrich_agency_contacts.py --max-accounts 10 --max-contact-queries 4
 ```
 
-This writes clean manual-review outputs under `data/prospects/`:
+This writes clean manual-review outputs under `data/prospects/current/`:
 
-- `agency_contacts_<date>.csv`: one row per public contact candidate, with source URL, confidence, and verification status.
-- `agency_pitch_pack_<date>.csv`: one row per account, with best contact, LinkedIn touch, cold email, follow-up, Loom plan, assumptions, and do-not-claim guardrails.
-- `agency_contact_pitch_review_<date>.md`: skim-friendly review file for the top accounts.
+- `04_contacts.csv`: one row per public contact candidate, with source URL, confidence, and verification status.
+- `04_pitch_pack.csv`: one row per account, with best contact, LinkedIn touch, cold email, follow-up, Loom plan, assumptions, and do-not-claim guardrails.
+- `04_review.md`: skim-friendly review file for the top accounts.
 
 OpenClaw pitch refinement is optional and should stay capped:
 

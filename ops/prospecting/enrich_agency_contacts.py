@@ -18,6 +18,7 @@ from bs4 import BeautifulSoup
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_DIR = REPO_ROOT / "data" / "prospects"
+ACTIVE_OUTPUT_DIR = OUTPUT_DIR / "current"
 TODAY = date.today().isoformat()
 
 SERPER_SEARCH_URL = "https://google.serper.dev/search"
@@ -801,8 +802,8 @@ def write_review(path: Path, contacts: list[dict[str, str]], pitches: list[dict[
         "",
         "## Output Files",
         "",
-        f"- Contacts CSV: `{OUTPUT_DIR / f'agency_contacts_{TODAY}.csv'}`",
-        f"- Pitch pack CSV: `{OUTPUT_DIR / f'agency_pitch_pack_{TODAY}.csv'}`",
+        f"- Contacts CSV: `{path.parent / '04_contacts.csv'}`",
+        f"- Pitch pack CSV: `{path.parent / '04_pitch_pack.csv'}`",
         f"- Review Markdown: `{path}`",
         "",
         "## Operating Rules",
@@ -864,7 +865,7 @@ def build_outputs(args: argparse.Namespace) -> tuple[list[dict[str, str]], list[
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Find agency contacts and produce outreach pitch packs.")
-    parser.add_argument("--input-csv", type=Path, default=OUTPUT_DIR / f"agency_outreach_approval_{TODAY}.csv")
+    parser.add_argument("--input-csv", type=Path, default=ACTIVE_OUTPUT_DIR / "03_approved.csv")
     parser.add_argument("--source", choices=("auto", "serper", "duckduckgo"), default="auto")
     parser.add_argument("--max-accounts", type=int, default=10)
     parser.add_argument("--max-contact-queries", type=int, default=4)
@@ -879,6 +880,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--openclaw-agent", default="draft-email-copilot")
     parser.add_argument("--openclaw-thinking", default="low", choices=("low", "medium", "high"))
     parser.add_argument("--openclaw-timeout", type=int, default=120)
+    parser.add_argument("--output-dir", type=Path, default=ACTIVE_OUTPUT_DIR)
     return parser.parse_args()
 
 
@@ -895,9 +897,10 @@ def main() -> None:
         print(f"OpenClaw top N: {args.openclaw_top_n}")
         return
     contacts, pitches = build_outputs(args)
-    contacts_csv = OUTPUT_DIR / f"agency_contacts_{TODAY}.csv"
-    pitch_csv = OUTPUT_DIR / f"agency_pitch_pack_{TODAY}.csv"
-    review_md = OUTPUT_DIR / f"agency_contact_pitch_review_{TODAY}.md"
+    output_dir = args.output_dir
+    contacts_csv = output_dir / "04_contacts.csv"
+    pitch_csv = output_dir / "04_pitch_pack.csv"
+    review_md = output_dir / "04_review.md"
     write_csv(contacts_csv, CONTACT_FIELDS, contacts)
     write_csv(pitch_csv, PITCH_FIELDS, pitches)
     write_review(review_md, contacts, pitches, args)
