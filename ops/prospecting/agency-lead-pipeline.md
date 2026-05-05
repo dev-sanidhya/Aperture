@@ -48,6 +48,7 @@ The operator-facing files are written directly under ignored `data/prospects/`:
 
 Internal stage files are written under `data/prospects/internal/` for debugging and reruns. You should not need them for normal outreach.
 By default, source collection and contact enrichment append and dedupe into the existing files. Use `--replace` only when intentionally rebuilding from scratch.
+Website research skips domains already present in `outreach.csv` or `internal/pipeline.csv` by default. Use `--no-skip-processed` only when intentionally rechecking old rows.
 
 ## Low-Cost Mode
 
@@ -151,6 +152,12 @@ python ops\prospecting\enrich_agency_contacts.py --max-accounts 10 --openclaw-to
 ```
 
 That command still writes to `data/prospects/outreach.csv`; it does not create a separate OpenClaw file.
+
+To refine existing outreach rows without re-running contact discovery:
+
+```powershell
+python ops\prospecting\enrich_agency_contacts.py --refine-existing-outreach --openclaw-top-n 5 --openclaw-command C:\Users\athar\AppData\Roaming\npm\openclaw.cmd
+```
 
 Do not send directly from these files. Use them to manually verify contact identity, source URLs, email deliverability, and final copy.
 

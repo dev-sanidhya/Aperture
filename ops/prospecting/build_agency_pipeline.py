@@ -377,6 +377,33 @@ def load_csv_candidates(path: Path) -> list[Candidate]:
     return candidates
 
 
+def load_domains_from_csv(path: Path) -> set[str]:
+    if not path.exists():
+        return set()
+    domains: set[str] = set()
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        for row in reader:
+            domain = first_present(row, ("domain",))
+            website = first_present(row, ("website", "url", "company website", "company_website"))
+            if not domain and website:
+                if not website.startswith(("http://", "https://")):
+                    website = f"https://{website}"
+                domain = root_domain(website)
+            if domain:
+                domains.add(domain)
+    return domains
+
+
+def processed_domains(args: argparse.Namespace) -> set[str]:
+    if not args.skip_processed:
+        return set()
+    domains: set[str] = set()
+    for path in args.skip_csv:
+        domains.update(load_domains_from_csv(path))
+    return domains
+
+
 def find_internal_pages(base_url: str, soup: BeautifulSoup, max_pages: int) -> list[str]:
     wanted = (
         "contact",
@@ -898,10 +925,15 @@ def build_candidates(args: argparse.Namespace) -> list[Candidate]:
 
 def build_pipeline(args: argparse.Namespace) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     candidates = build_candidates(args)
+    skip_domains = processed_domains(args)
+    if skip_domains:
+        print(f"Skipping {len(skip_domains)} previously processed domains")
     rows_by_domain: dict[str, dict[str, str]] = {}
     for candidate in candidates:
         domain = root_domain(candidate.url)
         if not domain or domain in rows_by_domain:
+            continue
+        if domain in skip_domains:
             continue
         if args.max_sites and len(rows_by_domain) >= args.max_sites:
             break
@@ -944,6 +976,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--openclaw-thinking", default="low", choices=("low", "medium", "high"), help="OpenClaw thinking level.")
     parser.add_argument("--openclaw-timeout", type=int, default=90, help="OpenClaw invocation timeout in seconds.")
     parser.add_argument("--output-dir", type=Path, default=INTERNAL_OUTPUT_DIR)
+    parser.add_argument("--skip-csv", type=Path, action="append", default=[OUTPUT_DIR / "outreach.csv", INTERNAL_OUTPUT_DIR / "pipeline.csv"])
+    parser.add_argument("--no-skip-processed", dest="skip_processed", action="store_false")
+    parser.set_defaults(skip_processed=True)
     return parser.parse_args()
 
 
@@ -957,6 +992,8 @@ def main() -> None:
         print(f"Queries: {min(args.query_limit, len(SEARCH_QUERIES))}")
         print(f"Max sites: {args.max_sites}")
         print(f"OpenClaw top N: {args.openclaw_top_n}")
+        print(f"Skip processed: {args.skip_processed}")
+        print(f"Skip CSVs: {', '.join(str(path) for path in args.skip_csv)}")
         return
 
     rows, approval_rows = build_pipeline(args)

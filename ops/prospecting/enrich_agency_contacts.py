@@ -802,7 +802,7 @@ def refine_pitch_with_openclaw(
             "draft_to_improve": compact_pitch_for_openclaw(pitch),
         }
     )
-    session_safe_domain = re.sub(r"[^a-zA-Z0-9_-]+", "-", account["domain"])[:80]
+    session_safe_domain = re.sub(r"[^a-zA-Z0-9_-]+", "-", account.get("domain", "") or account.get("company_name", ""))[:80]
     command = [
         args.openclaw_command,
         "agent",
@@ -936,6 +936,33 @@ def build_outputs(args: argparse.Namespace) -> tuple[list[dict[str, str]], list[
     return all_contacts, pitch_rows
 
 
+def refine_existing_outreach(args: argparse.Namespace) -> list[dict[str, str]]:
+    outreach_csv = args.output_dir / "outreach.csv"
+    rows = read_csv(outreach_csv)
+    limit = args.openclaw_top_n if args.openclaw_top_n > 0 else 5
+    refined = 0
+    for row in rows:
+        if refined >= limit:
+            break
+        status = row.get("ai_enrichment_status", "")
+        if status.startswith("openclaw_") and not args.retry_openclaw_failures:
+            continue
+        if row.get("pitch_status") != "needs_manual_review":
+            continue
+        print(f"OpenClaw refining outreach row: {row.get('domain') or row.get('company_name')}")
+        row.setdefault("ai_enrichment_status", "deterministic")
+        row = refine_pitch_with_openclaw(
+            account=row,
+            contacts=[],
+            pitch=row,
+            website_evidence=row.get("evidence", ""),
+            args=args,
+        )
+        refined += 1
+        time.sleep(args.request_delay)
+    return rows
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Find agency contacts and produce outreach pitch packs.")
     parser.add_argument("--input-csv", type=Path, default=INTERNAL_OUTPUT_DIR / "approved.csv")
@@ -955,6 +982,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--openclaw-timeout", type=int, default=120)
     parser.add_argument("--output-dir", type=Path, default=OUTPUT_DIR)
     parser.add_argument("--replace", action="store_true", help="Replace outreach/contact outputs instead of append+dedupe.")
+    parser.add_argument("--refine-existing-outreach", action="store_true", help="Run OpenClaw refinement on existing outreach.csv rows.")
+    parser.add_argument("--retry-openclaw-failures", action="store_true", help="Retry outreach rows already marked with OpenClaw timeout/failure statuses.")
     return parser.parse_args()
 
 
@@ -969,6 +998,18 @@ def main() -> None:
         print(f"Max accounts: {args.max_accounts}")
         print(f"Contact queries/account: {args.max_contact_queries}")
         print(f"OpenClaw top N: {args.openclaw_top_n}")
+        print(f"Refine existing outreach: {args.refine_existing_outreach}")
+        print(f"Retry OpenClaw failures: {args.retry_openclaw_failures}")
+        return
+    if args.refine_existing_outreach:
+        pitches = refine_existing_outreach(args)
+        pitch_csv = args.output_dir / "outreach.csv"
+        review_md = args.output_dir / "review.md"
+        write_csv(pitch_csv, PITCH_FIELDS, pitches)
+        write_review(review_md, [], pitches, args)
+        print(f"\nOutreach rows reviewed: {len(pitches)}")
+        print(f"Pitch pack CSV: {pitch_csv}")
+        print(f"Review Markdown: {review_md}")
         return
     contacts, pitches = build_outputs(args)
     output_dir = args.output_dir
