@@ -140,6 +140,9 @@ PITCH_FIELDS = [
     "call_questions",
     "manual_checks",
     "do_not_claim",
+    "personalization_depth",
+    "send_ready_score",
+    "quality_notes",
     "ai_enrichment_status",
     "pitch_status",
 ]
@@ -706,9 +709,12 @@ def default_pitch_pack(account: dict[str, str], contacts: list[dict[str, str]], 
         ),
         "manual_checks": "Verify best contact, email deliverability, LinkedIn profile, and opt-out footer before outreach.",
         "do_not_claim": "Do not claim proven hours saved, internal tools used, current CRM/reporting stack, or confirmed founder pain.",
+        "personalization_depth": "template",
+        "send_ready_score": "25" if contact and contact.get("contact_name") else "10",
+        "quality_notes": "Template-only personalization from deterministic category/pain-angle inference. Do not send before deep research.",
         "ai_enrichment_status": "deterministic",
         "pitch_status": (
-            "needs_manual_review"
+            "needs_deep_research"
             if contact and contact.get("contact_name") and contact.get("role_fit") != "business_contact"
             else "needs_person_contact"
         ),
@@ -832,11 +838,14 @@ def refine_pitch_with_openclaw(
                 "Return strict JSON only with keys: observed_signals, offer_angle, automation_ideas, workflow_gap, "
                 "evidence, assumptions, best_contact_name, best_contact_title, best_contact_linkedin, best_contact_email, "
                 "reachout_plan, linkedin_connect, linkedin_followup, cold_email_subject, cold_email_body, followup_1, "
-                "loom_teardown_plan, call_questions, manual_checks, do_not_claim, pitch_status. "
+                "loom_teardown_plan, call_questions, manual_checks, do_not_claim, personalization_depth, send_ready_score, "
+                "quality_notes, pitch_status. "
                 "Make the pitch specific to this company. Avoid generic phrases like 'tighten lead intake to CRM follow-up' "
                 "unless the evidence truly supports that exact workflow. Prefer 2-3 concrete workflow ideas tied to observed signals. "
                 "Do not invent names, emails, clients, stack, metrics, or internal pain. Use empty string for unknown emails. "
                 "If evidence is too thin, say so in assumptions and set pitch_status to needs_manual_review."
+                "Set personalization_depth to deep_account_research only when you found concrete public signals, otherwise shallow. "
+                "Set send_ready_score from 0-100 based on evidence specificity, contact confidence, and channel readiness."
             ),
             "account": {
                 "company_name": account.get("company_name", ""),
@@ -916,6 +925,21 @@ def refine_pitch_with_openclaw(
                 pitch[key] = "; ".join(clean_text(str(item)) for item in value if clean_text(str(item)))
             else:
                 pitch[key] = clean_text(str(value))
+    if (
+        pitch.get("observed_signals")
+        and pitch.get("offer_angle")
+        and pitch.get("automation_ideas")
+        and not pitch.get("personalization_depth")
+    ):
+        pitch["personalization_depth"] = "deep_account_research"
+    if not pitch.get("send_ready_score"):
+        pitch["send_ready_score"] = "75" if pitch.get("personalization_depth") == "deep_account_research" else "35"
+    if not pitch.get("quality_notes"):
+        pitch["quality_notes"] = (
+            "Deep account strategy present; manually verify contact/channel before sending."
+            if pitch.get("personalization_depth") == "deep_account_research"
+            else "OpenClaw output did not include enough concrete strategy fields; review before outreach."
+        )
     pitch["ai_enrichment_status"] = "openclaw_refined"
     return pitch
 
@@ -946,6 +970,8 @@ def write_review(path: Path, contacts: list[dict[str, str]], pitches: list[dict[
         f"- Contact rows found: {len(contacts)}",
         f"- Pitch rows ready for manual review: {sum(1 for row in pitches if row['pitch_status'] == 'needs_manual_review')}",
         f"- Pitch rows needing person contact: {sum(1 for row in pitches if row['pitch_status'] == 'needs_person_contact')}",
+        f"- Pitch rows needing deep research: {sum(1 for row in pitches if row.get('pitch_status') == 'needs_deep_research')}",
+        f"- Pitch rows ready with public evidence: {sum(1 for row in pitches if row.get('pitch_status') == 'ready_for_outreach_with_public_evidence')}",
         "",
         "## Top Pitch Packs",
         "",
