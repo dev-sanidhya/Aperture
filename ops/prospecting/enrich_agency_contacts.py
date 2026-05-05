@@ -32,6 +32,7 @@ USER_AGENT = (
 
 CONTACT_TEXT_CHARS = 7000
 OPENCLAW_TEXT_CHARS = 700
+OPENCLAW_DEEP_TEXT_CHARS = 2200
 
 EMAIL_RE = re.compile(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}", re.I)
 PHONE_RE = re.compile(r"(?:\+\d{1,3}[\s.-]?)?(?:\(?\d{2,4}\)?[\s.-]?)?\d{3,4}[\s.-]?\d{4}")
@@ -123,6 +124,10 @@ PITCH_FIELDS = [
     "best_contact_linkedin",
     "best_contact_email",
     "contact_confidence",
+    "observed_signals",
+    "offer_angle",
+    "automation_ideas",
+    "reachout_plan",
     "workflow_gap",
     "evidence",
     "assumptions",
@@ -285,6 +290,20 @@ def merge_existing_contact_rows(path: Path, rows: list[dict[str, str]]) -> list[
         current = merged.get(key, {})
         merged[key] = {field: row.get(field) or current.get(field, "") for field in CONTACT_FIELDS}
     return list(merged.values())
+
+
+def contacts_by_domain(path: Path) -> dict[str, list[dict[str, str]]]:
+    if not path.exists():
+        return {}
+    grouped: dict[str, list[dict[str, str]]] = {}
+    for row in read_csv(path):
+        domain = clean_text(row.get("domain", "")).lower()
+        if not domain:
+            continue
+        grouped.setdefault(domain, []).append({field: row.get(field, "") for field in CONTACT_FIELDS})
+    for domain, rows in grouped.items():
+        grouped[domain] = sorted(rows, key=lambda row: int(row.get("confidence", "0") or 0), reverse=True)
+    return grouped
 
 
 def search_serper(query: str, *, api_key: str, count: int, timeout: float) -> list[SearchResult]:
@@ -664,6 +683,10 @@ def default_pitch_pack(account: dict[str, str], contacts: list[dict[str, str]], 
         "best_contact_linkedin": contact.get("linkedin_url", ""),
         "best_contact_email": contact.get("email", ""),
         "contact_confidence": contact.get("confidence", "0") if contact else "0",
+        "observed_signals": clean_text(evidence or website_evidence[:500])[:900],
+        "offer_angle": "",
+        "automation_ideas": "",
+        "reachout_plan": "LinkedIn-first if a person profile exists; email only if a verified public email is present.",
         "workflow_gap": workflow_gap[:500],
         "evidence": clean_text(evidence or website_evidence[:350])[:500],
         "assumptions": "Manual ops pain is inferred from public positioning and service model; verify on call.",
@@ -744,7 +767,7 @@ def openclaw_output_payload(response: dict[str, object]) -> dict[str, object]:
 
 def compact_contacts_for_openclaw(contacts: list[dict[str, str]]) -> list[dict[str, str]]:
     compact: list[dict[str, str]] = []
-    for contact in contacts[:4]:
+    for contact in contacts[:8]:
         compact.append(
             {
                 "name": contact.get("contact_name", "")[:80],
@@ -752,8 +775,11 @@ def compact_contacts_for_openclaw(contacts: list[dict[str, str]]) -> list[dict[s
                 "role_fit": contact.get("role_fit", "")[:40],
                 "linkedin_url": contact.get("linkedin_url", "")[:160],
                 "email": contact.get("email", "")[:120],
+                "phone": contact.get("phone", "")[:80],
                 "confidence": contact.get("confidence", ""),
-                "evidence": contact.get("evidence", "")[:180],
+                "source_url": contact.get("source_url", "")[:180],
+                "email_source_url": contact.get("email_source_url", "")[:180],
+                "evidence": contact.get("evidence", "")[:260],
             }
         )
     return compact
@@ -761,6 +787,10 @@ def compact_contacts_for_openclaw(contacts: list[dict[str, str]]) -> list[dict[s
 
 def compact_pitch_for_openclaw(pitch: dict[str, str]) -> dict[str, str]:
     return {
+        "observed_signals": pitch.get("observed_signals", "")[:500],
+        "offer_angle": pitch.get("offer_angle", "")[:220],
+        "automation_ideas": pitch.get("automation_ideas", "")[:500],
+        "reachout_plan": pitch.get("reachout_plan", "")[:260],
         "workflow_gap": pitch.get("workflow_gap", "")[:220],
         "linkedin_connect": pitch.get("linkedin_connect", "")[:240],
         "cold_email_subject": pitch.get("cold_email_subject", "")[:80],
@@ -793,12 +823,20 @@ def refine_pitch_with_openclaw(
 ) -> dict[str, str]:
     payload = shell_safe_payload(
         {
-            "task": "agency_contact_pitch_pack",
+            "task": "agency_deep_account_strategy",
             "instructions": (
-                "Use only provided evidence. Return strict JSON with keys: workflow_gap, evidence, assumptions, "
-                "best_contact_name, best_contact_title, best_contact_linkedin, best_contact_email, linkedin_connect, "
-                "linkedin_followup, cold_email_subject, cold_email_body, followup_1, loom_teardown_plan, "
-                "call_questions, manual_checks, do_not_claim, pitch_status. Do not invent contacts or email addresses."
+                "Act like a senior outbound strategist for a custom AI workflow studio selling to B2B agencies. "
+                "Use the provided account, contact candidates, and evidence. If web_search/web_fetch are available, "
+                "you may inspect only the official website, about/team pages, services pages, case studies, blog posts, "
+                "careers/jobs, and contact pages to find concrete public signals. Do not browse social feeds. "
+                "Return strict JSON only with keys: observed_signals, offer_angle, automation_ideas, workflow_gap, "
+                "evidence, assumptions, best_contact_name, best_contact_title, best_contact_linkedin, best_contact_email, "
+                "reachout_plan, linkedin_connect, linkedin_followup, cold_email_subject, cold_email_body, followup_1, "
+                "loom_teardown_plan, call_questions, manual_checks, do_not_claim, pitch_status. "
+                "Make the pitch specific to this company. Avoid generic phrases like 'tighten lead intake to CRM follow-up' "
+                "unless the evidence truly supports that exact workflow. Prefer 2-3 concrete workflow ideas tied to observed signals. "
+                "Do not invent names, emails, clients, stack, metrics, or internal pain. Use empty string for unknown emails. "
+                "If evidence is too thin, say so in assumptions and set pitch_status to needs_manual_review."
             ),
             "account": {
                 "company_name": account.get("company_name", ""),
@@ -812,11 +850,20 @@ def refine_pitch_with_openclaw(
                 "loom_idea": account.get("loom_idea", ""),
                 "ai_summary": account.get("ai_summary", ""),
                 "ai_risk": account.get("ai_risk", ""),
-                "notes_excerpt": account.get("notes", "")[:OPENCLAW_TEXT_CHARS],
+                "observed_signals": account.get("observed_signals", ""),
+                "existing_evidence": account.get("evidence", ""),
+                "notes_excerpt": account.get("notes", "")[:OPENCLAW_DEEP_TEXT_CHARS],
             },
             "contacts": compact_contacts_for_openclaw(contacts),
-            "website_evidence_excerpt": website_evidence[:OPENCLAW_TEXT_CHARS],
+            "website_evidence_excerpt": website_evidence[:OPENCLAW_DEEP_TEXT_CHARS],
             "draft_to_improve": compact_pitch_for_openclaw(pitch),
+            "output_style": {
+                "observed_signals": "3-6 semicolon-separated concrete public signals with URLs when available",
+                "automation_ideas": "2-3 numbered ideas; each should name input, automation, and business output",
+                "linkedin_connect": "short permission opener, under 280 chars, addressed to the selected person when known",
+                "cold_email_body": "plain text under 120 words; only use if a public/verified email exists or as a draft for manual use",
+                "loom_teardown_plan": "specific 3-5 minute teardown plan tied to their website/service model",
+            },
         }
     )
     session_safe_domain = re.sub(r"[^a-zA-Z0-9_-]+", "-", account.get("domain", "") or account.get("company_name", ""))[:80]
@@ -857,17 +904,11 @@ def refine_pitch_with_openclaw(
         pitch["manual_checks"] = f"{pitch['manual_checks']} OpenClaw returned non-dict output."
         pitch["ai_enrichment_status"] = "openclaw_invalid_output"
         return pitch
-    contact_owned_fields = {
-        "best_contact_name",
-        "best_contact_title",
-        "best_contact_linkedin",
-        "best_contact_email",
-        "contact_confidence",
+    protected_fields = {
         "ai_enrichment_status",
-        "pitch_status",
     }
     for key in PITCH_FIELDS:
-        if key in contact_owned_fields:
+        if key in protected_fields:
             continue
         if key in output and output[key] is not None:
             value = output[key]
@@ -957,6 +998,7 @@ def build_outputs(args: argparse.Namespace) -> tuple[list[dict[str, str]], list[
 def refine_existing_outreach(args: argparse.Namespace) -> list[dict[str, str]]:
     outreach_csv = args.output_dir / "outreach.csv"
     rows = read_csv(outreach_csv)
+    contact_groups = contacts_by_domain(INTERNAL_OUTPUT_DIR / "contacts.csv")
     limit = args.openclaw_top_n if args.openclaw_top_n > 0 else 5
     refined = 0
     for row in rows:
@@ -969,11 +1011,46 @@ def refine_existing_outreach(args: argparse.Namespace) -> list[dict[str, str]]:
             continue
         print(f"OpenClaw refining outreach row: {row.get('domain') or row.get('company_name')}")
         row.setdefault("ai_enrichment_status", "deterministic")
+        domain = clean_text(row.get("domain", "")).lower()
+        contacts = contact_groups.get(domain, [])
+        if not contacts and (row.get("best_contact_name") or row.get("best_contact_linkedin") or row.get("best_contact_email")):
+            contacts = [
+                {
+                    "company_name": row.get("company_name", ""),
+                    "domain": row.get("domain", ""),
+                    "website": row.get("website", ""),
+                    "contact_name": row.get("best_contact_name", ""),
+                    "contact_title": row.get("best_contact_title", ""),
+                    "role_fit": "",
+                    "linkedin_url": row.get("best_contact_linkedin", ""),
+                    "email": row.get("best_contact_email", ""),
+                    "phone": "",
+                    "source_url": row.get("best_contact_linkedin", ""),
+                    "email_source_url": "",
+                    "profile_source_url": row.get("best_contact_linkedin", ""),
+                    "public_business_contact": "true",
+                    "confidence": row.get("contact_confidence", ""),
+                    "status": "needs_manual_verification",
+                    "evidence": row.get("evidence", ""),
+                    "notes": "Built from existing outreach best-contact fields.",
+                }
+            ]
         row = refine_pitch_with_openclaw(
             account=row,
-            contacts=[],
+            contacts=contacts,
             pitch=row,
-            website_evidence=row.get("evidence", ""),
+            website_evidence=clean_text(
+                "; ".join(
+                    value
+                    for value in (
+                        row.get("observed_signals", ""),
+                        row.get("evidence", ""),
+                        row.get("workflow_gap", ""),
+                        row.get("loom_teardown_plan", ""),
+                    )
+                    if value
+                )
+            ),
             args=args,
         )
         refined += 1
