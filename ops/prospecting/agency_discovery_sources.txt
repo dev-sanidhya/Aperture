@@ -1,0 +1,31 @@
+# Public agency directory/list pages for low-cost account discovery.
+# The discovery script treats these as weak sources: it extracts outbound
+# agency domains, dedupes them, and sends likely agencies to the research queue.
+#
+# Start with high-signal categories. Add more country/service pages as needed.
+
+# DesignRush: large public B2B/marketing agency categories
+https://www.designrush.com/agency/digital-marketing/b2b/us
+https://www.designrush.com/agency/digital-marketing/b2b
+https://www.designrush.com/agency/digital-marketing
+https://www.designrush.com/agency/search-engine-optimization
+https://www.designrush.com/agency/paid-media-pay-per-click
+
+# AgencyReview: useful category pages with lead-gen and marketing agencies
+https://agencyreview.dev/agency-directory
+
+# Clutch: public agency categories
+https://clutch.co/us/call-centers/lead-generation
+https://clutch.co/agencies/digital-marketing
+https://clutch.co/seo-firms
+https://clutch.co/agencies/ppc
+https://clutch.co/agencies/inbound-marketing
+
+# HubSpot Solutions Directory: RevOps/HubSpot agencies
+https://ecosystem.hubspot.com/marketplace/solutions
+
+# Secondary directories
+https://agencysort.com/agencies
+https://agencycake.com/
+https://www.agencyloft.com/
+https://growyouragency.group/agency-directory/

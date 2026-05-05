@@ -42,6 +42,8 @@ python ops\prospecting\build_agency_pipeline.py --no-search --input-csv "data\pr
 
 Generated files are written under ignored `data/prospects/`:
 
+- `agency_directory_accounts_<date>.csv`: public directory account import.
+- `agency_directory_seed_urls_<date>.txt`: website-only seed file from public directory imports.
 - `agency_discovery_raw_<date>.csv`: raw API/search/list/seed results
 - `agency_accounts_discovered_<date>.csv`: deduped discovered accounts
 - `agency_research_queue_<date>.csv`: qualified accounts to enrich
@@ -69,6 +71,7 @@ Useful commands:
 ```powershell
 python ops\prospecting\build_agency_pipeline.py --dry-run
 python ops\prospecting\discover_agencies.py --dry-run
+python ops\prospecting\import_agency_directories.py --source all --max-profiles 500 --max-sitemaps 1 --request-delay 0.2
 python ops\prospecting\discover_agencies.py --source seed --seed-file ops\prospecting\agency_seed_urls.example.txt --max-results 50 --min-score 45
 python ops\prospecting\discover_agencies.py --source brave --segment b2b-lead-gen --country "United States" --max-queries 20
 python ops\prospecting\discover_agencies.py --source serper --segment b2b-lead-gen --country "United States" --max-queries 20
@@ -80,6 +83,27 @@ python ops\prospecting\build_agency_pipeline.py --input-csv path\to\apollo_expor
 ```
 
 If DuckDuckGo returns an anomaly/throttle page, the run still works from seed URLs and CSV imports. For scale after first validation, add a paid search/data source such as Apollo, Clay, SerpAPI, or a sequencing CRM export rather than trying to bypass search-engine protections.
+
+## Public Directory Import
+
+Use public directories before spending search/API credits:
+
+```powershell
+python ops\prospecting\import_agency_directories.py --source all --max-profiles 500 --max-sitemaps 1 --request-delay 0.2
+$today = Get-Date -Format yyyy-MM-dd
+python ops\prospecting\build_agency_pipeline.py --no-search --input-csv "data\prospects\agency_directory_accounts_$today.csv" --max-sites 100 --max-pages-per-site 3 --min-score 70
+python ops\prospecting\enrich_agency_contacts.py --input-csv "data\prospects\agency_outreach_approval_$today.csv" --max-accounts 0 --max-contact-queries 4 --max-results-per-query 5 --source serper
+```
+
+Current importer sources:
+
+- `agencyreview`: fetches profile pages and usually resolves the agency website.
+- `agencysort`: fetches profile pages and usually resolves the agency website.
+- `agencyloft`: uses the public listing sitemap, then fetches profile pages to resolve agency websites.
+- `hubspot-solutions`: uses HubSpot's public marketplace search endpoint to collect solution partner profiles, tiers, and review counts. Summary rows do not include direct websites, so they are marked `needs_website`.
+- `clutch-sitemap`: uses public Clutch profile sitemaps to collect profile URLs at scale. Direct Clutch profile/category HTML is Cloudflare-blocked from scripts, so these rows are marked `needs_website` and should be resolved later via search/API enrichment instead of brittle scraping.
+
+DesignRush category pages are currently Cloudflare-blocked from script fetches, so treat DesignRush as a manual/export or search-backed source for now.
 
 ## Optional OpenClaw Enrichment
 
