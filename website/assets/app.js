@@ -347,11 +347,11 @@ const isCoarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
       float g = fbm(q * 1.6 + flow * 0.9 - vec2(t * 0.4, 0.0));
       float h = fbm(q * 0.7 - flow * 1.2 + vec2(t * 0.2, -t * 0.3));
 
-      // holographic palette (violet → cyan → pink)
-      vec3 c1 = vec3(0.72, 0.58, 1.0);    // #b794ff
-      vec3 c2 = vec3(0.37, 0.91, 0.87);   // #5ee7df
-      vec3 c3 = vec3(1.0, 0.47, 0.78);    // #ff79c6
-      vec3 c0 = vec3(0.03, 0.03, 0.06);   // bg
+      // cool iridescent palette (electric blue → cyan → violet)
+      vec3 c1 = vec3(0.31, 0.49, 1.0);    // #4f7cff electric blue
+      vec3 c2 = vec3(0.37, 0.91, 0.87);   // #5ee7df cyan
+      vec3 c3 = vec3(0.55, 0.43, 1.0);    // #8b6dff violet
+      vec3 c0 = vec3(0.018, 0.024, 0.05); // deep navy bg
 
       float m1 = smoothstep(-0.4, 0.6, f);
       float m2 = smoothstep(-0.3, 0.7, g);
