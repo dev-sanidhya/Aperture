@@ -1,0 +1,12 @@
+backend/
+openclaw/
+ops/
+contracts/
+docs/
+rules/
+alembic.ini
+pyproject.toml
+*.py
+.env
+.env.*
+data/
