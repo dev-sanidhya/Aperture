@@ -177,6 +177,58 @@ const isCoarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
   }
 })();
 
+/* ---------------- Scroll-driven scenes ---------------- */
+(function scenes() {
+  const sceneEls = document.querySelectorAll("[data-scene]");
+  if (!sceneEls.length) return;
+
+  const scenes = [...sceneEls].map((el) => {
+    const beats = [...el.querySelectorAll("[data-beat]")].map((b) => {
+      const [a, c] = (b.getAttribute("data-beat") || "0 1").split(/\s+/).map(Number);
+      return { el: b, start: a, end: c };
+    });
+    return { el, beats };
+  });
+
+  function update() {
+    const vh = window.innerHeight;
+    for (const scene of scenes) {
+      const rect = scene.el.getBoundingClientRect();
+      const total = rect.height - vh;
+      let p = 0;
+      if (total > 0) {
+        p = Math.min(1, Math.max(0, -rect.top / total));
+      } else if (rect.top < vh && rect.bottom > 0) {
+        p = 1 - rect.bottom / (rect.height + vh);
+      }
+      scene.el.style.setProperty("--p", p.toFixed(4));
+
+      for (const beat of scene.beats) {
+        const inRange = p >= beat.start && p <= beat.end;
+        // local progress 0->1 within the beat range
+        let local = 0;
+        if (p < beat.start) local = 0;
+        else if (p > beat.end) local = 1;
+        else local = (p - beat.start) / Math.max(0.0001, beat.end - beat.start);
+        beat.el.style.setProperty("--bp", local.toFixed(4));
+        beat.el.classList.toggle("beat-active", inRange);
+      }
+    }
+    rafPending = false;
+  }
+
+  let rafPending = false;
+  function onScroll() {
+    if (rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(update);
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  update();
+})();
+
 /* ---------------- Ticker seamless duplication ---------------- */
 (function ticker() {
   document.querySelectorAll(".ticker-track").forEach((track) => {
