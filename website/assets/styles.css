@@ -429,8 +429,22 @@ main {
 .hero h1 em,
 .page-hero h1 em,
 .section-heading h2 em,
-.manifesto-title em {
+.manifesto-title em,
+.footer-form h2 em {
   font-style: italic;
+  background: var(--grad-holo);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* split-text wraps chars in inline-block spans which break background-clip
+   inheritance — re-apply the gradient on those inner spans directly. */
+.hero h1 em .split-char > span,
+.page-hero h1 em .split-char > span,
+.section-heading h2 em .split-char > span,
+.manifesto-title em .split-char > span,
+.footer-form h2 em .split-char > span {
   background: var(--grad-holo);
   -webkit-background-clip: text;
   background-clip: text;
