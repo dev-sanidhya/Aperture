@@ -229,27 +229,22 @@ img {
   height: 36px;
   border-radius: 12px;
   position: relative;
-  background: var(--grad-holo);
-  box-shadow: 0 6px 24px rgba(183, 148, 255, 0.35);
-  overflow: hidden;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(79, 124, 255, 0.35), transparent 60%),
+    radial-gradient(circle at 70% 70%, rgba(139, 109, 255, 0.30), transparent 60%),
+    #04060d;
+  background-image: url("/assets/logo.svg");
+  background-size: 108% 108%;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow:
+    0 6px 24px rgba(79, 124, 255, 0.32),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  transition: transform 600ms var(--ease-soft);
 }
 
-.brand-mark::before {
-  content: "";
-  position: absolute;
-  inset: 3px;
-  border-radius: 9px;
-  background: var(--bg-0);
-}
-
-.brand-mark::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 12px;
-  background: var(--grad-holo);
-  mask: radial-gradient(circle at center, transparent 38%, black 42%, black 48%, transparent 52%);
-  -webkit-mask: radial-gradient(circle at center, transparent 38%, black 42%, black 48%, transparent 52%);
+.brand:hover .brand-mark {
+  transform: rotate(60deg);
 }
 
 .nav {
