@@ -475,6 +475,55 @@ const isCoarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
   });
 })();
 
+/* ---------------- Mobile nav drawer ---------------- */
+(function mobileNav() {
+  const toggle = document.querySelector(".nav-toggle");
+  if (!toggle) return;
+
+  const overlay = document.createElement("div");
+  overlay.className = "nav-overlay";
+
+  const drawer = document.createElement("nav");
+  drawer.className = "nav-drawer";
+
+  document.querySelectorAll(".nav a[data-nav]").forEach((a) => {
+    drawer.append(a.cloneNode(true));
+  });
+
+  document.body.append(overlay, drawer);
+
+  const path = window.location.pathname.replace(/\/+$/, "") || "/";
+  drawer.querySelectorAll("a[data-nav]").forEach((link) => {
+    const href = link.getAttribute("href");
+    if (!href) return;
+    if ((href === "/" && path === "/") || (href !== "/" && path.endsWith(href))) {
+      link.classList.add("active");
+    }
+  });
+
+  function open() {
+    toggle.classList.add("is-open");
+    drawer.classList.add("is-open");
+    overlay.classList.add("is-open");
+    toggle.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+  }
+
+  function close() {
+    toggle.classList.remove("is-open");
+    drawer.classList.remove("is-open");
+    overlay.classList.remove("is-open");
+    toggle.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  }
+
+  toggle.addEventListener("click", () => {
+    toggle.classList.contains("is-open") ? close() : open();
+  });
+  overlay.addEventListener("click", close);
+  drawer.querySelectorAll("a").forEach((a) => a.addEventListener("click", close));
+})();
+
 /* ---------------- Intent chips + contact form ---------------- */
 document.querySelectorAll("[data-intent-chip]").forEach((chip) => {
   chip.addEventListener("click", () => {
