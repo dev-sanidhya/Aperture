@@ -3,17 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aperture Process — How We Work</title>
+    <title>Aperture — How We Work</title>
     <meta name="description" content="Short path from brief to shipped. How Aperture moves from scoping through design, build, and launch." />
-    <meta property="og:title" content="Aperture Process — How We Work" />
+    <meta property="og:title" content="Aperture — How We Work" />
     <meta property="og:description" content="Short path from brief to shipped. Small team, fast execution." />
     <meta property="og:image" content="/assets/logo.svg" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Aperture Process — How We Work" />
+    <meta name="twitter:title" content="Aperture — How We Work" />
     <meta name="twitter:description" content="Short path from brief to shipped. Small team, fast execution." />
     <meta name="twitter:image" content="/assets/logo.svg" />
     <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/assets/logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" />
     <link rel="stylesheet" href="/assets/styles.css" />
     <script defer src="/assets/app.js"></script>
   </head>
@@ -27,8 +30,9 @@
           </a>
           <nav class="nav">
             <a data-nav href="/">Home</a>
-            <a data-nav href="/services.html">Services</a>
-            <a data-nav href="/process.html">Process</a>
+            <a data-nav href="/services.html">Solutions</a>
+            <a data-nav href="/process.html">How It Works</a>
+            <a data-nav href="/clients.html">Clients</a>
             <a data-nav href="/contact.html">Contact</a>
           </nav>
           <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
@@ -43,7 +47,7 @@
           <div class="container page-hero-inner" data-reveal>
             <span class="eyebrow">How We Work</span>
             <h1>How we work <em>with you.</em></h1>
-            <p class="lead">Four stages from brief to shipped. We move fast because we're small and there's no handoff chain in the middle.</p>
+            <p class="lead">Four stages from brief to shipped. We move fast because we're small and there's no handoff chain.</p>
           </div>
         </section>
 
@@ -116,65 +120,16 @@
           </div>
         </section>
 
-        <section class="footer-band" id="inquiry">
+        <!-- CTA (replaces duplicated form) -->
+        <section class="cta-band" id="inquiry" data-reveal>
           <div class="container">
-            <div class="footer-card" data-reveal>
-              <div class="footer-copy">
-                <span class="section-label">Ready to Start</span>
-                <p>Send the brief. We'll tell you exactly what we'd build and roughly what it takes.</p>
-                <div class="contact-cluster">
-                  <article class="contact-person">
-                    <div class="contact-avatar">AS</div>
-                    <div>
-                      <strong>Atharva Singh</strong>
-                      <span>Design and Direction</span>
-                    </div>
-                    <a class="contact-link" href="mailto:atharvasingh0405@gmail.com">atharvasingh0405@gmail.com</a>
-                  </article>
-                  <article class="contact-person">
-                    <div class="contact-avatar">SS</div>
-                    <div>
-                      <strong>Sanidhya Shishodia</strong>
-                      <span>Systems and AI</span>
-                    </div>
-                    <a class="contact-link" href="mailto:shishodiasanidhya@gmail.com">shishodiasanidhya@gmail.com</a>
-                  </article>
-                </div>
-                <div class="contact-meta">
-                  <span>cachemoney0410@gmail.com</span>
-                  <span>Reply within 48 hours</span>
-                </div>
-              </div>
-              <div class="footer-form">
-                <span class="form-kicker">Project Intake</span>
-                <h2>Send the brief.</h2>
-                <p>Short or long — we'll read it.</p>
-                <form data-contact-form>
-                  <div class="intent-row" data-intent-group>
-                    <button type="button" class="intent-chip" data-intent-chip="Website">Website</button>
-                    <button type="button" class="intent-chip" data-intent-chip="Integration">Integration</button>
-                    <button type="button" class="intent-chip" data-intent-chip="AI workflow">AI workflow</button>
-                    <button type="button" class="intent-chip" data-intent-chip="Full rebuild">Full rebuild</button>
-                  </div>
-                  <div class="form-grid">
-                    <label>
-                      Company
-                      <input type="text" name="company" placeholder="Your company" required />
-                    </label>
-                    <label>
-                      Email
-                      <input type="email" name="email" placeholder="you@company.com" required />
-                    </label>
-                  </div>
-                  <label>
-                    Brief
-                    <textarea name="brief" placeholder="What needs to change or exist?" required></textarea>
-                  </label>
-                  <div class="form-actions">
-                    <button type="submit">Send it</button>
-                    <span class="form-status" data-form-status>Goes directly to both founders.</span>
-                  </div>
-                </form>
+            <div class="cta-inner">
+              <span class="eyebrow">Ready to start</span>
+              <h2 class="cta-title">Send us the <em>brief.</em></h2>
+              <p class="lead">Short or long — we'll read it. One of the founders replies directly within 48 hours.</p>
+              <div class="hero-actions">
+                <a class="button button-primary" href="/contact.html">Get your free teardown</a>
+                <a class="button button-secondary" href="mailto:hello@aperture.studio">hello@aperture.studio</a>
               </div>
             </div>
           </div>
@@ -183,9 +138,32 @@
 
       <footer class="site-footer">
         <div class="container">
-          <span>Aperture</span>
-          <span>Websites, apps, AI, automation, brand.</span>
-          <span>&copy; <span data-year></span></span>
+          <div class="footer-grid">
+            <div class="footer-col footer-col-brand">
+              <a class="brand" href="/">
+                <span class="brand-mark"></span>
+                <span>Aperture</span>
+              </a>
+              <p>AI systems and automation for companies that are done doing things manually.</p>
+            </div>
+            <div class="footer-col">
+              <strong>Navigate</strong>
+              <a href="/">Home</a>
+              <a href="/services.html">Solutions</a>
+              <a href="/process.html">How It Works</a>
+              <a href="/clients.html">Clients</a>
+              <a href="/contact.html">Contact</a>
+            </div>
+            <div class="footer-col">
+              <strong>Contact</strong>
+              <a href="mailto:hello@aperture.studio">hello@aperture.studio</a>
+              <span>Reply within 48 hours</span>
+              <span>Est. 2025</span>
+            </div>
+          </div>
+          <div class="footer-bottom">
+            <span>&copy; <span data-year></span> Aperture</span>
+          </div>
         </div>
       </footer>
 
@@ -195,7 +173,7 @@
             <strong>Aperture</strong>
             <span>Brief to shipped, four stages.</span>
           </div>
-          <a class="button button-primary" href="#inquiry">Start a project</a>
+          <a class="button button-primary" href="/contact.html">Get your free teardown</a>
         </div>
       </div>
     </div>

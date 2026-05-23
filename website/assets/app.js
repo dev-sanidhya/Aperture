@@ -1,4 +1,4 @@
-/* Aperture motion engine — cursor, magnetics, splits, transitions */
+/* Aperture motion engine — magnetics, splits, transitions, reveals */
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isCoarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
@@ -14,58 +14,11 @@ const isCoarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
     }
   });
 
-  if (!isCoarse && !document.querySelector(".cursor-ring")) {
-    const ring = document.createElement("div");
-    ring.className = "cursor-ring";
-    const dot = document.createElement("div");
-    dot.className = "cursor-dot";
-    document.body.append(ring, dot);
-  }
-
   if (!document.querySelector(".veil")) {
     const veil = document.createElement("div");
     veil.className = "veil";
     document.body.append(veil);
   }
-})();
-
-/* ---------------- Custom cursor ---------------- */
-(function cursor() {
-  if (isCoarse) return;
-  const ring = document.querySelector(".cursor-ring");
-  const dot = document.querySelector(".cursor-dot");
-  if (!ring || !dot) return;
-
-  let mx = window.innerWidth / 2;
-  let my = window.innerHeight / 2;
-  let rx = mx;
-  let ry = my;
-
-  window.addEventListener("pointermove", (e) => {
-    mx = e.clientX;
-    my = e.clientY;
-    dot.style.transform = `translate3d(${mx}px, ${my}px, 0) translate(-50%, -50%)`;
-  }, { passive: true });
-
-  function frame() {
-    rx += (mx - rx) * 0.18;
-    ry += (my - ry) * 0.18;
-    ring.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%)`;
-    requestAnimationFrame(frame);
-  }
-  frame();
-
-  const hoverTargets = "a, button, .intent-chip, .pill-link, .contact-link, [data-magnetic]";
-  document.addEventListener("pointerover", (e) => {
-    if (e.target instanceof Element && e.target.closest(hoverTargets)) {
-      document.body.classList.add("cursor-hover");
-    }
-  });
-  document.addEventListener("pointerout", (e) => {
-    if (e.target instanceof Element && e.target.closest(hoverTargets)) {
-      document.body.classList.remove("cursor-hover");
-    }
-  });
 })();
 
 /* ---------------- Magnetic buttons ---------------- */
@@ -85,7 +38,7 @@ const isCoarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
   });
 })();
 
-/* ---------------- Reveal observer ---------------- */
+/* ---------------- Reveal observer with staggered delays ---------------- */
 (function reveals() {
   const els = document.querySelectorAll("[data-reveal]");
   if (!("IntersectionObserver" in window)) {
@@ -96,6 +49,16 @@ const isCoarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
+          /* Stagger sibling cards inside grids */
+          const parent = entry.target.parentElement;
+          if (parent) {
+            const siblings = parent.querySelectorAll("[data-reveal]");
+            let idx = 0;
+            siblings.forEach((sib) => {
+              if (sib === entry.target) return;
+              /* Check if this sibling is also intersecting or already revealed */
+            });
+          }
           entry.target.classList.add("revealed");
           io.unobserve(entry.target);
         }
@@ -103,6 +66,15 @@ const isCoarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
     },
     { threshold: 0.14, rootMargin: "0px 0px -8% 0px" }
   );
+
+  /* Apply staggered delays to card grids */
+  document.querySelectorAll(".services-grid, .work-grid, .contact-grid, .founders-stage, .timeline, .clients-grid, .clients-stats").forEach((grid) => {
+    const cards = grid.querySelectorAll("[data-reveal]");
+    cards.forEach((card, i) => {
+      card.style.transitionDelay = `${i * 80}ms`;
+    });
+  });
+
   els.forEach((el) => io.observe(el));
 })();
 
@@ -113,7 +85,6 @@ const isCoarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
     if (node.dataset.split === "true") return;
     node.dataset.split = "true";
     const html = node.innerHTML;
-    // Wrap words to keep wrapping behavior; each word is a .split-char box; chars animate inside
     const parser = new DOMParser();
     const doc = parser.parseFromString(`<div>${html}</div>`, "text/html");
     const root = doc.body.firstChild;
@@ -138,7 +109,7 @@ const isCoarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
               box.className = "split-char";
               const inner = document.createElement("span");
               inner.textContent = ch;
-              inner.style.setProperty("--d", `${i * 22}ms`);
+              inner.style.setProperty("--d", `${i * 18}ms`);
               box.append(inner);
               wordWrap.append(box);
             });
@@ -146,7 +117,6 @@ const isCoarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
           });
         } else if (child.nodeType === Node.ELEMENT_NODE) {
           const clone = child.cloneNode(false);
-          // recurse into children but keep wrapper (e.g., <em>)
           clone.appendChild(walk(child));
           out.append(clone);
         }
@@ -204,7 +174,6 @@ const isCoarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
   const veil = document.querySelector(".veil");
   if (!veil) return;
 
-  // Out animation on load
   requestAnimationFrame(() => {
     veil.classList.add("veil-out");
     setTimeout(() => veil.classList.remove("veil-out"), 800);
@@ -224,7 +193,7 @@ const isCoarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
 
     e.preventDefault();
     veil.classList.add("veil-in");
-    setTimeout(() => { window.location.href = href; }, 580);
+    setTimeout(() => { window.location.href = href; }, 350);
   });
 })();
 
@@ -327,7 +296,7 @@ document.querySelectorAll("[data-contact-form]").forEach((form) => {
     }
     if (submitButton instanceof HTMLButtonElement) {
       submitButton.disabled = true;
-      submitButton.textContent = "Sending";
+      submitButton.textContent = "Sending…";
     }
 
     try {
@@ -340,19 +309,19 @@ document.querySelectorAll("[data-contact-form]").forEach((form) => {
       if (!response.ok) throw new Error(result.message || "Unable to send inquiry.");
       form.reset();
       if (statusNode) {
-        statusNode.textContent = "Inquiry sent. Aperture will reach out shortly.";
+        statusNode.textContent = "Inquiry sent. We'll reply within 48 hours.";
         statusNode.className = "form-status success";
       }
     } catch (error) {
       if (statusNode) {
         statusNode.textContent =
-          error instanceof Error ? error.message : "Unable to send inquiry. Email us at cachemoney0410@gmail.com.";
+          error instanceof Error ? error.message : "Unable to send inquiry. Email us at hello@aperture.studio.";
         statusNode.className = "form-status error";
       }
     } finally {
       if (submitButton instanceof HTMLButtonElement) {
         submitButton.disabled = false;
-        submitButton.textContent = "Start the conversation";
+        submitButton.textContent = "Send the brief";
       }
     }
   });

@@ -3,17 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aperture Services — Websites, Apps, AI & Automation</title>
-    <meta name="description" content="Aperture builds websites, apps, AI workflows, automations, and brand systems. Everything in-house, by the two founders." />
-    <meta property="og:title" content="Aperture Services — Websites, Apps, AI & Automation" />
-    <meta property="og:description" content="Four disciplines, all in-house. Websites, apps, AI, automation, and brand." />
+    <title>Aperture Solutions — AI Systems, Apps & Automation</title>
+    <meta name="description" content="Aperture builds AI workflows, automation, apps, and brand systems. Everything in-house, by the two founders." />
+    <meta property="og:title" content="Aperture Solutions — AI Systems, Apps & Automation" />
+    <meta property="og:description" content="Four disciplines, all in-house. AI, automation, apps, and brand." />
     <meta property="og:image" content="/assets/logo.svg" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Aperture Services — Websites, Apps, AI & Automation" />
-    <meta name="twitter:description" content="Four disciplines, all in-house. Websites, apps, AI, automation, and brand." />
+    <meta name="twitter:title" content="Aperture Solutions — AI Systems, Apps & Automation" />
+    <meta name="twitter:description" content="Four disciplines, all in-house. AI, automation, apps, and brand." />
     <meta name="twitter:image" content="/assets/logo.svg" />
     <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/assets/logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" />
     <link rel="stylesheet" href="/assets/styles.css" />
     <script defer src="/assets/app.js"></script>
   </head>
@@ -27,8 +30,9 @@
           </a>
           <nav class="nav">
             <a data-nav href="/">Home</a>
-            <a data-nav href="/services.html">Services</a>
-            <a data-nav href="/process.html">Process</a>
+            <a data-nav href="/services.html">Solutions</a>
+            <a data-nav href="/process.html">How It Works</a>
+            <a data-nav href="/clients.html">Clients</a>
             <a data-nav href="/contact.html">Contact</a>
           </nav>
           <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
@@ -41,12 +45,12 @@
         <section class="page-hero page-hero-shader">
           <div class="page-shader" data-shader></div>
           <div class="container page-hero-inner" data-reveal>
-            <span class="eyebrow">Services</span>
+            <span class="eyebrow">Solutions</span>
             <h1>Everything we build.</h1>
             <p class="lead">Four disciplines, all in-house. No subcontractors, no handoffs to people you haven't met.</p>
             <div class="page-hero-actions">
-              <a class="button button-primary" href="/contact.html">Start a project</a>
-              <a class="button button-secondary" href="/process.html">See how we work</a>
+              <a class="button button-primary" href="/contact.html">Get your free teardown</a>
+              <a class="button button-secondary" href="/process.html">How we work</a>
             </div>
           </div>
         </section>
@@ -55,39 +59,39 @@
           <div class="container">
             <div class="services-grid">
               <article class="service-card" data-reveal>
-                <h3>Websites</h3>
-                <p>Multi-page company sites built to perform. Clean, responsive, and structured to build trust fast.</p>
+                <h3>AI Implementation</h3>
+                <p>AI that removes actual work from your team. We scope it against what you actually need, not what sounds good in a pitch.</p>
                 <ul>
-                  <li>Company profiles</li>
-                  <li>Landing pages</li>
-                  <li>Ecommerce builds</li>
+                  <li>Intake automation</li>
+                  <li>AI-powered workflows</li>
+                  <li>Custom agent systems</li>
                 </ul>
               </article>
               <article class="service-card" data-reveal>
-                <h3>Brand & Presence</h3>
-                <p>For companies that need to look like they have their act together. Visual identity and messaging that holds up.</p>
-                <ul>
-                  <li>Logo & identity</li>
-                  <li>Design systems</li>
-                  <li>Brand refresh</li>
-                </ul>
-              </article>
-              <article class="service-card" data-reveal>
-                <h3>Integrations & Systems</h3>
+                <h3>Systems & Integrations</h3>
                 <p>Connect your CRM, email, forms, and ops stack. Stop doing manually what a system should do for you.</p>
                 <ul>
-                  <li>Lead routing</li>
+                  <li>Lead routing & enrichment</li>
                   <li>CRM + email flows</li>
                   <li>API connections</li>
                 </ul>
               </article>
               <article class="service-card" data-reveal>
-                <h3>AI Implementation</h3>
-                <p>AI that removes actual work from your team. We scope it against what you actually need, not what sounds good in a pitch.</p>
+                <h3>Apps & Products</h3>
+                <p>SaaS MVPs, dashboards, internal tools, client portals. We write the code and own the result.</p>
                 <ul>
-                  <li>Intake automation</li>
-                  <li>AI support layers</li>
-                  <li>Custom workflows</li>
+                  <li>Web applications</li>
+                  <li>Client portals</li>
+                  <li>Internal tools</li>
+                </ul>
+              </article>
+              <article class="service-card" data-reveal>
+                <h3>Web & Brand</h3>
+                <p>Your company's front door. Websites and brand systems built to convert, not just look good.</p>
+                <ul>
+                  <li>Company websites</li>
+                  <li>Landing pages</li>
+                  <li>Brand identity</li>
                 </ul>
               </article>
             </div>
@@ -140,65 +144,16 @@
           </div>
         </section>
 
-        <section class="footer-band" id="inquiry">
+        <!-- CTA (replaces duplicated form) -->
+        <section class="cta-band" id="inquiry" data-reveal>
           <div class="container">
-            <div class="footer-card" data-reveal>
-              <div class="footer-copy">
-                <span class="section-label">Reach Out</span>
-                <p>Tell us what you need. We'll tell you what we'd actually build.</p>
-                <div class="contact-cluster">
-                  <article class="contact-person">
-                    <div class="contact-avatar">AS</div>
-                    <div>
-                      <strong>Atharva Singh</strong>
-                      <span>Design and Direction</span>
-                    </div>
-                    <a class="contact-link" href="mailto:atharvasingh0405@gmail.com">atharvasingh0405@gmail.com</a>
-                  </article>
-                  <article class="contact-person">
-                    <div class="contact-avatar">SS</div>
-                    <div>
-                      <strong>Sanidhya Shishodia</strong>
-                      <span>Systems and AI</span>
-                    </div>
-                    <a class="contact-link" href="mailto:shishodiasanidhya@gmail.com">shishodiasanidhya@gmail.com</a>
-                  </article>
-                </div>
-                <div class="contact-meta">
-                  <span>cachemoney0410@gmail.com</span>
-                  <span>Reply within 48 hours</span>
-                </div>
-              </div>
-              <div class="footer-form">
-                <span class="form-kicker">Project Intake</span>
-                <h2>Describe the work.</h2>
-                <p>A sentence is enough to start.</p>
-                <form data-contact-form>
-                  <div class="intent-row" data-intent-group>
-                    <button type="button" class="intent-chip" data-intent-chip="Website">Website</button>
-                    <button type="button" class="intent-chip" data-intent-chip="Integration">Integration</button>
-                    <button type="button" class="intent-chip" data-intent-chip="AI workflow">AI workflow</button>
-                    <button type="button" class="intent-chip" data-intent-chip="Full rebuild">Full rebuild</button>
-                  </div>
-                  <div class="form-grid">
-                    <label>
-                      Company
-                      <input type="text" name="company" placeholder="Your company" required />
-                    </label>
-                    <label>
-                      Email
-                      <input type="email" name="email" placeholder="you@company.com" required />
-                    </label>
-                  </div>
-                  <label>
-                    Scope
-                    <textarea name="brief" placeholder="What needs to exist or what's broken?" required></textarea>
-                  </label>
-                  <div class="form-actions">
-                    <button type="submit">Send it</button>
-                    <span class="form-status" data-form-status>Goes directly to both founders.</span>
-                  </div>
-                </form>
+            <div class="cta-inner">
+              <span class="eyebrow">Ready to start</span>
+              <h2 class="cta-title">Tell us what you need <em>built.</em></h2>
+              <p class="lead">Describe the workflow or project. We'll send back a free teardown with what we'd build, what it would save, and what it would cost.</p>
+              <div class="hero-actions">
+                <a class="button button-primary" href="/contact.html">Get your free teardown</a>
+                <a class="button button-secondary" href="mailto:hello@aperture.studio">hello@aperture.studio</a>
               </div>
             </div>
           </div>
@@ -207,9 +162,32 @@
 
       <footer class="site-footer">
         <div class="container">
-          <span>Aperture</span>
-          <span>Websites, apps, AI, automation, brand.</span>
-          <span>&copy; <span data-year></span></span>
+          <div class="footer-grid">
+            <div class="footer-col footer-col-brand">
+              <a class="brand" href="/">
+                <span class="brand-mark"></span>
+                <span>Aperture</span>
+              </a>
+              <p>AI systems and automation for companies that are done doing things manually.</p>
+            </div>
+            <div class="footer-col">
+              <strong>Navigate</strong>
+              <a href="/">Home</a>
+              <a href="/services.html">Solutions</a>
+              <a href="/process.html">How It Works</a>
+              <a href="/clients.html">Clients</a>
+              <a href="/contact.html">Contact</a>
+            </div>
+            <div class="footer-col">
+              <strong>Contact</strong>
+              <a href="mailto:hello@aperture.studio">hello@aperture.studio</a>
+              <span>Reply within 48 hours</span>
+              <span>Est. 2025</span>
+            </div>
+          </div>
+          <div class="footer-bottom">
+            <span>&copy; <span data-year></span> Aperture</span>
+          </div>
         </div>
       </footer>
 
@@ -217,9 +195,9 @@
         <div class="container">
           <div class="bottom-bar-copy">
             <strong>Aperture</strong>
-            <span>Websites, apps, AI, and automation.</span>
+            <span>AI systems and automation.</span>
           </div>
-          <a class="button button-primary" href="#inquiry">Start a project</a>
+          <a class="button button-primary" href="/contact.html">Get your free teardown</a>
         </div>
       </div>
     </div>
