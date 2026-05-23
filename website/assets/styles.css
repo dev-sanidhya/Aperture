@@ -1378,6 +1378,17 @@ textarea {
   display: block;
 }
 
+.client-ticker-img.capx-ticker-logo {
+  height: 38px;
+  max-width: 110px;
+}
+
+.client-ticker-item .client-wordmark {
+  height: 26px;
+  width: auto;
+  display: block;
+}
+
 .client-ticker-name {
   font-family: "Instrument Serif", serif;
   font-size: 1.5rem;
