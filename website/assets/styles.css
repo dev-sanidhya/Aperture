@@ -1350,11 +1350,11 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 60px;
-  height: 88px;
+  padding: 0 65px;
+  height: 96px;
   border-right: 1px solid var(--line);
   color: var(--text);
-  opacity: 0.55;
+  opacity: 0.82;
   transition: opacity 300ms var(--ease-soft);
   text-decoration: none;
   flex-shrink: 0;
@@ -1370,21 +1370,16 @@ textarea {
 }
 
 .client-ticker-img {
-  height: 28px;
+  height: 36px;
   width: auto;
-  max-width: 130px;
+  max-width: 140px;
   object-fit: contain;
   filter: brightness(0) invert(1);
   display: block;
 }
 
-.client-ticker-img.capx-ticker-logo {
-  height: 38px;
-  max-width: 110px;
-}
-
 .client-ticker-item .client-wordmark {
-  height: 26px;
+  height: 34px;
   width: auto;
   display: block;
 }
