@@ -1,4 +1,4 @@
-/* Aperture motion engine — magnetics, splits, transitions, reveals */
+/* Aperture motion engine - magnetics, splits, transitions, reveals */
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isCoarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
