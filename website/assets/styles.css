@@ -1,4 +1,4 @@
-﻿/* Fonts loaded via <link> in HTML â€” no @import */
+/* Fonts loaded via <link> in HTML â€” no @import */
 
 :root {
   --bg-0: #09090B;
@@ -1956,7 +1956,6 @@ textarea {
   font-size: 1.1rem;
   font-weight: 600;
   letter-spacing: -0.02em;
-  text-transform: lowercase;
 }
 
 @media (max-width: 760px) {
