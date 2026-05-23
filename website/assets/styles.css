@@ -1378,6 +1378,16 @@ textarea {
   display: block;
 }
 
+.client-ticker-img-actual {
+  height: 34px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+  display: block;
+  mix-blend-mode: screen;
+  filter: brightness(1.25) contrast(1.1);
+}
+
 .client-ticker-item .client-wordmark {
   height: 34px;
   width: auto;
