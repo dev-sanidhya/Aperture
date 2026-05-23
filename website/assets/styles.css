@@ -1,4 +1,4 @@
-/* Fonts loaded via <link> in HTML — no @import */
+﻿/* Fonts loaded via <link> in HTML â€” no @import */
 
 :root {
   --bg-0: #09090B;
@@ -80,7 +80,7 @@ body {
   background: radial-gradient(ellipse 100% 80% at 50% 50%, transparent 50%, rgba(0, 0, 0, 0.45) 100%);
 }
 
-/* Cursor: native system cursor — no custom cursor */
+/* Cursor: native system cursor â€” no custom cursor */
 
 /* ---------- Page transition veil ---------- */
 
@@ -279,7 +279,7 @@ main {
   padding-bottom: 60px;
 }
 
-/* hero-grid, hero-copy, hero-bullets removed — unused */
+/* hero-grid, hero-copy, hero-bullets removed â€” unused */
 
 .eyebrow,
 .section-label,
@@ -336,7 +336,7 @@ main {
 }
 
 /* split-text wraps chars in inline-block spans which break background-clip
-   inheritance — re-apply the gradient on those inner spans directly. */
+   inheritance â€” re-apply the gradient on those inner spans directly. */
 .hero h1 em .split-char > span,
 .page-hero h1 em .split-char > span,
 .section-heading h2 em .split-char > span,
@@ -397,7 +397,7 @@ main {
   display: block;
 }
 
-/* Hide legacy hero decorations — replaced by shader */
+/* Hide legacy hero decorations â€” replaced by shader */
 .canvas-grid,
 .canvas-beam,
 .canvas-disc,
@@ -568,7 +568,7 @@ main {
   letter-spacing: 0.03em;
 }
 
-/* manifesto section removed — unused */
+/* manifesto section removed â€” unused */
 
 /* ---------- Cards ---------- */
 
@@ -1387,6 +1387,138 @@ textarea {
   color: inherit;
 }
 
+/* ---------- Client cards (clients page) ---------- */
+
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.client-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(22, 22, 26, 0.7), rgba(14, 14, 17, 0.65));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.client-card:hover {
+  border-color: rgba(209, 162, 106, 0.25);
+  box-shadow: 0 4px 32px rgba(209, 162, 106, 0.06);
+}
+
+.client-shelf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--line);
+  min-height: 80px;
+}
+
+.client-logo-img {
+  height: 40px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+  filter: brightness(0.95);
+}
+
+.client-wordmark {
+  height: 36px;
+  width: auto;
+}
+
+.client-ext {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  flex-shrink: 0;
+}
+
+.client-ext:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(209, 162, 106, 0.08);
+}
+
+.client-body {
+  padding: 24px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.client-body h3 {
+  font-family: "Instrument Serif", serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--text);
+  margin: 0;
+}
+
+.client-body p {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.client-tag {
+  display: inline-block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(209, 162, 106, 0.15);
+  background: rgba(209, 162, 106, 0.06);
+  width: fit-content;
+}
+
+/* Stats band */
+.clients-stats {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+}
+
+.clients-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.clients-stat strong {
+  font-family: "Instrument Serif", serif;
+  font-size: 2.4rem;
+  color: var(--text);
+  font-weight: 400;
+}
+
+.clients-stat span {
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
 /* ---------- Keyframes ---------- */
 
 @keyframes ticker-run {
@@ -1533,6 +1665,14 @@ textarea {
     grid-template-columns: 1fr;
   }
 
+  .clients-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .clients-stats {
+    gap: 40px;
+  }
+
   .service-row {
     grid-template-columns: 1fr;
   }
@@ -1673,7 +1813,7 @@ textarea {
   animation: glow-breathe 9s ease-in-out infinite;
 }
 
-/* glow-breathe removed — unnecessary GPU load */
+/* glow-breathe removed â€” unnecessary GPU load */
 
 /* ---------- Hero capability tags ---------- */
 
@@ -1697,7 +1837,7 @@ textarea {
   letter-spacing: 0.05em;
 }
 
-/* statement-band removed — unused */
+/* statement-band removed â€” unused */
 
 /* ---------- Founders ---------- */
 
@@ -1806,6 +1946,7 @@ textarea {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+
 }
 
 /* ---------- capx wordmark ---------- */
@@ -1821,4 +1962,6 @@ textarea {
 @media (max-width: 760px) {
   .founders-stage { grid-template-columns: 1fr; }
   .hero-home h1 { font-size: clamp(3.4rem, 13vw, 5.5rem); }
+  .clients-grid { grid-template-columns: 1fr; }
+  .clients-stats { flex-wrap: wrap; gap: 32px; }
 }
