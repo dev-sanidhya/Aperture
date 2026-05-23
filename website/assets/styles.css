@@ -315,7 +315,6 @@ button[type="submit"]:hover {
   background: rgba(255, 255, 255, 0.04);
   color: var(--text);
   border: 1px solid var(--line-strong);
-  backdrop-filter: blur(10px);
 }
 
 .button-secondary:hover {
@@ -324,7 +323,7 @@ button[type="submit"]:hover {
 }
 
 main {
-  padding-bottom: 160px;
+  padding-bottom: 100px;
   position: relative;
 }
 
@@ -504,51 +503,10 @@ main {
   display: none;
 }
 
-.hero-tag-overlay {
-  position: absolute;
-  z-index: 2;
-  padding: 9px 14px;
-  border-radius: 999px;
-  background: rgba(10, 10, 20, 0.55);
-  border: 1px solid var(--line-strong);
-  color: var(--text);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  font-size: 0.64rem;
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 500;
-  backdrop-filter: blur(14px);
-}
-
-.hero-tag-overlay::before {
-  content: "";
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  margin-right: 10px;
-  vertical-align: middle;
-  background: var(--accent);
-  box-shadow: 0 0 12px var(--accent);
-}
-
-.tag-tl { top: 22px; left: 22px; }
-.tag-tr { top: 22px; right: 22px; }
-.tag-tr::before { background: var(--accent-2); box-shadow: 0 0 12px var(--accent-2); }
-.tag-bl { bottom: 22px; left: 22px; }
-.tag-bl::before { background: var(--accent-3); box-shadow: 0 0 12px var(--accent-3); }
-.tag-br {
-  bottom: 22px;
-  right: 22px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.6rem;
-}
-.tag-br::before { background: #fff; box-shadow: 0 0 10px #fff; }
-
 /* ---------- Sections ---------- */
 
 .section {
-  padding: 56px 0;
+  padding: 80px 0;
   position: relative;
 }
 
@@ -1028,8 +986,8 @@ main {
 }
 
 .page-hero-shader {
-  padding: 140px 0 80px;
-  min-height: 78vh;
+  padding: 160px 0 96px;
+  min-height: 68vh;
   display: grid;
   align-items: center;
   overflow: hidden;
@@ -1042,9 +1000,9 @@ main {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(79, 124, 255, 0.2) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 40% at 85% 60%, rgba(94, 231, 223, 0.1) 0%, transparent 55%),
-    radial-gradient(ellipse 55% 45% at 15% 80%, rgba(139, 109, 255, 0.12) 0%, transparent 55%);
+    radial-gradient(ellipse 90% 65% at 50% -5%, rgba(79, 124, 255, 0.24) 0%, transparent 62%),
+    radial-gradient(ellipse 55% 45% at 88% 55%, rgba(94, 231, 223, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 12% 80%, rgba(139, 109, 255, 0.14) 0%, transparent 55%);
 }
 
 .page-shader::after {
@@ -1426,8 +1384,8 @@ textarea {
 .clients-head h2 {
   font-family: "Instrument Serif", serif;
   font-weight: 400;
-  font-size: clamp(2.8rem, 5.5vw, 4.8rem);
-  line-height: 0.96;
+  font-size: clamp(2.6rem, 5vw, 4.4rem);
+  line-height: 0.97;
   letter-spacing: -0.025em;
   margin: 14px 0 18px;
   color: var(--text);
@@ -1804,6 +1762,12 @@ textarea {
     radial-gradient(ellipse 80% 55% at 50% -10%, rgba(79, 124, 255, 0.28) 0%, transparent 65%),
     radial-gradient(ellipse 55% 40% at 85% 50%, rgba(94, 231, 223, 0.14) 0%, transparent 55%),
     radial-gradient(ellipse 60% 45% at 10% 85%, rgba(139, 109, 255, 0.16) 0%, transparent 55%);
+  animation: glow-breathe 9s ease-in-out infinite;
+}
+
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
 }
 
 /* ---------- Hero capability tags ---------- */
