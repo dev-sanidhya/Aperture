@@ -63,12 +63,12 @@ website/          # Landing page
 - Min score threshold: 45 (configurable) before outreach generation
 
 ## GitHub
-https://github.com/wannabeaquant/Aperture — push after every session.
+https://github.com/wannabeaquant/Aperture
 
 ## Git & Commits
 - Format: `<type>(<scope>): <short imperative description>`
   - feat(prospecting): ... | fix(scoring): ... | chore(ops): ...
-- Every self-contained working change = one commit. Push at session end.
+- Every self-contained working change = one commit, pushed immediately. Do not batch — commit and push as each unit completes.
 
 ## Session Memory
 - Read MEMORY.md at session start.
