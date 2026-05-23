@@ -1372,8 +1372,8 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 65px;
-  height: 96px;
+  padding: 0 95px;
+  height: 116px;
   border-right: 1px solid var(--line);
   color: var(--text);
   opacity: 0.88;
@@ -1393,18 +1393,18 @@ textarea {
 }
 
 .client-ticker-img {
-  height: 36px;
+  height: 42px;
   width: auto;
-  max-width: 140px;
+  max-width: 150px;
   object-fit: contain;
   filter: brightness(0) invert(1);
   display: block;
 }
 
 .client-ticker-img-actual {
-  height: 34px;
+  height: 52px;
   width: auto;
-  max-width: 140px;
+  max-width: 160px;
   object-fit: contain;
   display: block;
   mix-blend-mode: screen;
@@ -1412,7 +1412,7 @@ textarea {
 }
 
 .client-ticker-item .client-wordmark {
-  height: 34px;
+  height: 42px;
   width: auto;
   display: block;
 }
