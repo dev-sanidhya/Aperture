@@ -27,3 +27,6 @@ openclaw/workspaces/**/SOUL.md
 openclaw/workspaces/**/TOOLS.md
 openclaw/workspaces/**/USER.md
 
+
+# Local Claude Code settings
+.claude/
