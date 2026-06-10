@@ -1,9 +1,11 @@
-# Aperture
+# Agency
 
 ## What This Is
 Low-cost B2B agency lead pipeline for selling AI workflow implementation to international agencies.
 Daily automated pipeline: discover agencies → score for AI ROI → generate outreach batch → founder-led LinkedIn/email.
 OpenClaw used only for capped enrichment on best leads. Amazon SES for production email.
+
+The public marketing website is a separate project in the nested `Aperture/` folder (its own git repo, gitignored here). This repo is the lead-generation / outreach pipeline only.
 
 ## Stack
 - Python 3.11
@@ -51,7 +53,7 @@ data/
 contracts/        # Client contracts/docs
 rules/            # Business rules
 openclaw/         # OpenClaw integration
-website/          # Landing page
+Aperture/         # Marketing website — SEPARATE nested git repo (gitignored here)
 ```
 
 ## Permanent Facts

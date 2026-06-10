@@ -1,3 +1,6 @@
+# Website lives in its own nested repo (Agency/Aperture)
+/Aperture/
+
 .env
 .venv/
 __pycache__/
