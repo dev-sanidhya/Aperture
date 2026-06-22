@@ -18,11 +18,14 @@ METRO_TOKENS = {
                 "apache junction", "maricopa"],
     "bangalore": ["bangalore", "bengaluru", "whitefield", "marathahalli",
                   "electronic city", "jayanagar", "kr puram", "bommanahalli",
-                  "rr nagar", "yelahanka"],
+                  "rr nagar", "yelahanka", "hsr layout", "btm layout",
+                  "banashankari", "rajajinagar"],
     "delhi": ["delhi", "rohini", "dwarka", "pitampura", "lajpat", "uttam nagar",
-              "najafgarh", "burari", "janakpuri"],
+              "najafgarh", "burari", "janakpuri", "karol bagh", "laxmi nagar",
+              "paschim vihar", "kalkaji"],
     "gurgaon": ["gurgaon", "gurugram", "sohna", "sector 56", "palam vihar",
-                "sector 10", "manesar", "new gurgaon"],
+                "sector 10", "manesar", "new gurgaon", "dlf phase", "sushant lok",
+                "sector 14", "sector 45"],
 }
 
 
