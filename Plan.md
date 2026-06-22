@@ -51,8 +51,16 @@ Targets: 200 US roofing (voice agent), 100 India interior, 150 India aesthetic c
   us_roofing_lower_tier.csv = 97, india_interior_lower_tier.csv = 67, india_aesthetic_clinics_lower_tier.csv = 36.
   All E.164-valid, unique, 0 overlap with existing lists. Budget now effectively exhausted ($0.54 left).
   Clinics inherently low yield under strict filter (Indian clinics nearly all have own sites).
-- To go further: user must raise the Apify cap (FREE $5/mo is spent). To regenerate from already-paid
-  Apify datasets for free: re-fetch dataset ids -> consolidate_recover.py -> build_lists.py.
+- Clinic budget-max pass (`clinic_blast.py` + cheap actor `S3TUPOWUK8RoocPjh` @ $1/1k via
+  `normalize_cheap.py`): premium actor blocked once remaining < its per-run reservation, so switched to
+  the $1/1k actor for the last cents. CONFIRMED the FREE cap is a hard $5 (not $7) -- Apify error
+  `not-enough-usage-to-run-paid-actor`. Usage maxed at ~$4.97/$5.
+- FINAL counts: us_roofing_lower_tier.csv = 96, india_interior_lower_tier.csv = 67,
+  india_aesthetic_clinics_lower_tier.csv = 42 (now spans BLR/DEL/GGN + Pune/Noida/Mumbai). 205 total,
+  all E.164-valid, unique, 0 overlap with existing lists.
+- To go further: FREE $5/mo is fully spent -> user must raise the Apify cap / use a funded token.
+  Free rebuild/re-tune from already-paid Apify datasets: re-fetch dataset ids -> consolidate_recover.py
+  (+ normalize_cheap.py for cheap-actor data) -> build_lists.py. Loosen is_lower_tier() for more volume.
 
 ## Next steps
 <!-- Updated each session -->
