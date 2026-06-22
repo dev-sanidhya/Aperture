@@ -7,6 +7,17 @@ Discovers agencies, scores them for AI-ROI fit, and generates founder-led outrea
 The marketing website was split out on 2026-06-10 into the nested `Aperture/` folder, which is now its
 own git repo with its own memory. Nothing in this repo touches the website anymore.
 
+## Clients
+- **PriBhum Nest** (first agency client). Lives under `PriBhum Nest/` as two nested client git repos
+  (gitignored here): `Mobile/` (github.com/wannabeaquant/pribhum-nest - Expo app + Supabase admin panel,
+  Supabase phone/SMS OTP) and `Website/` (github.com/RajatMawal/PG-WEB - MERN PG-listing site with
+  email OTP, JWT/Google auth).
+  - 2026-06-22: Cloned both. On the Website repo, resolved leftover merge-conflict markers that were
+    breaking the build (otpController, propertyController, Server.js), moved `redux/` into `src/`, and
+    confirmed the existing email-OTP flow (register verification + forgot-password) is wired correctly -
+    matching mobile's conceptual flow with minimum effort per client request. Work sits on the
+    `feat/otp-flow-and-structure` branch in that repo; not pushed to the client remote yet.
+
 ## Pipeline (high level)
 1. `ops/prospecting/discover_agencies.py` - discover candidate agencies (seed list or web-search fanout).
 2. `ops/prospecting/build_agency_pipeline.py` - score sites, optional capped OpenClaw enrichment on top leads.
