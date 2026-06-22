@@ -45,12 +45,20 @@ def classify(s):
         if any(t in s for t in toks):
             metro = m
             break
+    if not metro:
+        # fallback: the last word of the search string is usually the city
+        toks = s.split()
+        if toks:
+            metro = toks[-1]
     return cat, niche, metro
 
 
 buckets = {}
 for fp in glob.glob(os.path.join(REC, "*.json")):
-    if os.path.basename(fp).startswith("_"):
+    bn = os.path.basename(fp)
+    # cheap-actor / one-off files use a different field shape -> handled by
+    # normalize_cheap.py, so skip them here.
+    if bn.startswith("_") or bn.startswith("cheap") or bn.startswith("last"):
         continue
     try:
         data = json.load(open(fp, encoding="utf-8"))
