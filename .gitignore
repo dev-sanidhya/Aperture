@@ -1,6 +1,9 @@
 # Website lives in its own nested repo (Agency/Aperture)
 /Aperture/
 
+# Client project repos live in their own nested git repos
+/PriBhum Nest/
+
 .env
 .venv/
 __pycache__/
