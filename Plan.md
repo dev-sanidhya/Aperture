@@ -47,10 +47,12 @@ Targets: 200 US roofing (voice agent), 100 India interior, 150 India aesthetic c
   timeouts in this env (use curl instead); Windows cp1252 decode bug on UTF-8 names (fetch via `curl -o`,
   not Python text mode). Apify keeps every run's dataset server-side, so partial/failed local saves are
   always recoverable by re-fetching the dataset id.
-- RESULT (usage ~$3.30 of $5): us_roofing_lower_tier.csv = 97, india_interior_lower_tier.csv = 52,
-  india_aesthetic_clinics_lower_tier.csv = 19. All E.164-valid, unique, 0 overlap with existing lists.
+- RESULT after India top-up (`scrape_more_india.py`, fresh BLR/DEL/GGN localities; usage ~$4.46 of $5):
+  us_roofing_lower_tier.csv = 97, india_interior_lower_tier.csv = 67, india_aesthetic_clinics_lower_tier.csv = 36.
+  All E.164-valid, unique, 0 overlap with existing lists. Budget now effectively exhausted ($0.54 left).
   Clinics inherently low yield under strict filter (Indian clinics nearly all have own sites).
-- ~$1.5 budget remains if user wants to push roofing/interior counts higher.
+- To go further: user must raise the Apify cap (FREE $5/mo is spent). To regenerate from already-paid
+  Apify datasets for free: re-fetch dataset ids -> consolidate_recover.py -> build_lists.py.
 
 ## Next steps
 <!-- Updated each session -->
