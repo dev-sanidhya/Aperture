@@ -1,0 +1,17 @@
+{
+  "name": "shree-jee-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Aperture personalized concept video for Shree Jee Packaging Industries",
+  "scripts": {
+    "start": "remotion studio",
+    "render": "remotion render Main out/shree-jee-aperture.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.290",
+    "@remotion/google-fonts": "^4.0.290",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "remotion": "4.0.290"
+  }
+}
