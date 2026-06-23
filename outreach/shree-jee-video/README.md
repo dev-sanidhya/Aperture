@@ -1,13 +1,13 @@
 # Shree Jee Packaging - Aperture Concept Video
 
-Personalized 70-second concept video for **Divyansh Ahuja** (Founder & Director, Shree Jee Packaging Industries) — a warm LinkedIn outreach asset for Aperture.
+Personalized ~58-second concept video for **Divyansh Ahuja** (Founder & Director, Shree Jee Packaging Industries) — a warm LinkedIn outreach asset for Aperture.
 
 ## The deliverable
 `out/shree-jee-aperture-1080.mp4`
 - 1080×1080 square (legible on mobile without rotating, clean on desktop)
-- 70s, ~4.7 MB (well inside LinkedIn DM limits)
+- ~58s (rendered at 70s, sped to 1.2x for pace), ~4.0 MB (well inside LinkedIn DM limits)
 - H.264 / yuv420p (limited range) + AAC, `+faststart` → plays identically on any phone/laptop/browser
-- Music bed only (no voiceover); all key copy is burned in for muted autoplay
+- Music bed (ambient pad + arpeggio, loudness-normalized to ~-16 LUFS); no voiceover. All key copy is burned in for muted autoplay
 
 ## Flow
 1. **Cold open** — "Hey Divyansh, a 60-second look"
@@ -21,9 +21,10 @@ Personalized 70-second concept video for **Divyansh Ahuja** (Founder & Director,
 npm install
 npx remotion render Main out/video-raw.mp4 --codec=h264
 bash make_music.sh                       # regenerates out/music.wav
-# final compatible mux:
-ffmpeg -y -i out/video-raw.mp4 -i out/music.wav -map 0:v:0 -map 1:a:0 \
-  -vf "scale=in_range=full:out_range=tv,format=yuv420p" -color_range tv \
+# final compatible mux at 1.2x pace:
+ffmpeg -y -i out/video-raw.mp4 -i out/music.wav \
+  -filter_complex "[0:v]setpts=PTS/1.2,scale=in_range=full:out_range=tv,format=yuv420p[v];[1:a]atempo=1.2[a]" \
+  -map "[v]" -map "[a]" -color_range tv \
   -c:v libx264 -profile:v high -level 4.0 -crf 20 -preset slow \
   -c:a aac -b:a 192k -ar 44100 -movflags +faststart -shortest \
   out/shree-jee-aperture-1080.mp4

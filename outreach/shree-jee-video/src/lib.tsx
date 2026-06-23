@@ -49,7 +49,7 @@ export const useEntrance = (delay = 0, config?: Partial<{damping: number; mass: 
   return spring({
     frame: frame - delay,
     fps,
-    config: {damping: 200, mass: 0.8, stiffness: 120, ...config},
+    config: {damping: 26, mass: 0.6, stiffness: 150, overshootClamping: false, ...config},
   });
 };
 

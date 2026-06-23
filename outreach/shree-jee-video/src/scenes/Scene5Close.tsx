@@ -29,10 +29,10 @@ export const Scene5Close: React.FC = () => {
         </FadeUp>
 
         {/* proof row */}
-        <div style={{display: 'flex', gap: 70, marginTop: 48}}>
-          <Proof delay={20} value="10k+" label="daily users served" />
-          <Proof delay={34} value="4×" label="national hackathon wins" />
-          <Proof delay={48} value="AI-first" label="builds, not templates" />
+        <div style={{display: 'flex', gap: 64, marginTop: 48}}>
+          <Proof delay={20} value="10+" label="businesses shipped" />
+          <Proof delay={34} value="Web3 + AI" label="specialist firm" />
+          <Proof delay={48} value="End-to-end" label="web · AI · automation" />
         </div>
 
         <FadeUp delay={80} style={{marginTop: 64}}>
@@ -78,9 +78,20 @@ export const Scene5Close: React.FC = () => {
           </div>
         </FadeUp>
 
-        <FadeUp delay={170} style={{position: 'absolute', bottom: 70}}>
-          <div style={{fontFamily: FONT, fontSize: 24, color: C.muted}}>
-            Sanidhya · Aperture
+        <FadeUp delay={170} style={{position: 'absolute', bottom: 64, alignItems: 'center'}}>
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8}}>
+            <div
+              style={{
+                fontFamily: FONT,
+                fontWeight: 700,
+                fontSize: 30,
+                color: C.accent,
+                letterSpacing: 0.5,
+              }}
+            >
+              aperturecm.in
+            </div>
+            <div style={{fontFamily: FONT, fontSize: 23, color: C.muted}}>Sanidhya · Aperture</div>
           </div>
         </FadeUp>
       </AbsoluteFill>
