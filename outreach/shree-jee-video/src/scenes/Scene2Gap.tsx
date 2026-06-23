@@ -74,7 +74,7 @@ export const Scene2Gap: React.FC = () => {
         </FadeUp>
 
         {/* Part 2: the gap */}
-        <Sequence from={90}>
+        <Sequence from={90} layout="none">
           <FadeUp delay={0} style={{marginTop: 46, textAlign: 'center'}}>
             <div
               style={{
