@@ -17,6 +17,22 @@ own git repo with its own memory. Nothing in this repo touches the website anymo
     confirmed the existing email-OTP flow (register verification + forgot-password) is wired correctly -
     matching mobile's conceptual flow with minimum effort per client request. Work sits on the
     `feat/otp-flow-and-structure` branch in that repo; not pushed to the client remote yet.
+  - 2026-07-01: Client asked to switch the Website OTP from email to SMS (matching mobile). Set up
+    MSG91 as the SMS aggregator on the client's Jio DLT PE (PE ID 1201177304358511257): got a Service
+    Inferred / Real Estate OTP content template approved (DLT template 1207178265665596727), created
+    the MSG91 template (id 6a44a127714f8d640307b712), sender PRIBHU, authkey generated (ROTATE before
+    prod - it was pasted in plaintext during setup).
+    - Implemented SMS OTP on the Website using MSG91's **Flow API** (NOT the OTP API - the OTP API
+      needs a literal ##OTP## variable which Jio DLT can't produce; Jio only offers {#number#}). We
+      generate/store/verify the 6-digit code ourselves in the Mongo `Otp` collection (keyed by phone)
+      and send via Flow API filling the ##number## variable. Files: Server/Controller/msg91.js (new),
+      otpController.js, userController.js (forgotPassword/otpVerify/updatePassword now phone-based),
+      Model/Otp.js (+phone); Client register-OTP + forgot-password pages now take a 10-digit phone.
+    - BLOCKED on end-to-end delivery test: MSG91 Flow API returns "Template Not Yet Approved" (401) -
+      DLT->MSG91 operator propagation delay. Code is correct (earlier "Invalid Template" error is gone).
+      Retry the send once the template shows under DLT "Registered with All TSP"; escalate to MSG91
+      support if it persists >1 day. Test number: 9368322072. Local test needs Docker Mongo (Docker
+      Desktop was starting) + `npm install` in Server & Client.
 
 ## Pipeline (high level)
 1. `ops/prospecting/discover_agencies.py` - discover candidate agencies (seed list or web-search fanout).
