@@ -28,11 +28,32 @@ own git repo with its own memory. Nothing in this repo touches the website anymo
       and send via Flow API filling the ##number## variable. Files: Server/Controller/msg91.js (new),
       otpController.js, userController.js (forgotPassword/otpVerify/updatePassword now phone-based),
       Model/Otp.js (+phone); Client register-OTP + forgot-password pages now take a 10-digit phone.
-    - BLOCKED on end-to-end delivery test: MSG91 Flow API returns "Template Not Yet Approved" (401) -
-      DLT->MSG91 operator propagation delay. Code is correct (earlier "Invalid Template" error is gone).
-      Retry the send once the template shows under DLT "Registered with All TSP"; escalate to MSG91
-      support if it persists >1 day. Test number: 9368322072. Local test needs Docker Mongo (Docker
-      Desktop was starting) + `npm install` in Server & Client.
+    - Root-caused the delivery blocker through 3 layers: (1) MSG91 OTP API doesn't work with Jio DLT
+      templates at all (needs literal ##OTP##, Jio only offers {#number#}) -> switched to Flow API;
+      (2) template stuck "Pending"/"Failed - PE-TM chain error on DLT" because the client's Jio DLT PE
+      had ZERO registered telemarketer chain -> created chain linking PE 1201177304358511257 to MSG91's
+      TM id 1302157225275643280 (Jio DLT: My Telemarketers > Create New Chain), approved after ~4 days;
+      (3) MSG91 account needed KYC completion before real (non-demo) sends worked. Once chain hit
+      "Registered" on DLT and template re-verified to "Verified by DLT" on MSG91, delivery confirmed
+      working end-to-end (2026-07-10, live SMS received on 9368322072).
+    - 2026-07-10: Extended the same working MSG91 setup to the **Mobile** app, replacing its
+      never-actually-wired `EXPO_PUBLIC_MOCK` flag (dead code, deleted - mobile's real sign-in already
+      used Supabase phone OTP, it just had no real SMS delivery configured). Rewrote
+      `Mobile/supabase/functions/send-sms-otp/index.ts` (Supabase's "Send SMS" auth hook) to call MSG91's
+      Flow API with the same authkey/template/sender as the Website. Wired `[auth.hook.send_sms]` +
+      `[functions.send-sms-otp] verify_jwt = false` in supabase/config.toml, secrets via
+      supabase/functions/.env. Confirmed real SMS delivery via local Supabase (`supabase start`) hitting
+      `/auth/v1/otp` for 9368322072.
+      Gotchas hit getting local Supabase Send-SMS hooks working (useful if this breaks again):
+      `Buffer` isn't a global in the Deno edge runtime -- needs `import { Buffer } from 'node:buffer'`;
+      GoTrue's hook call has no JWT, so the target function needs `verify_jwt = false` or every call
+      500s with "Hook requires authorization token"; the edge-runtime container caches a compiled
+      bundle and does NOT hot-reload on file edits -- always `supabase stop` + `supabase start` (not a
+      bare `docker restart` of just the edge-runtime container, which leaves Kong's proxy pointing at a
+      dead instance and every hook call hangs ~30s before a 502).
+    - Both Website and Mobile changes are uncommitted in their working trees (client repos) -
+      not pushed per instruction. Rotate the MSG91 authkey before production launch (pasted in
+      plaintext chat during setup).
 
 ## Pipeline (high level)
 1. `ops/prospecting/discover_agencies.py` - discover candidate agencies (seed list or web-search fanout).
