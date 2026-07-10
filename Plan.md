@@ -54,6 +54,52 @@ own git repo with its own memory. Nothing in this repo touches the website anymo
     - Both Website and Mobile changes are uncommitted in their working trees (client repos) -
       not pushed per instruction. Rotate the MSG91 authkey before production launch (pasted in
       plaintext chat during setup).
+  - 2026-07-10 (same day, continued): client asked to take Mobile to production and get a demo APK
+    to the PriBhum Nest owner for review.
+    - **Fixed a real rendering bug**: SignUpScreen's PG Owner / Student role cards rendered as tiny
+      ~100px unstyled boxes instead of filling their row. Root cause in `mobile/src/components/ui.tsx`'s
+      `PressableScale`: the `style` prop (incl. `flex:1`) landed on an inner `Animated.View`, not the
+      outer `Pressable` — which is the actual flex item inside a `flexDirection:row` parent, so it
+      shrink-wrapped to content instead of stretching. Fixed via
+      `Animated.createAnimatedComponent(Pressable)` so style+transform both land on the real flex item.
+      This was a repo-wide bug (affects every `PressableScale` user with a flex layout, not just
+      SignUpScreen). Verified via Expo web preview + DOM layout measurements (screenshot tool was
+      flaky/timing out in this session, used computed-style/bounding-rect eval instead).
+    - **Created a real hosted Supabase project** (org "Dehshat", project `pribhum-nest`,
+      id `ojnuhuzeuhitraufdtpk`, region ap-south-1, free tier / $0mo) via the Supabase MCP + CLI — the
+      mobile app previously only worked against local Docker Supabase (127.0.0.1), which is useless in
+      an APK installed on someone else's phone. Pushed all 6 migrations, deployed `send-sms-otp` with
+      `verify_jwt=false`, set real secrets (`supabase secrets set`, needed a client-generated Personal
+      Access Token since the MCP server's own OAuth session isn't reusable by the CLI), and pushed
+      `[auth.hook.send_sms]` config via `supabase config push` (had to temporarily swap the hook URI
+      from the local `host.docker.internal` address to the real `https://ojnuhuzeuhitraufdtpk...`
+      one for the push, then revert locally after — `config push` is a one-time snapshot, not a live
+      sync). Hit and fixed two gotchas: `storage.vector.enabled=true` 402s on free tier (unused
+      feature, disabled); `secrets = "env(SEND_SMS_HOOK_SECRET)"` in config.toml silently resolves to
+      empty if that env var isn't exported in the exact shell that runs `config push`, causing "Hook
+      requires authorization token" on the hosted project even though the function itself is correctly
+      `verify_jwt=false`. Confirmed a real SMS delivered end-to-end from the hosted backend
+      (9368322072). Seeded realistic demo data via the repo's existing `supabase/demo_seed.sql`
+      (owner "Rajesh Kumar", 5 PGs across Bangalore/Pune/Noida, 28 beds/14 free, photos) directly
+      against the hosted DB.
+    - **Built a release APK locally** (no EAS/Expo account, $0 cost): `expo prebuild --platform
+      android`, then `gradlew assembleRelease` (release build type uses the debug signing config by
+      default in Expo's template, so no separate keystore needed for a demo/sideload APK). Set
+      `app.json` package to `com.pribhumnest.app` (was defaulting to a placeholder
+      `com.ssanidhya.mobile`). `.env.production` (hosted URL/anon key, gitignored) is what
+      `NODE_ENV=production gradlew assembleRelease` bundles — confirmed by grepping the built APK's JS
+      bundle for the hosted project ref. Hit a Windows-only native-build failure: deeply nested project
+      path (`...PriBhum Nest\Mobile\mobile\android\...`) plus CMake/Ninja's own long-path handling
+      (independent of the `LongPathsEnabled` registry key, which was already on) pushed C++ object
+      file paths over 260 chars for `react-native-safe-area-context`/`react-native-screens`. Fixed by
+      building through a short-path Windows directory junction (`C:\Users\<user>\pbn` ->
+      `...\Mobile\mobile`, junction removed after build) instead of touching the real project location
+      or Gradle internals. Final APK: 78MB, package `com.pribhumnest.app`, minSdk 24, at
+      `mobile/android/app/build/outputs/apk/release/app-release.apk`.
+    - Not yet done / flagged for the client: rotate the MSG91 authkey (still the one pasted in this
+      chat) before real launch; the Supabase Personal Access Token the client generated for CLI access
+      should be revoked once no longer needed; MSG91 AuthKey IP restriction was left off for dev
+      convenience, tighten before wide launch.
 
 ## Pipeline (high level)
 1. `ops/prospecting/discover_agencies.py` - discover candidate agencies (seed list or web-search fanout).
