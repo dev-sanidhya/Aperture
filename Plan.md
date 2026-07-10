@@ -100,6 +100,64 @@ own git repo with its own memory. Nothing in this repo touches the website anymo
       chat) before real launch; the Supabase Personal Access Token the client generated for CLI access
       should be revoked once no longer needed; MSG91 AuthKey IP restriction was left off for dev
       convenience, tighten before wide launch.
+  - 2026-07-10 (same day, continued): **created a real hosted Supabase project** for Mobile (org
+    "Dehshat", project `pribhum-nest`, id `ojnuhuzeuhitraufdtpk`, region ap-south-1, free tier) since the
+    app previously only worked against local Docker Supabase — useless in an APK on someone else's
+    phone. Pushed all 6 migrations, deployed `send-sms-otp` with real secrets (needed a client-generated
+    Supabase Personal Access Token since the MCP server's own OAuth session isn't reusable by the CLI),
+    pushed `[auth.hook.send_sms]` config (temporarily swapping the hook URI from
+    `host.docker.internal` to the real hosted URL for the push, then reverting locally — `config push`
+    is a one-time snapshot, not a live sync). Seeded demo data via the repo's own `demo_seed.sql`
+    (owner "Rajesh Kumar", 5 PGs across Bangalore/Pune/Noida). Confirmed a real SMS delivered end-to-end
+    from the hosted backend.
+  - 2026-07-10 (continued): user reported the demo APK crashed on open ("bug in the app"). Root-caused
+    by installing it on a local Android emulator (Android SDK + a JDK were already present on this
+    machine, so no device/cloud build service needed) and reading `adb logcat` crash traces directly —
+    much faster than guessing. This became a long chain of missing-global crashes, each fixed only to
+    reveal the next, because **this was literally the first-ever release/Hermes build of this app** —
+    dev-mode Expo Go never exercises this code path. Root causes found, in order:
+    1. `FormData`, `Headers/fetch/Request/Response`, `Blob`, `URL/URLSearchParams`, `WebSocket`,
+       `File/FileReader` are all normally installed *lazily* by React Native's own `setUpXHR.js` via a
+       getter-based `polyfillGlobal()`. That lazy mechanism doesn't resolve in time in this build —
+       Supabase's client chain and even Expo's own fetch wrapper reference these globals eagerly at
+       their own module-init time, crashing with "Property X doesn't exist" / "expected globalThis.X to
+       be installed".
+    2. `globalThis` itself isn't reliably aliased to `global` early enough — fixed by explicitly setting
+       `global.globalThis = global` first.
+    3. `AbortController`/`AbortSignal` aren't part of RN's polyfill set at all. The obvious fix
+       (`abort-controller` npm package, already a transitive dep) is a trap: Metro resolves its
+       `browser` field over `main`, and that file assumes `self`/`window` exist (`typeof self !==
+       'undefined' ? self : ...`) — neither exists in RN, so it throws immediately on import. Fixed
+       with a ~20-line dependency-free polyfill class instead. (RN's own `setUpXHR.js` sidesteps this
+       exact trap by deep-importing `abort-controller/dist/abort-controller` directly, bypassing
+       package.json field resolution — good precedent, didn't need to duplicate it once we had our own
+       polyfill.)
+    4. `global.performance` doesn't exist; RN's performance logger falls back to `global.performance
+       .now()` when no native QPL timestamp module is present, crashing during `renderApplication`.
+       Fixed with a trivial `{ now: () => Date.now() }` stub.
+    - **Debugging methodology note** (useful if this class of bug recurs): checking "is my code in the
+      bundle" via `grep` on the APK's `assets/index.android.bundle` is **unreliable and produced a false
+      negative that wasted significant time** — that file is compiled Hermes bytecode, and grep matches
+      inside its string-constant pool can produce misleading coincidental substring concatenations (a
+      real example hit this session: "ZZZDIAG" + "Generator is already executing" concatenated into a
+      false-positive-looking "ZZZDIAGenerator..." match). The only reliable way to inspect what's really
+      in a Hermes release bundle is a real sourcemap: Gradle writes one to
+      `android/app/build/generated/sourcemaps/react/release/index.android.bundle.map`; resolve a crash's
+      `line:column` with the (old-API, synchronous) `source-map` npm package:
+      `new (require('source-map').SourceMapConsumer)(mapJson).originalPositionFor({line, column})`.
+    - Also relevant: **ES `import` statements are hoisted above regular top-level statements**
+      regardless of textual source position, and Babel/Metro preserve the *relative order* of hoisted
+      imports. A plain `require()` call sitting inside a top-level `if` block in `index.ts` runs too
+      late if anything hoisted above it (e.g. `import App from './App'`, whose transitive chain reaches
+      `src/lib/supabase.ts`'s eager `createClient()` call) needs the polyfill first. Fix: the polyfill
+      file itself must be imported via `import './polyfills'` as literally the first import, not
+      `require()`d conditionally.
+    - Final state: `mobile/polyfills.ts` (new) holds all of the above, imported first in `index.ts`.
+      Verified crash-free via a real local Android emulator (Android SDK's `emulator`/`adb`, no EAS/cloud
+      device needed) — app launches, renders the Welcome screen, stays alive. Rebuilt APK is at
+      `mobile/android/app/build/outputs/apk/release/app-release.apk`; not yet re-verified against the
+      hosted Supabase OTP flow on-device (was verified via curl against the hosted project earlier in
+      the day, and the app code itself is unchanged since then — only startup polyfills changed).
 
 ## Pipeline (high level)
 1. `ops/prospecting/discover_agencies.py` - discover candidate agencies (seed list or web-search fanout).
