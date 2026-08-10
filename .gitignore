@@ -1,8 +1,13 @@
 # Website lives in its own nested repo (Agency/Aperture)
 /Aperture/
 
+# Vibrant Academy chatbot demo lives in its own nested repo (MSC-Demo)
+/vibrant-academy-demo/
+
 # Client project repos live in their own nested git repos
 /PriBhum Nest/
+/BPO-Demo/
+/chplus-3d-rebrand/
 
 .env
 .venv/
