@@ -495,6 +495,43 @@ dashboard) got a compact summary card (total leads / total pulls) linking
 through to the same management view, per explicit request to have this
 accessible from the admin dashboard specifically.
 
+## 14. Fixed: caller pulls showed 0 leads on "My Leads" — FIXED (2026-08-18)
+
+**Bug**: Diksha pulled the daily sheet from her caller dashboard, the pull
+reported success ("160 new, 0 updated"), but "My Leads" stayed empty and
+the Pull Sheet page's own "leads currently on file from this sheet" count
+also showed 0.
+
+**Root cause**: `import_leads` never set `assigned_to` on newly inserted
+leads — they landed unassigned. The `leads_caller_select` RLS policy only
+lets a caller see rows where `assigned_to = auth.uid()`, so Diksha's own
+pull was invisible to her own account, and the same RLS restriction is
+what made the live per-sheet count on `/sheets` read 0 too (that count
+query runs through the same caller session). Confirmed via direct DB
+inspection: `pg_stat_user_tables` showed every lead and sheet import ever
+created (660 / 7 respectively) had an equal delete count — nothing had
+survived, likely from repeated pull/delete cycles while chasing this
+symptom without knowing the actual cause.
+
+**Fix**: `import_leads` now looks up the puller's role and, for newly
+inserted leads only (not updates on re-pull, which leave existing
+assignment untouched), sets `assigned_to` to the puller if they're a
+caller — self-service pulls are now visible to the person who pulled
+them immediately. Founder pulls still leave leads unassigned, preserving
+the existing manual `reassignLead` flow for distributing leads across
+multiple callers later if the team grows beyond one caller.
+
+Verified end-to-end in the browser as Diksha in production: pulled the
+real 160-row "Aperture — Call Queue" sheet, confirmed "160 leads
+currently on file from this sheet" (previously 0) and all 160 showing
+correctly on her "My Leads" page.
+
+Applied directly via Supabase migration (`apply_migration`) rather than a
+local file-based migration, since the schema lives in the Supabase
+project's migration history, not in this repo.
+
 ## Next steps
 - Answer the open questions in §10.
-- Deploy to Vercel when ready to move off local dev.
+- If a second caller joins, revisit whether unassigned (founder-pulled)
+  leads should be visible to all callers as a shared pool, or stay
+  manual-assign-only via the existing `reassignLead` flow.
