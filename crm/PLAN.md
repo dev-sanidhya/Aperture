@@ -453,6 +453,48 @@ Also created a second, shared founder account (`info@aperturecm.in`, name
 "Sanidhya & Atharva") for both founders to log in with, alongside the
 original individual founder account.
 
+## 13. Deployed to production, format-agnostic sheet mapping — BUILT (2026-08-17/18)
+
+**Deployed**: https://aperturecrm.vercel.app, project `aperturecrm` under
+"Sanidhya's projects". Vercel's MCP connector hit a team-role permission
+wall (403 on project creation, unrelated to the GitHub authorization —
+that part worked fine once granted). Used the Vercel CLI instead, already
+logged in on this machine under a separate full-access session: `vercel
+link` (also auto-connected GitHub for deploy-on-push), `vercel env add` for
+all three secrets across Production/Preview/Development, `vercel deploy
+--prod`. Confirmed working end-to-end on the real URL, not just localhost.
+Diksha's password reset to `Diksha@Aperture`. All test/seed data wiped
+before real use (0 leads/activities/reminders/imports; 4 sheet-layout
+configs and 3 real accounts kept).
+
+**Format-agnostic sheet pulling**: sheets no longer need a pre-registered
+layout. `lib/groq.ts`'s new `inferSheetMapping()` — when a pulled sheet's
+header row doesn't match any known `sheet_layouts` signature, Groq maps the
+headers to our schema (business_name, phone, city, website, score, status,
+follow_up_date) directly from the header names + one sample row, and the
+result is cached as a new `sheet_layouts` row keyed by that exact header
+signature — so the same format is instant and free on every future pull;
+the LLM call only happens once per genuinely new layout. Verified against
+a synthetic, never-seen header set ("Company", "Contact Number", "Region",
+"Homepage", "Lead Score", "Call Result", "Next Callback Date", "Remarks")
+using the exact production prompt — every field mapped correctly, and the
+unmappable "Remarks" column was correctly left out (falls into
+`extra_fields` automatically, same as any known layout).
+
+Also registered the actual new standard format the team settled on
+("Aperture — Call Queue": Priority/Business/Phone/Trigger/Pitch Script/
+Discovery Question/Last Outcome/Follow-up Date/Notes) as a named layout —
+close to but not identical to the old Layout D — and pulled it for real:
+160 leads landed correctly on the first real production pull.
+
+**Admin data-source management**: `/sheets` now shows every import ever
+made (not just the last 15) with a *live* count of leads still attached to
+each — separate from the historical new/updated counts at pull time, which
+drift as leads get re-pulled into newer imports. `/team` (the admin
+dashboard) got a compact summary card (total leads / total pulls) linking
+through to the same management view, per explicit request to have this
+accessible from the admin dashboard specifically.
+
 ## Next steps
 - Answer the open questions in §10.
 - Deploy to Vercel when ready to move off local dev.
