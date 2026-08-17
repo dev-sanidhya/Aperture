@@ -9,6 +9,9 @@
 /BPO-Demo/
 /chplus-3d-rebrand/
 
+# Lead CRM app lives in its own nested repo (Agency/crm/app -> dev-sanidhya/CRM)
+/crm/app/
+
 .env
 .venv/
 __pycache__/
