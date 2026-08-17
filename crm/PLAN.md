@@ -1,9 +1,13 @@
 # Lead CRM — Plan
 
-Status: Phases 1–3 built and pushed (2026-08-17), including voice logging and
-a founder-only Team stats page (added same day, beyond original scope — see
-§11). Code repo: https://github.com/dev-sanidhya/CRM (nested at `crm/app`).
-This folder holds the design/context docs that inform that repo.
+Status: Phases 1–3 built and pushed (2026-08-17), plus several rounds added
+same-day beyond original scope: voice logging, a founder Team stats page
+(§11), caller-side sheet pull/delete + search/pagination + a full visual
+redesign (§12). Code repo: https://github.com/dev-sanidhya/CRM (nested at
+`crm/app`). This folder holds the design/context docs that inform that repo.
+
+Accounts live: founder `shishodiasanidhya@gmail.com`, shared founder
+`info@aperturecm.in` (Sanidhya & Atharva), caller `diksha_aperture`.
 
 ## 1. The problem this solves
 
@@ -396,6 +400,58 @@ Verified end-to-end: logged an answered call, a no-answer call, and a
 completed follow-up with a result note as the caller account, then confirmed
 the founder's `/team` page showed the exact right numbers and feed entry,
 and that the caller account is blocked from `/team` server-side.
+
+## 12. Caller sheet pull/delete, search, and redesign — BUILT (2026-08-17)
+
+**Sheet pull opened to callers.** Originally founder-only. The dedup-upsert
+logic moved into a Postgres RPC (`import_leads`, security definer) so a
+caller can pull a sheet without needing RLS visibility into every other
+lead — one round trip instead of ~2 queries/row. A matching `delete_sheet_import`
+RPC lets a caller delete a pull they made themselves (founders can delete
+any pull) — removes every lead from that import plus their activities/
+reminders via cascade, and the import record. Both RPCs self-guard on
+`auth.uid()`.
+
+Hit and fixed two real bugs during this: (1) `delete_sheet_import`'s
+authorization check used `v_imported_by <> auth.uid()`, which is SQL NULL
+(not TRUE) when unauthenticated — `if NULL` silently falls through as false
+in plpgsql, so an anonymous caller could have bypassed the ownership check
+entirely; fixed with an explicit `auth.uid() IS NULL` guard up front. (2) The
+RPC's `insert into leads` never set `sheet_import_id`, so every delete
+silently no-op'd on the leads themselves (only the import record vanished,
+leads got orphaned) — caught by testing an actual pull-then-delete cycle
+and checking row counts in the DB, not just the UI's success message.
+
+**Search + pagination** on the leads list (`?q=`, `?page=`), backed by a
+`pg_trgm` GIN index on `business_name` and `phone` for fast fuzzy matching
+at scale instead of a sequential scan. 30 leads/page.
+
+**New features:** click-to-call (`tel:` links on phone numbers, leads list
+and lead detail), a "your day so far" stats widget on the caller's own
+leads page (reuses `getCallerStats`), and on `/team`: an all-time combined
+total across every caller plus a pipeline-by-stage funnel bar.
+
+**Redesign:** root cause of the "annoying" look was `globals.css` hardcoding
+`font-family: Arial, Helvetica, sans-serif` on `body`, silently overriding
+the Geist font setup — the app had never actually rendered in the intended
+font. Replaced with Manrope (body) + JetBrains Mono, added a proper indigo
+accent color used sparingly for primary actions/active nav/focus rings
+(Tailwind v4 `@theme inline` tokens), avatar initials in the sidebar,
+active-link highlighting, and a full pass to zinc-based neutrals.
+
+**A streaming attempt was tried and reverted**: wrapped each caller's
+`/team` card in `<Suspense>` so cards would stream in independently. Worked
+correctly per `next build`, but content only ever landed in a leftover
+`<div id="S:0">` appended to `<body>` instead of being swapped into place —
+Next.js's streaming-reveal script never completed in this specific sandboxed
+test browser. Reverted to a plain blocking fetch (still fast — only 1-2
+callers) rather than ship something unverifiable; confirmed working after
+reverting. Worth retrying streaming later if the caller list grows enough
+to matter, testing in a real browser rather than the sandbox.
+
+Also created a second, shared founder account (`info@aperturecm.in`, name
+"Sanidhya & Atharva") for both founders to log in with, alongside the
+original individual founder account.
 
 ## Next steps
 - Answer the open questions in §10.
