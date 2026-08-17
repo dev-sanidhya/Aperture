@@ -203,5 +203,22 @@ Targets: 200 US roofing (voice agent), 100 India interior, 150 India aesthetic c
   Free rebuild/re-tune from already-paid Apify datasets: re-fetch dataset ids -> consolidate_recover.py
   (+ normalize_cheap.py for cheap-actor data) -> build_lists.py. Loosen is_lower_tier() for more volume.
 
+## Lead CRM (2026-08-17, planning only)
+Started planning a CRM to replace/augment the current Google Sheets lead
+workflow as volume grows — needs to store per-lead context (call notes,
+history), auto-remind on follow-ups, and bridge the founder/caller
+communication gap. Sheets stays the source leads get generated/scored into
+(existing `ops/prospecting/` pipeline); CRM becomes where they get worked.
+Sync direction: Sheets -> CRM only (scheduled pull + optional Apps Script
+push later), not two-way. Recommended stack: Supabase (Postgres/Auth/
+Realtime/Edge Functions+cron) + Next.js on Vercel — deliberately not the
+Agency backend's FastAPI/Dramatiq stack, since Supabase gives CRUD+auth+
+realtime+cron for free instead of hand-building it. Code will live in a
+separate repo: https://github.com/dev-sanidhya/CRM. Full design doc:
+[crm/PLAN.md](crm/PLAN.md).
+
 ## Next steps
+- CRM: answer open questions in crm/PLAN.md §7 (sheet column layout, caller
+  count, digest channel, stable row key), then scaffold the Supabase +
+  Next.js app in the dev-sanidhya/CRM repo.
 <!-- Updated each session -->
