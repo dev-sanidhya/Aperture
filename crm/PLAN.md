@@ -1,8 +1,9 @@
 # Lead CRM — Plan
 
-Status: planning only, no code written yet.
-Code repo (separate, when we start building): https://github.com/dev-sanidhya/CRM
-This folder just holds the design/context docs that inform that repo.
+Status: Phases 1–3 built and pushed (2026-08-17), including voice logging and
+a founder-only Team stats page (added same day, beyond original scope — see
+§11). Code repo: https://github.com/dev-sanidhya/CRM (nested at `crm/app`).
+This folder holds the design/context docs that inform that repo.
 
 ## 1. The problem this solves
 
@@ -362,7 +363,40 @@ pulled earlier if it turns out to matter more than the kanban/digest pieces.
   if the team is on Safari/Firefox, the calculus changes and Whisper-style
   transcription becomes the fallback.
 
+## 11. Founder team stats page — BUILT (2026-08-17, added beyond original plan)
+
+Founder asked for per-caller visibility: how many calls a caller has dialled
+(today + all-time), how many went unanswered, how many demos got booked, how
+many follow-ups got completed, and the result of each one — all on one page.
+
+**Schema additions** to support this (none of these existed before):
+- `activities.answered` (boolean) — set on `type='call'` rows, both from the
+  manual log-activity form (an Outcome dropdown that only appears when
+  logging a Call) and from voice logging (Groq now also extracts
+  `call_answered` from the transcript, shown as an editable field in the
+  confirm-before-save draft).
+- `activities.to_stage` — set on `type='status_change'` rows (both the
+  manual stage-change form and voice-applied stage changes), so "demos
+  booked" can be counted structurally (`to_stage = 'meeting_booked'`)
+  instead of text-matching a summary string.
+- `reminders.completed_at` + `reminders.resolution_note` — the Reminders
+  page's "Done" button now expands inline into an optional one-line "what
+  happened?" field before confirming, so completing a follow-up captures its
+  outcome instead of just flipping a status flag.
+
+**`/team` page** (founder-only, redirects callers back to their own leads):
+one card per caller showing Today and All-time blocks (calls dialled, no
+answer, demos booked, follow-ups done) plus a reverse-chronological
+follow-up-results feed (lead name, what the reminder was for, the logged
+result, when). "Today" is computed in IST regardless of server timezone
+(`lib/timezone.ts`), consistent with the rest of the app's Asia/Kolkata date
+formatting (`lib/format.ts`).
+
+Verified end-to-end: logged an answered call, a no-answer call, and a
+completed follow-up with a result note as the caller account, then confirmed
+the founder's `/team` page showed the exact right numbers and feed entry,
+and that the caller account is blocked from `/team` server-side.
+
 ## Next steps
 - Answer the open questions in §10.
-- Scaffold the Supabase project + Next.js app in the `dev-sanidhya/CRM` repo
-  once you confirm you want to start building.
+- Deploy to Vercel when ready to move off local dev.
