@@ -237,7 +237,15 @@ Other findings that shape the build:
   `leads.extra_fields` (§4) rather than forcing every layout into the same
   fixed columns.
 
-## 6. Voice-first lead logging (the "just talk" flow)
+## 6. Voice-first lead logging (the "just talk" flow) — BUILT
+
+Status: shipped (2026-08-17). `src/components/VoiceLogger.tsx` + `src/lib/groq.ts`
++ `src/app/(app)/leads/[id]/voice-actions.ts`. Verified the exact production
+prompt against Groq directly — correctly resolved "Thursday" to the right
+date, defaulted time to 10:00, wrote a clean summary, stayed conservative on
+`suggested_stage` (null rather than guessing) matching the confirm-first
+design. Full mic-to-save loop untestable in the sandbox browser (no real
+mic) — first live test happens when you or Diksha use it for a real call.
 
 Goal: after a call, the caller taps **Record**, talks for 30–60 seconds the
 way they'd naturally debrief a colleague ("Called Rahul at Kadiwa, he's
