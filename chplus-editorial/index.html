@@ -8,7 +8,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23F6F1E6'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='22' font-weight='700' fill='%23B5502E' text-anchor='middle'%3E+%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="site.css" />
 </head>
 <body>
@@ -38,60 +38,66 @@
     </div>
   </section>
 
-  <section class="page section--border" style="padding-top:clamp(32px,5vw,56px);padding-bottom:clamp(32px,5vw,56px);">
-    <div class="grid-editorial reveal">
-      <div class="frame">
-        <img src="assets/stills/menu-default.jpg" alt="Living room with jali screens and brass jharokha lighting" />
-        <div class="frame__cap"><span>Gachibowli, Hyderabad</span><span>01</span></div>
+  <section class="reel">
+    <video src="assets/vid/entrance.mp4" muted playsinline preload="auto" class="is-active"></video>
+    <video src="assets/vid/living.mp4" muted playsinline preload="none"></video>
+    <video src="assets/vid/kitchen.mp4" muted playsinline preload="none"></video>
+    <div class="reel__veil"></div>
+    <div class="reel__dots"><span class="is-active"></span><span></span><span></span></div>
+    <div class="reel__caption">
+      <div data-clip>
+        <span class="kicker"><span class="kicker__num">01</span><span>The arrival</span></span>
+        <h2>Jali lattice, marble facade, a threshold before the house begins.</h2>
       </div>
-      <div class="frame">
-        <img src="assets/stills/entrance.jpg" alt="Entrance, jali lattice and marble facade" />
-        <div class="frame__cap"><span>Arrival</span><span>02</span></div>
+      <div data-clip style="display:none;">
+        <span class="kicker"><span class="kicker__num">02</span><span>The living room</span></span>
+        <h2>Brass jharokha light against green lacquered cabinetry.</h2>
       </div>
-      <div class="frame">
-        <img src="assets/stills/kitchen.jpg" alt="Kitchen island, veined marble" />
-        <div class="frame__cap"><span>Kitchen</span><span>03</span></div>
-      </div>
-      <div class="frame">
-        <img src="assets/stills/living.jpg" alt="Living room, wide" />
-        <div class="frame__cap"><span>Living room</span><span>04</span></div>
+      <div data-clip style="display:none;">
+        <span class="kicker"><span class="kicker__num">03</span><span>The kitchen</span></span>
+        <h2>Veined marble, an island built for a household, not a showroom.</h2>
       </div>
     </div>
   </section>
 
-  <section class="page section section--border">
-    <div class="kicker"><span class="kicker__num">01</span><span>What we do</span></div>
-    <div class="rail">
-      <div class="rail__side reveal">
-        <strong>Four disciplines,<br />one studio.</strong>
-        Architecture, structural engineering, sustainability and interiors — the same conversation,
-        not four separate ones.
-      </div>
-      <div class="reveal">
-        <div class="rows">
-          <div class="row"><span class="row__num">01</span><span class="row__name">Architecture</span><span class="row__meta">Buildings for current and future needs</span></div>
-          <div class="row"><span class="row__num">02</span><span class="row__name">Structural Engineering</span><span class="row__meta">The inevitable solution</span></div>
-          <div class="row"><span class="row__num">03</span><span class="row__name">Sustainability</span><span class="row__meta">Built in, not bolted on</span></div>
-          <div class="row"><span class="row__num">04</span><span class="row__name">Interiors</span><span class="row__meta">Inside-out, outside-in</span></div>
-        </div>
-        <div class="btn-row"><a class="btn btn--line" href="services.html">All services</a></div>
-      </div>
-    </div>
+  <section class="page section--border" style="padding-bottom:0;">
+    <div class="kicker"><span class="kicker__num">—</span><span>Where to next</span></div>
+    <h2 class="h-lg reveal" style="margin-bottom:8px;">Read the studio,<br />room by room.</h2>
   </section>
+
+  <nav class="page contents reveal" aria-label="Site pages">
+    <a class="contents__row" href="about.html" data-preview="assets/stills/about-hero.jpg">
+      <span class="contents__num">01</span>
+      <span class="contents__name">About</span>
+      <span class="contents__desc">Chandu S R Krishna, and six years of one belief</span>
+      <span class="contents__arrow">→</span>
+    </a>
+    <a class="contents__row" href="services.html" data-preview="assets/stills/services-hero.jpg">
+      <span class="contents__num">02</span>
+      <span class="contents__name">Services</span>
+      <span class="contents__desc">Four disciplines, one studio</span>
+      <span class="contents__arrow">→</span>
+    </a>
+    <a class="contents__row" href="projects.html" data-preview="assets/stills/projects-hero.jpg">
+      <span class="contents__num">03</span>
+      <span class="contents__name">Projects</span>
+      <span class="contents__desc">Twelve homes across Hyderabad</span>
+      <span class="contents__arrow">→</span>
+    </a>
+    <a class="contents__row" href="contact.html" data-preview="assets/stills/contact-hero.jpg">
+      <span class="contents__num">04</span>
+      <span class="contents__name">Contact</span>
+      <span class="contents__desc">Book a consultation</span>
+      <span class="contents__arrow">→</span>
+    </a>
+  </nav>
+  <div class="contents__preview" aria-hidden="true"><img alt="" /></div>
 
   <section class="page section section--border">
     <blockquote class="pull reveal">
       "Finally I got best interior in hyderabad.. don't think more just go for him"
       <cite>ahamad khan, client</cite>
     </blockquote>
-  </section>
-
-  <section class="page section section--border">
-    <div class="kicker"><span class="kicker__num">02</span><span>Selected work</span></div>
-    <h2 class="h-lg reveal">Twelve homes,<br />one studio.</h2>
-    <p class="lede reveal">Projects designed and executed at renowned residential communities across Hyderabad
-      — Devisthana Homes, Lansum Etania, Aparna Serene Park and nine more.</p>
-    <div class="btn-row"><a class="btn btn--fill" href="projects.html">View all projects</a></div>
   </section>
 
   <section class="page section section--border" style="text-align:center;">
