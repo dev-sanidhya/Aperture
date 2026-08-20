@@ -22,28 +22,50 @@ document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-// Cinematic reel: crossfade between looping ambient clips
+// Cinematic reel: scroll-scrubbed pinned walkthrough (no autoplay — scroll drives playback)
+const reelWrap = document.querySelector('.reel-wrap');
 const reel = document.querySelector('.reel');
-if (reel) {
+if (reelWrap && reel) {
   const videos = [...reel.querySelectorAll('video')];
-  const dots = [...reel.querySelectorAll('.reel__dots span')];
+  const dots = [...reel.querySelectorAll('.reel__rail span')];
   const captions = [...reel.querySelectorAll('.reel__caption [data-clip]')];
-  let active = 0;
-
-  function activate(i) {
-    videos.forEach((v, vi) => v.classList.toggle('is-active', vi === i));
-    dots.forEach((d, di) => d.classList.toggle('is-active', di === i));
-    captions.forEach((c, ci) => c.style.display = ci === i ? '' : 'none');
-    const v = videos[i];
-    if (v) { v.currentTime = 0; v.play().catch(() => {}); }
-  }
+  const progressBar = reel.querySelector('.reel__progress');
+  const durations = videos.map(() => 8);
 
   videos.forEach((v, i) => {
     v.muted = true; v.playsInline = true;
-    v.addEventListener('ended', () => activate((i + 1) % videos.length));
+    v.addEventListener('loadedmetadata', () => { if (v.duration) durations[i] = v.duration; });
   });
 
-  activate(0);
+  let activeIdx = -1;
+  function setActive(idx) {
+    if (idx === activeIdx) return;
+    activeIdx = idx;
+    videos.forEach((v, vi) => v.classList.toggle('is-active', vi === idx));
+    dots.forEach((d, di) => d.classList.toggle('is-active', di === idx));
+    captions.forEach((c, ci) => c.style.display = ci === idx ? '' : 'none');
+  }
+
+  function updateReel() {
+    const rect = reelWrap.getBoundingClientRect();
+    const total = reelWrap.offsetHeight - window.innerHeight;
+    const progress = Math.min(1, Math.max(0, -rect.top / Math.max(1, total)));
+    const segCount = videos.length;
+    const segFloat = progress * segCount;
+    const idx = Math.min(segCount - 1, Math.floor(segFloat));
+    const local = Math.min(1, Math.max(0, segFloat - idx));
+    setActive(idx);
+    const v = videos[idx];
+    if (v) {
+      if (v.readyState === 0) v.load();
+      if (v.readyState >= 1) v.currentTime = local * durations[idx];
+    }
+    if (progressBar) progressBar.style.width = (progress * 100) + '%';
+  }
+
+  window.addEventListener('scroll', updateReel, { passive: true });
+  window.addEventListener('resize', updateReel);
+  updateReel();
 }
 
 // Contents nav: cursor-following preview thumbnail
