@@ -598,6 +598,41 @@ lead's fields end up correctly split: "Chapter/Centre" → business_name,
 person"/"Status" (no fixed-field match) → the From The Sheet extra-fields
 panel. This is real production data, kept in (not test data to clean up).
 
+## 17. Fixed: caller's own re-pull of existing leads left them invisible — FIXED (2026-09-23)
+
+**Bug**: Diksha uploaded the IIID file on the *deployed* CRM herself (not
+a local test this time). It reported "0 new, 33 updated" — technically
+correct, since I'd already inserted those 33 leads into production during
+§16's verification — but from her side that read as "0 leads added," and
+none of them showed up on her "My Leads."
+
+**Root cause**: a gap in §14's fix. `import_leads` auto-assigns a caller
+as `assigned_to` for *brand-new* leads it inserts, but the *update*
+branch (existing lead, matched by phone) never touched `assigned_to` at
+all. Those 33 leads had been inserted by a founder's pull in §16's
+verification, so they stayed unassigned — and when Diksha's own pull hit
+them as updates, they stayed unassigned still, invisible to her under
+`leads_caller_select`'s `assigned_to = auth.uid()` RLS rule.
+
+**Fix**: on the update branch, if a matched lead has `assigned_to is
+null` and the puller is a caller, it now claims the lead the same way a
+new insert would. Applied via Supabase migration. Confirmed by directly
+reassigning the 33 already-existing IIID leads to Diksha (equivalent to
+what a re-pull would now do) and verifying live on
+`aperturecrm.vercel.app` logged in as her — "Ahmedabad" and the rest of
+the IIID chapters now appear on her "My Leads" (263 leads total across
+all sources: 160 + 70 + 33, no duplicates).
+
+**Also fixed while verifying**: one lead ("Jaipur") had a garbage
+25-digit phone number in production — traced to the source sheet's Phone
+cell holding two numbers separated by `/` ("+91 76888 34111 / +91 82336
+88000"), which `normalizePhone()` was concatenating into one undialable
+string instead of picking one. Corrected that one record directly (first
+number kept as `phone`, second saved into `extra_fields.Alternate
+phone`), and hardened `normalizePhone()` in `lib/sheets.ts` to split on
+`/`, `,`, `;`, or " or " and take the first segment, so this class of
+messy real-world cell doesn't recur on future pulls.
+
 ## Next steps
 - Answer the open questions in §10.
 - If a second caller joins, revisit whether unassigned (founder-pulled)
@@ -606,3 +641,5 @@ panel. This is real production data, kept in (not test data to clean up).
 - Consider accepting other upload types people might hand over next
   (PDF contact lists, plain-text pastes) through the same Groq mapping
   layer if that need comes up.
+- Worth a pass over other `extra_fields` values across existing leads
+  for similar multi-value-cell artifacts, now that one's been found.
