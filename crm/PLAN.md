@@ -530,8 +530,79 @@ Applied directly via Supabase migration (`apply_migration`) rather than a
 local file-based migration, since the schema lives in the Supabase
 project's migration history, not in this repo.
 
+## 15. Fixed: opening a lead from page 5+ reset the list to page 1 — FIXED (2026-08-18)
+
+**Bug**: Opening a lead from deep in the paginated leads list, then
+returning to the list (via the sidebar nav, or any fresh visit to
+`/leads?page=N`), landed back on page 1 instead of the page the lead was
+opened from.
+
+**Root cause**: not the pagination links themselves — `LeadSearch.tsx`'s
+debounce `useEffect` ran on every mount, not just on typing, and
+unconditionally called `params.delete("page")` before `router.push`. So
+250ms after landing on `/leads?page=5` for any reason, the search widget
+silently stripped `?page=` and pushed back to page 1, even though the
+search box was never touched.
+
+**Fix**: the effect now only pushes when the debounced value actually
+differs from what's already in the URL (`value === (searchParams.get("q")
+?? "")` short-circuits otherwise) — comparison-based rather than a
+run-once ref, so it's correct under React Strict Mode's dev-only double
+effect invocation too. Also added a real "← Back to leads" link on the
+lead detail page (`leads/[id]/page.tsx`) that carries the originating
+page/search via a `?from=` param set on each lead link in the list, so
+returning from a lead goes back to the exact page/search it was opened
+from, not just to plain `/leads`.
+
+Verified end-to-end in the browser: navigated to page 5, opened a lead,
+confirmed the back link read `/leads?page=5` and actually landed there
+without bouncing back to page 1 afterward.
+
+## 16. Added file upload (xlsx/xls/csv) as a pull source — BUILT (2026-09-22)
+
+**Ask**: a real lead sheet (IIID India Chapter Contacts — 35 chapter
+contacts for AI 3D-tool outreach) existed only as a local `.xlsx` file,
+never published as a Google Sheet, so it couldn't be pulled at all — the
+Pull Sheet page only accepted a Google Sheet URL. Requested: make sheet
+pulling format- and source-agnostic, not just column-agnostic.
+
+**Built**: `sheets/actions.ts` now shares one `importRows()` core (header
+detection, known-layout matching, Groq `inferSheetMapping()` fallback,
+`import_leads` RPC call) between two entry points — `pullSheet` (existing
+Google Sheet URL fetch) and a new `pullFile` server action that accepts
+an uploaded `.xlsx`/`.xls`/`.csv` file directly. Excel files are parsed
+with SheetJS; installed from `cdn.sheetjs.com` rather than the `xlsx` npm
+package, since the npm-published 0.18.5 build carries known prototype-
+pollution/ReDoS CVEs that SheetJS only patched in later CDN-distributed
+releases. `PullForm.tsx` got a second form (file input + "Pull file"
+button) below the existing URL field, sharing the same result-banner UI.
+
+Also widened `HEADER_SCAN_ROWS` from 5 to 10: the real IIID file has 3
+title/note rows + 1 blank row before its header row (index 5), which the
+old 5-row scan window would have missed entirely, breaking layout
+detection for exactly this kind of file.
+
+Uploaded files are logged in `sheet_imports.sheet_url` as `file:<name>`
+(that column is `NOT NULL text`, no schema change needed) so they show up
+in the existing "All data sources" admin view alongside URL-based pulls.
+
+Verified end-to-end against the real file (not a synthetic test): browser
+pane can't drive native OS file pickers, so the file was served from the
+dev server's `public/` folder and attached to the file `<input>` via a
+`DataTransfer` + `fetch().blob()` injection script, then submitted for
+real. Result matched the sheet's own footnote exactly — "33 callable
+chapters | 34 published numbers | Mangalore and Satara have no current
+number" — pull reported 33 new, 2 skipped (missing phone). Confirmed a
+lead's fields end up correctly split: "Chapter/Centre" → business_name,
+"Phone" → normalized phone, "Official source" → website, and "Contact
+person"/"Status" (no fixed-field match) → the From The Sheet extra-fields
+panel. This is real production data, kept in (not test data to clean up).
+
 ## Next steps
 - Answer the open questions in §10.
 - If a second caller joins, revisit whether unassigned (founder-pulled)
   leads should be visible to all callers as a shared pool, or stay
   manual-assign-only via the existing `reassignLead` flow.
+- Consider accepting other upload types people might hand over next
+  (PDF contact lists, plain-text pastes) through the same Groq mapping
+  layer if that need comes up.
