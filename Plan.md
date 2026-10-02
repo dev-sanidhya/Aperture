@@ -222,3 +222,21 @@ separate repo: https://github.com/dev-sanidhya/CRM. Full design doc:
   count, digest channel, stable row key), then scaffold the Supabase +
   Next.js app in the dev-sanidhya/CRM repo.
 <!-- Updated each session -->
+
+## CH+ 3D site: V3 video regeneration (2026-10-02)
+- Approach: drive Google Flow via Claude in Chrome (browser MCP at PORTFOLIO/tools/google-flow-browser-mcp was reviewed, Linux-only, not used).
+- Prompts: chplus-3d-rebrand/PROMPTS_V3_TRANSFORMATION.md (locked villa bible + 6 legs). Working files in chplus-3d-rebrand/flow-v3/ (gitignored).
+- Flow account has too few credits for Veo Quality (100/clip). Using Veo 3.1 Fast (20/clip), which cannot Extend, so each leg starts from the previous leg's last frame (ffmpeg -sseof extract, upload as start frame).
+- Leg 0 done: Veo cut from empty plot to finished villa at ~4.5s (no gradual build, no orbit). Villa and car look good; last frame is a clean front view. Decision pending on keeping it.
+- Next: legs 1-5 from last frames, strip audio, encode (GOP 8, faststart), wire into index.html; CONTACT US via HTML overlay if Veo misspells.
+- Leg 1 done (flow-v3/leg1.mp4): villa+car, through driver window into POV, drives to portico. Last frame saved as leg1_last.png. Flow's video-viewer "Save frame" icon makes a project image asset usable as next start frame (no file upload needed; Flow upload button exposes no file input to the Chrome extension).
+- BLOCKER: Flow credits exhausted for Fast (20). Only one Lite clip (10) affordable. Legs 2-4 (exit car + enter, interior, card/CONTACT US) need a credit top-up by the user.
+
+## Lead Funnel demo (lead-funnel/, 2026-10-02)
+- What: AI qualification funnel for a client who gets Meta-ad enquiries. Telegram agent qualifies or disqualifies against a minimum-budget bar and files leads into a central CRM as Active / Nurtured / Disqualified / Needs human. Built as a trust-layer demo. Full docs: lead-funnel/README.md.
+- Stack: Node 22+, zero npm deps (node:sqlite), Telegram long polling, Cloudflare Workers AI (Llama 3.3 70B, fallback gpt-oss-120b) via its OpenAI-compatible endpoint.
+- Why Telegram: Meta only allows DMs after the customer messages first, so cold-DMing a Google Form lead on Instagram is not allowed; Telegram deep link (t.me/bot?start=token) mimics a Click-to-DM ad.
+- Key decisions: the LLM only extracts facts and phrases replies; src/qualify.js (pure code) decides the category, so the budget bar is exact and explainable. Inbox/outbox pattern in SQLite for crash safety, per-lead serial queue, rolling summary for context, hallucinated-budget guards.
+- Demo features: admin console (pipeline board, lead drawer with manual takeover, what-if budget slider, designers with auto-assignment, follow-up fast-forward, webhook CRM sync, CSV), persona simulator (10 personas, 10/10 pass), in-browser test chat as Telegram backup, hosted enquiry form + Google Form Apps Script.
+- State: 25 tests pass; live simulator 10/10. Cloudflare creds are in lead-funnel/.env (gitignored). NOT yet tested against a real Telegram bot (needs a BotFather token).
+- Next: user creates bot via @BotFather and sets TELEGRAM_BOT_TOKEN; expose via cloudflared and set PUBLIC_URL for the Google Form script; rehearse with /reset; record a backup screen capture; confirm the client's real project types, min budget and designers and replace the Aperture Interiors placeholder content in Settings.
