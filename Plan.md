@@ -240,3 +240,11 @@ separate repo: https://github.com/dev-sanidhya/CRM. Full design doc:
 - Demo features: admin console (pipeline board, lead drawer with manual takeover, what-if budget slider, designers with auto-assignment, follow-up fast-forward, webhook CRM sync, CSV), persona simulator (10 personas, 10/10 pass), in-browser test chat as Telegram backup, hosted enquiry form + Google Form Apps Script.
 - State: 25 tests pass; live simulator 10/10. Cloudflare creds are in lead-funnel/.env (gitignored). NOT yet tested against a real Telegram bot (needs a BotFather token).
 - Next: user creates bot via @BotFather and sets TELEGRAM_BOT_TOKEN; expose via cloudflared and set PUBLIC_URL for the Google Form script; rehearse with /reset; record a backup screen capture; confirm the client's real project types, min budget and designers and replace the Aperture Interiors placeholder content in Settings.
+
+## Lead Funnel: calls, reminders, UI revamp (2026-10-03)
+- Problem found in real use: the customer said "tomorrow 5 pm" for the designer call, the bot confirmed, but the CRM captured nothing. Treated as a class of problem: any important fact the customer states must become structured data.
+- Fix: structured call time (when.js parser cross-checks the LLM, business timezone), plus property/scope/style/best-time/phone capture, designer brief, call-booked team alerts, phone requested together with call time (Instagram gives no phone).
+- Follow-ups: assistant reminds before the call while the messaging window is open; otherwise the lead lands in a red "Needs you now" column (attention.js is the single source of truth) for manual follow-up. Owner actions: done with note, snooze, reschedule.
+- UI: admin console rewritten in plain language (Today, Leads board with Needs you now column, Calls agenda, Try it, Practice, Settings), responsive, dark mode.
+- State: 46 tests pass; live simulator still matches expectations; deployed repo: github.com/dev-sanidhya/AI-Funnel.
+- Next: confirm with the client which extra details designers want captured; consider WhatsApp as a second Meta channel (templates allow first contact); move off the ngrok URL to a stable host.
