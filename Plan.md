@@ -248,3 +248,12 @@ separate repo: https://github.com/dev-sanidhya/CRM. Full design doc:
 - UI: admin console rewritten in plain language (Today, Leads board with Needs you now column, Calls agenda, Try it, Practice, Settings), responsive, dark mode.
 - State: 46 tests pass; live simulator still matches expectations; deployed repo: github.com/dev-sanidhya/AI-Funnel.
 - Next: confirm with the client which extra details designers want captured; consider WhatsApp as a second Meta channel (templates allow first contact); move off the ngrok URL to a stable host.
+
+## Glad U Came demo video (lead-funnel/demo-video/, 2026-10-05)
+- What: ~90s premium product film for the client Glad U Came (Mumbai PR and influencer agency, IG @instagladucame, mint brand colour). Flow: title card, Meta ad, self-filling lead form, Instagram DM chat with Aria while a live lead profile fills, zoom out into the Lead Desk CRM, new lead lands on the board, drawer walkthrough (summary, next step, details, call, chat), recap of Today / Leads / Calls / Rules, outro.
+- Stack: Remotion 4 (React, frame-exact, deterministic), Inter + Instrument Serif, no screen recording. All data is fictional (Riya Mehta, Mira Skin, Ananya Rao). The CRM scenes are a faithful recreation of the product's design language in client mint, with PR/influencer data, not a capture of the live app (the live app is still interior-design specific in its field labels).
+- Two cuts from one codebase: Film (1920x1080) and FilmVertical (1080x1920) with a native phone layout of the CRM, because 16:9 is unreadable on a phone held upright. Shared timeline in src/timeline.js (scene starts, chat script, sound cues).
+- Audio: synthesized in Python (scripts/make_audio.py): ambient score plus UI sounds synced to cues.json, normalised to about -15 LUFS. soundtrack.wav is gitignored and regenerable (node scripts/dump-cues.mjs && python scripts/make_audio.py).
+- Render: from demo-video/, npx remotion render src/index.jsx Film|FilmVertical out/x.mp4 --port=3411 --props='{"fps":30}' (port 3000 is the funnel server, so pass a different port). Output in out/ is gitignored.
+- Decision: user considered replacing the ad opener with a reply to an organic post (client does not run Meta ads), then chose to keep the ad flow as is. If revisited: the DM would start with Aria answering a comment, and comment-triggered DMs need the Instagram comments webhook, which the funnel does not subscribe to yet (story replies and DMs already work).
+- Next: final 60fps renders of both cuts, user review, possible tweak of copy and handle.
