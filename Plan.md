@@ -257,3 +257,10 @@ separate repo: https://github.com/dev-sanidhya/CRM. Full design doc:
 - Render: from demo-video/, npx remotion render src/index.jsx Film|FilmVertical out/x.mp4 --port=3411 --props='{"fps":30}' (port 3000 is the funnel server, so pass a different port). Output in out/ is gitignored.
 - Decision: user considered replacing the ad opener with a reply to an organic post (client does not run Meta ads), then chose to keep the ad flow as is. If revisited: the DM would start with Aria answering a comment, and comment-triggered DMs need the Instagram comments webhook, which the funnel does not subscribe to yet (story replies and DMs already work).
 - Next: final 60fps renders of both cuts, user review, possible tweak of copy and handle.
+
+## Demo data reset (2026-10-07)
+- Wiped all leads, messages and activity from the live funnel DB and seeded 18 sample leads with scripts/seed-demo.js (lead-funnel). Backup of the previous DB: lead-funnel/data/backup-before-demo-seed.db (gitignored). Settings, designers and channel tokens were kept.
+- Sample leads cover every stage (New 1, In conversation 2, Active 9, Needs a person 2, Nurture 2, Not a fit 2) and every "Needs you now" state (call soon, call overdue, no call time, no phone, asked for a person, waiting for reply, AI had trouble, follow up by hand), a manually pinned stage, a completed call with notes, both channels (Instagram, Telegram) and all three designers.
+- Safety: leads with meta.demo use the no-op transport (replies from the console show as sent, nothing reaches a real account) and background timers skip them unless "Run follow-ups now" is pressed.
+- Product fix: nextStepFor now says "Call done..." once a call is marked done (was "Confirm a call time").
+- Re-run anytime: node scripts/seed-demo.js --wipe (times are relative to now, so re-run before each demo).
