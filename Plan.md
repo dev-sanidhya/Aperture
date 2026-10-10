@@ -264,3 +264,50 @@ separate repo: https://github.com/dev-sanidhya/CRM. Full design doc:
 - Safety: leads with meta.demo use the no-op transport (replies from the console show as sent, nothing reaches a real account) and background timers skip them unless "Run follow-ups now" is pressed.
 - Product fix: nextStepFor now says "Call done..." once a call is marked done (was "Confirm a call time").
 - Re-run anytime: node scripts/seed-demo.js --wipe (times are relative to now, so re-run before each demo).
+
+## Arty chatbot integrated into the Interio Arty website (verify/, 2026-10-07)
+- What: the production chatbot from interioarty-chatbot (not the older interioarty-demo prototype, which has no streaming, memory or summaries) is now live in verify/ (clone of namdevjedgule/InterioArty). Mock chat widget, its fragment, CSS and JS removed; js/chatbot.js loads on all 29 pages.
+- Pipeline kept intact: SSE streaming, 12-message window, sticky knownLead memory, rolling summary every 8 turns, mandatory-details gate (name, contact, city, budget), re-ask validator, em dash filter, lead summary, WhatsApp/call handoff, persona and business facts in config/.
+- Changes vs source: widget re-themed to emerald/gold/Montserrat; city extraction now accepts natural replies ("Kharadi, Pune. Budget around 18 lakh"), which previously never qualified a lead while the bot still said the closing line; budget hint trimmed; spaced en dash stripped; chips hidden after reload mid-chat. The city fix is NOT yet back-ported to interioarty-chatbot.
+- Verified in browser: greeting from /api/meta, streamed replies, memory across reload and across pages, lead saved with AI summary, mobile layout. Deterministic smoke tests pass; live Groq tests hit provider rate limits when run back to back.
+- Open: leads live only in the visitor's localStorage (no studio-side delivery); needs a webhook or CRM call in handleLead. Local commits only, not pushed (not the user's repo). Local preview: launch.json entry interioarty-site (port 3010).
+- Next: decide lead delivery (webhook, email or CRM), back-port the city fix, then deploy on Vercel with GROQ_API_KEY.
+
+## Decision: verify/ is the delivery (2026-10-07)
+- The user chose verify/ (full stack inside the client repo namdevjedgule/InterioArty) as the single deliverable. The lighter alternative (InterioArty-site/, widget wired to the hosted backend) was discarded and its folder and preview entry removed.
+- Fixed in verify/ (local commits 49cfb58, 26f7205): a bare "area" in the assistant's question made a flat-size answer ("Two bedroom hall") get stored as the city. The trigger now only fires on city, location, locality, neighbourhood, "which/what area" or "where is/are ...". Regression cases added to verify/scripts/smoke.js; suite passes.
+- verify/ is 6 commits ahead of origin/main and not pushed (client's repo, so push or PR only with the user's go-ahead).
+- interioarty-chatbot (837b2b0) has its own city fix (lead-ins, "Baner, Pune") but not verify/'s one-sentence "city and budget" case; verify/ lacks the comma-preserving format. Merge only if the two repos should stay in sync.
+- Still open: leads exist only in the visitor's browser (no studio-side delivery); production backend at interioarty-studio.vercel.app needs a manual redeploy to pick up 837b2b0.
+
+## verify/ squashed to one commit and tested locally (2026-10-07)
+- verify/ (clone of namdevjedgule/InterioArty) is now ONE local commit, f44cf92 "feat(chat): add Arty AI chatbot", on top of origin/main. Not pushed (client's repo, push or PR only on the user's go-ahead). Old interioarty-chatbot repo is unchanged since 837b2b0.
+- Tested running verify/ locally: 121 smoke checks pass, a full 47-message conversation passes (no repeat-asks, no truncation, name, phone, email, city and budget kept, CRM name, phone, size, budget and location correct), and real-browser runs on the site check greeting, memory, the four-field gate, no dashes and the CRM record.
+- Fixed in verify/ while testing: (1) flat-size answers stored as the city (bare "area" trigger); (2) non-answers ("I don't know", "undecided", "my flat") stored as the city, and "around Baner" dropped; (3) iPhone curly apostrophes made "I'm Rajesh" invisible so the bot re-asked the name; (4) spaced en dash filter ran per streamed chunk and missed split dashes, now runs on the buffer (stripDashes in api/lib/streaming.js); (5) a network error reaching Groq returned HTTP 500, now retries and degrades to the polite busy reply (callGroq in api/chat.js); (6) a question that only mentions a place ("Do you only work in Pune?") was stored as the visitor's city. Each has a regression test in verify/scripts/smoke.js.
+- The long-convo-test now answers whatever the bot asks (name, contact, city, budget) instead of fixed replies, checks repeats only against the bot's question sentences, and compares the CRM location field.
+- interioarty-chatbot does NOT have fixes 1 to 6 (verify/ is the only place). The live backend at interioarty-studio.vercel.app has the old behaviour.
+- Open: studio-side lead delivery (leads only live in the visitor's browser, verify/ has no crm.html), pushing verify/, and the site's own titles and copy still say "InterioArty".
+
+## CRM page added to verify/ (2026-10-07)
+- verify/ had no CRM page. Ported crm.html + js/crm.js from interioarty-chatbot, restyled to the site theme (emerald/gold, Playfair/Montserrat), noindex, "Back to site" link, Avg. Reply Time stat dropped.
+- Wired the same way as the chatbot repo: the widget already writes to localStorage `interioarty_leads` and posts on BroadcastChannel `interioarty-leads`, and crm.js reads both. Open /crm.html in the same browser to see leads.
+- Verified in browser with a seeded lead (summary, spec chips, transcript, status button, WhatsApp). Folded into the single verify/ commit (amended, still unpushed).
+- Limitation unchanged: store is per-browser, so the studio only sees leads from the browser they open /crm.html in. Real delivery needs a webhook/DB.
+
+## Lead delivery backend + admin panel in verify/ (2026-10-07)
+- Replaced the browser-only CRM (crm.html/crm.js, removed) with a server-side flow: widget POSTs each qualified lead to /api/leads (public, write-only, validated, capped, per-IP limited), stored in Upstash Redis (REST, no deps) or .data/leads.json locally. On Vercel without Redis it returns storage_not_configured instead of losing data.
+- Admin: /admin.html + js/admin.js. Password (ADMIN_PASSWORD env) gives a signed HttpOnly SameSite=Strict cookie (7 days; changing the password signs everyone out). Endpoints: /api/admin/session (login/logout/check), /api/admin/leads (GET/PATCH status+notes/DELETE). Features: stats, filters, search, status dropdown, notes, Call/WhatsApp/Email, CSV, 20s refresh.
+- Widget: stable per-lead cid (UUID), full conversation log (MAX_LOG 300, separate from the 30-message model history), chained ordered syncs with retries, re-sync after each reply and after the AI summary. Server merge never blanks known fields and never lets visitors touch status/notes.
+- Tests: npm run test:leads (offline, 50+ checks incl. auth, forged/expired cookies, rate limit, Redis mock). Real-browser check: chat -> lead synced with full transcript + summary -> admin login from fresh state -> status/notes saved.
+- Owner TODO on Vercel: add Upstash Redis integration, set ADMIN_PASSWORD, redeploy, open /admin.html.
+- Limits: rate limits are per warm instance; single shared password (no per-user accounts).
+
+- Pushed verify/ (single commit f5ec4e5) to namdevjedgule/InterioArty as branch Chatbot-Integration (2026-10-07). main untouched. PR not opened yet.
+
+## Lead Funnel on Vercel (2026-10-10)
+- Live at https://aperture-lead-funnel.vercel.app (admin /admin, form /form, IG webhook /webhook/instagram). Code: https://github.com/dev-sanidhya/Lead-Funnel (folder lead-funnel, source in `core/`, Vercel entry `api/index.js`).
+- Database: Supabase Postgres project `aperture-lead-funnel` (ap-south-1), app role `funnel_app` via the transaction pooler, RLS on with no policies. Local dev still uses SQLite when DATABASE_URL is empty. The whole store is async with two drivers (core/db.js).
+- Follow-ups rebuilt: pure planner `core/followups.js` decides the next action per lead (nudges, call reminder, stall/hand-over, form lead who never opened the chat, nurture check-ins). Rules: Instagram 24h window (last nudge pulled inside it), quiet hours 9pm-9am IST, counters restart when the customer replies, sends are claimed with compare-and-swap so overlapping runs send once.
+- Scheduler: pg_cron job `funnel-tick` calls /api/cron every minute with the CRON_SECRET bearer (Vercel Hobby cron is daily only, a daily Vercel cron stays as backstop). Per-lead DB lease replaces in-process locks; background work goes through waitUntil.
+- Verified on prod: cron tick, follow-up, call reminder and form-lead hand-over all fired exactly once on test leads (deleted afterwards).
+- Next: point Meta webhook callback at the Vercel URL (needs dashboard login), real DM test from @ssanidhya29_, then move to the client's own Instagram account.
