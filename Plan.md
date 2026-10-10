@@ -311,3 +311,9 @@ separate repo: https://github.com/dev-sanidhya/CRM. Full design doc:
 - Scheduler: pg_cron job `funnel-tick` calls /api/cron every minute with the CRON_SECRET bearer (Vercel Hobby cron is daily only, a daily Vercel cron stays as backstop). Per-lead DB lease replaces in-process locks; background work goes through waitUntil.
 - Verified on prod: cron tick, follow-up, call reminder and form-lead hand-over all fired exactly once on test leads (deleted afterwards).
 - Next: point Meta webhook callback at the Vercel URL (needs dashboard login), real DM test from @ssanidhya29_, then move to the client's own Instagram account.
+
+## Funnel update: calendar booking, 8h nudge (2026-10-10)
+- Follow-up defaults: first nudge after 8h, next after 12h more (last one always lands inside the IG 24h window), quiet hours OFF by default (settings still allow them). Production DB settings updated to match.
+- Calendar booking (core/calendar.js): Google Calendar via a free service account (env GOOGLE_SERVICE_ACCOUNT_JSON, owner shares calendar with its e-mail, "Make changes to events"). Aria offers real free slots, checks any time the customer names against freebusy, offers 3 alternatives when busy, accepts "the second one", books the event, moves/deletes it when the owner reschedules in the admin. Demo/sim leads never touch the calendar; a Google outage never blocks the chat. Admin: Connect tab > Calendar card with a Test button.
+- Status: code tested with a fake Google (85 tests pass) and deployed. NOT yet live: needs the service account JSON from Google Cloud (free) and the owner's calendar shared with it.
+- Meta webhook now points at https://aperture-lead-funnel.vercel.app/webhook/instagram (saved in the dashboard).
