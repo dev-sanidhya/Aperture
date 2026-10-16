@@ -388,3 +388,4 @@ separate repo: https://github.com/dev-sanidhya/CRM. Full design doc:
 - Instagram automation pushed to https://github.com/dev-sanidhya/Arty-social (instagram/, whatsapp/ and facebook/ placeholders). Vercel Interioarty project still builds from Lead-Funnel; root dir must become `instagram` if switched.
 - Production website repo namdevjedgule/InterioArty, branch Chatbot-Integration: js/chatbot.js now also posts every lead (id = cid) to /api/crm/ingest (commit 9ee74d5).
 - Next: standalone CRM repo (link pending), Vercel root-dir switch, Aperture teardown decision, calendar, Meta app review.
+- Prod ready: website chatbot test lead landed in central CRM (channel web); all lead data wiped from the Interioarty schema (settings kept). Vercel interioarty-funnel now deploys from Arty-social (root instagram). Next: Facebook Messenger and WhatsApp via client adding us as Page admin / Business Portfolio partner (no password sharing).
