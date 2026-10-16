@@ -382,3 +382,9 @@ separate repo: https://github.com/dev-sanidhya/CRM. Full design doc:
 - Studio clean-up in /crm: storage meter (photos and database vs this client's share: STORAGE_LIMIT_MB 700, DB_LIMIT_MB 250), tick leads and delete (leads or photos only), Clean up panel (photos only or whole leads, older than 30/90/180/365 days, closed or all, live preview of count and MB), auto-delete choice. Batches of 100 leads. Storage failure aborts without deleting leads.
 - Known: a deleted photo can stay viewable at its exact address up to ~1h (Supabase CDN cache). Database meter does not shrink immediately after deleting (space is reused).
 - Still to do for the trial: Meta app review for Advanced Access; Vercel Hobby is non-commercial (consider Pro); redeploy the website so its widget feeds the inbox; consider a custom domain; periodic CSV export (free Supabase has no backups).
+
+## Update: repos and CRM redesign
+- CRM redesigned (Apple style, light/dark, responsive); Aperture traces removed from Interioarty (privacy page, defaults). Deployed to interioarty-funnel only. Aperture deployment/data untouched (Meta webhook still routes via it).
+- Instagram automation pushed to https://github.com/dev-sanidhya/Arty-social (instagram/, whatsapp/ and facebook/ placeholders). Vercel Interioarty project still builds from Lead-Funnel; root dir must become `instagram` if switched.
+- Production website repo namdevjedgule/InterioArty, branch Chatbot-Integration: js/chatbot.js now also posts every lead (id = cid) to /api/crm/ingest (commit 9ee74d5).
+- Next: standalone CRM repo (link pending), Vercel root-dir switch, Aperture teardown decision, calendar, Meta app review.
