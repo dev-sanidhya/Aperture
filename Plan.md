@@ -389,3 +389,55 @@ separate repo: https://github.com/dev-sanidhya/CRM. Full design doc:
 - Production website repo namdevjedgule/InterioArty, branch Chatbot-Integration: js/chatbot.js now also posts every lead (id = cid) to /api/crm/ingest (commit 9ee74d5).
 - Next: standalone CRM repo (link pending), Vercel root-dir switch, Aperture teardown decision, calendar, Meta app review.
 - Prod ready: website chatbot test lead landed in central CRM (channel web); all lead data wiped from the Interioarty schema (settings kept). Vercel interioarty-funnel now deploys from Arty-social (root instagram). Next: Facebook Messenger and WhatsApp via client adding us as Page admin / Business Portfolio partner (no password sharing).
+
+## Mobile declutter (local only, not pushed)
+- Phone view was text heavy (home 8,453px tall). Added a `max-width: 640px` block at the end of `aperture-site/app/globals.css`: shorter posters with the one-line blurb hidden, 2-column service tiles without descriptions, tighter steps, 2-column number band, hidden hero orange mark and barcode, smaller buttons and chat panel.
+- Services page keeps descriptions (`.cat.full`, one column). Studio and Contact stat cards tightened.
+- Result at 375px: home 5,558px, work 3,878px, services 2,757px, studio 2,972px, contact 2,502px; no horizontal overflow.
+- Desktop and tablet unchanged. Nothing committed or pushed; waiting for the user to review locally at http://localhost:3100.
+
+- Added a MENU button on phones and tablets (below 860px): full-screen yellow sheet with Home, Work, Services, Studio, Contact. Closes on navigation and locks page scroll while open. Local only, not pushed.
+
+- Pushed mobile menu and lighter phone layout to wannabeaquant/Aperture main as 5d87045 (normal commit, only 3 website files).
+
+- Emoji pass (local, not pushed): no real emoji in source; arrow glyphs and the close mark can render as colour emoji on phones, so added text-presentation selector after each and font-variant-emoji: text on body.
+
+- Pushed text-only arrow glyph fix as 39ba07a (normal commit, 11 website files).
+
+- Arrow glyphs replaced with inline SVG (components/Arr.tsx). Previous push 39ba07a had broken them (selector replaced the arrow char, boxes on phones). Local fix, awaiting push approval.
+
+- Pushed SVG arrow fix as af49add (normal commit, 12 website files, no stray selectors, 0 secret matches).
+
+## SEO and AEO plan (research only, nothing built)
+- Site today: only title/description in layout.tsx. No sitemap, robots, canonical, Open Graph or JSON-LD. Few indexable pages (5 plus case studies).
+- Plan phases: 1 technical foundation (sitemap, robots allowing GPTBot/OAI-SearchBot/ClaudeBot/Claude-SearchBot/PerplexityBot, canonicals, OG, JSON-LD Organization/Service/FAQ, Bing + Google + Brave submission); 2 intent pages (multi-agent systems, AI automation, voice agents, website and app development, by sector and India) with FAQs and proof; 3 off-site entity building (Clutch, GoodFirms, DesignRush, Google Business Profile, LinkedIn, Reddit/Quora, client backlinks); 4 freshness and measurement.
+- Honest targets: win specific intent phrases, not "automation" or "website" alone. llms.txt is low priority (no evidence it moves citations). Vendor stats are directional, not proven.
+- Open items for the user: legal business name/address/GST for schema, 2-3 client quotes with permission, who writes monthly posts, confirm claims (26+ clients, 5Cr+) before they go into structured data.
+
+## SEO and AEO foundation (built locally, not pushed)
+- Sub-agents researched schema, sitemap/robots and AI-answer-engine measures. Findings: FAQPage rich results ended May 2026 so no FAQ schema; no self-serving AggregateRating; Organization not LocalBusiness (no public address); lastmod must be accurate; allow search AND training bots; llms.txt has weak evidence but is cheap.
+- Added: lib/site.ts, lib/schema.ts (connected @graph: Organization, WebSite, 2 Person, Service x11, WebPage types, BreadcrumbList, ItemList, CreativeWork per case study), components/JsonLd.tsx, app/sitemap.ts, app/robots.ts, app/manifest.ts, app/opengraph-image.tsx, public/llms.txt, IndexNow key file + scripts/indexnow.mjs, per-page titles/descriptions/canonicals/OG, X-Robots-Tag noindex on /api and on non-production Vercel deploys.
+- Verified on localhost: all JSON-LD parses, @id refs resolve, canonical/OG on every page, robots and sitemap valid.
+- Still needs the user: Search Console + Bing Webmaster verification and sitemap submit, run scripts/indexnow.mjs after deploy, create profiles (LinkedIn company, GitHub, Clutch, Google Business Profile) then fill SAME_AS in lib/site.ts, confirm areaServed (India only now).
+- Blogs deferred by the user.
+
+- Pushed SEO foundation as 0667748 (normal commit, 18 website files, 0 secret matches).
+
+## SEO go-live steps done (2026-10-17)
+- Live host is www.aperturecm.in (apex 307-redirects to www), so canonical/sitemap/schema/llms/IndexNow now use www (96f74ec). Bing meta verification tag added (fb51e62).
+- Google Search Console (domain property sc-domain:aperturecm.in): sitemap https://www.aperturecm.in/sitemap.xml submitted OK; home page indexing requested.
+- Bing Webmaster (property https://aperturecm.in/, verified via meta tag): sitemap submitted OK.
+- IndexNow: key file live, 19 URLs sent, 202 Accepted.
+- Open: make apex to www redirect permanent (308) in Vercel Domains; add profile URLs to SAME_AS; request indexing for /work, /services, /studio, /contact in GSC; watch GSC Pages report in a few days.
+
+- GSC indexing requested for /, /services, /work, /studio, /contact (all confirmed). Bing gets the same URLs via IndexNow (202). Remaining high-impact work is off-site (profiles, reviews, backlinks) and content; both need the user.
+
+## 3D-Website work gallery expansion (2026-10-18)
+- Cloned https://github.com/dev-sanidhya/3D-Website to ..\3D-Website (sibling of Agency). Static site: index.html, work.html, js/, css/, assets/.
+- Added 127 photos from the "CH+ Photos" Drive folder and the PORTFOLIO 4.pptx deck to work.html (now 223 images, 18 albums: 13 interiors grouped by finish plus an Architecture section (exteriors, 3D views, drawings)). Deduped by perceptual hash; skipped renders, drawings, screenshots.
+- Pushed to main (commits 4bbc388, e56065a). Drive zip left in Downloads (1.6 GB) and is safe to delete.
+- Landing hero (2026-10-18): the scroll film no longer opens the page. New hero in 3D-Website/index.html + js/hero.js: dimmed finished-house stills with a cursor lens that reveals colour, press-and-hold to open up, rolling "We design / engineer / finish" line, 3-picture cycle. Film intro now reads "Plot to home." Pushed to main.
+- Responsive pass (2026-10-18): header no longer uses mix-blend-mode (it clipped/washed out 'ch+' over the bright sky on phones); added stronger top scrim, translucent header bar off the film, tablet hero footer fixes. Audited 320 to 1920 widths, no overflow. Pushed.
+- Instagram token incident (2026-10-18): replies failed because Meta invalidated the interioarty session; a stale refreshed token in kv (ig_token) also overrode the new env token. Fixed: env token wins when it changes (fingerprint), kv cleared.
+- Added "Connect Instagram" in the CRM (core/igconnect.js): status chip + red banner with Reconnect button, OAuth via Instagram business login, long-lived token saved in DB (no redeploy). Redirect URI https://interioarty-funnel.vercel.app/crm/instagram/callback registered in the Meta app (Aperture Lead Funnel, kept as the single app for now).
+- Instagram automation handles DMs only; comment events are received but ignored.
