@@ -664,3 +664,37 @@ and imports (team runs on trust, not contract policing). Focus narrowed to
 making call logging fast: one Today screen, outcome sheet that opens
 automatically after a call, one-tap outcomes, time and note chips, Undo,
 optimistic saves, Vercel region bom1. CALLING_SYSTEM_PLAN.md rewritten.
+
+## 19. CRM v2 built: fast call logging + redesign (2026-11-14)
+
+Built from CALLING_SYSTEM_PLAN.md (playbook dropped, free tier, caller can delete).
+- **Today screen** (`/today`, now the home page) replaces My Leads + Reminders as
+  the caller's workspace: Due now / Try again / Not called yet, 25 rows per
+  section with "Show all", Called today list, dial meter (70 ticks, colour per
+  result), demos strip, search (name, city, last digits; also finds leads not
+  in today's list), Add lead, End of day report (copy / WhatsApp).
+- **Outcome sheet**: tap Call, the sheet opens; leaving for the dialer and
+  coming back stops the clock ("Back after 0:14") and highlights No answer for
+  short calls. 9 one-tap results (keys 1 to 9), time chips instead of a date
+  picker (adapt to time of day, skip Sunday), note chips, voice note (Groq
+  extracts summary + time, now IST-correct), WhatsApp details message.
+- **Database** (repo now has `supabase/migrations/`): `log_call` does activity +
+  stage + closes due follow-ups + next callback + undo snapshot in one call;
+  `delete_call` = exact undo for the latest call; `get_queue`, `get_day_stats`,
+  `get_stage_counts`, `get_import_lead_counts`, `quick_add_lead`. Backfilled
+  outcome/attempts/last call on the 331 old calls. No-answer leads come back
+  next working day 11:00 IST. Callers can delete their own calls.
+- **Speed**: Vercel region bom1 (vercel.json), daily keepalive cron
+  (`/api/keepalive`, also reports DB latency), auth via getClaims + per-request
+  profile cache, logging goes browser -> Supabase directly with optimistic UI.
+- **Redesign**: "Switchboard" tokens, IBM Plex Sans only, light rail + mobile
+  tab bar, all pages restyled (Today, leads list with views, lead page, Team,
+  Import with drag-drop, login).
+- Bugs fixed on the way: search silently failed for terms starting a-f or a
+  digit (`%` wildcard in PostgREST `.or()`), Reminders bucketed by UTC.
+
+Measured: DB round trip from Vercel iad1 = ~650 ms per query (before). Logging
+a call (local prod build, India -> Mumbai DB): screen updates in the same
+frame; saved in 82 to 191 ms; undo 108 ms; queue reload 116 to 162 ms;
+log_call inside Postgres 4.5 ms. First call after the DB restore took 6.5 s
+(one-time cold start).
