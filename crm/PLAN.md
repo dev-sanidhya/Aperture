@@ -698,3 +698,9 @@ a call (local prod build, India -> Mumbai DB): screen updates in the same
 frame; saved in 82 to 191 ms; undo 108 ms; queue reload 116 to 162 ms;
 log_call inside Postgres 4.5 ms. First call after the DB restore took 6.5 s
 (one-time cold start).
+
+## 20. Data wiped for a fresh start (2026-11-14)
+At Sanidhya's request all lead data was deleted: 966 leads, 367 calls, 14
+follow-ups, 6 import records. Kept: the 3 accounts (Diksha, Sanidhya,
+Sanidhya & Atharva) and the 8 saved sheet layouts. A full copy was saved first
+to `Agency/data/crm-backup-2026-11-14/` (JSON + CSVs, gitignored, local only).
