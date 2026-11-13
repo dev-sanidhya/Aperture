@@ -657,3 +657,10 @@ Found: Supabase `lead-crm` is paused (free tier), Vercel functions likely
 run in US East while the DB is in Mumbai (main slowness cause), schema not
 in repo, callers can cascade-delete call history via import delete,
 Reminders page buckets by UTC not IST.
+
+Revision (2026-11-13, later): Sanidhya dropped the Calling Playbook, chose
+to stay on Supabase free tier, and wants the caller able to delete calls
+and imports (team runs on trust, not contract policing). Focus narrowed to
+making call logging fast: one Today screen, outcome sheet that opens
+automatically after a call, one-tap outcomes, time and note chips, Undo,
+optimistic saves, Vercel region bom1. CALLING_SYSTEM_PLAN.md rewritten.

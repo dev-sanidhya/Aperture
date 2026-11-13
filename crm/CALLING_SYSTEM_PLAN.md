@@ -1,236 +1,187 @@
 # Calling System Plan (CRM v2)
 
-Date: 2026-11-13. Status: proposal only, no code written.
+Date: 2026-11-13 (revised same day). Status: proposal only, no code written.
 Code repo: https://github.com/dev-sanidhya/CRM (nested at `crm/app`). History and v1 decisions: [PLAN.md](PLAN.md).
-Source of requirements: the Outbound Sales and Appointment-Setting Agreement (caller: Diksha, 70 dials/day minimum, 350/week, 80% = 280 warning line, 15% commission on attended-and-paid demos).
+Context: one caller (Diksha) doing 70 dials a day, scaling to about 110.
+
+## Decisions (Sanidhya, 2026-11-13)
+- **No Calling Playbook** (cadence rules, release limits, settings page). Dropped for now.
+- **Stay on Supabase free tier.**
+- **The caller can delete calls and imports.** The agreement is strict on paper, but the team works on mutual trust, so the CRM should not police her.
+- **Main focus: make logging calls into the CRM as fast and easy as possible.**
+- Server moves to Mumbai.
 
 ---
 
-## 1. What the agreement actually asks the software to do
+## 1. Moving the server to Mumbai
 
-Every clause below turns into a hard requirement. Today the CRM covers almost none of them automatically.
+The database is in Mumbai (`ap-south-1`). The Vercel project has no region set, so its server functions run in the default `iad1` (Washington, USA). Every database query crosses the world (~200 to 250 ms), and a page makes 6 to 8 of them in a row.
 
-| Clause | What it requires | Today |
+The free Hobby plan can choose any single region. Two ways, same result:
+
+**Option A: dashboard (2 minutes)**
+1. Vercel, project `aperturecrm`, Settings, Functions.
+2. Function Region: pick **Mumbai, India (bom1)**. Save.
+3. Deployments tab, latest production deployment, Redeploy. The region only applies to new deployments.
+
+**Option B: in code (preferred, version-controlled)**
+Add `vercel.json` to `crm/app`:
+```json
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "regions": ["bom1"]
+}
+```
+Push to main; the auto-deploy picks it up.
+
+Expected effect: each query drops from ~220 ms to a few ms. Pages that take 1.5 to 2 s today should land in a few hundred ms. Combined with the code fixes in section 5 they become close to instant.
+
+### Staying on the free tier safely
+- The `lead-crm` Supabase project is **paused right now**. Restore it from the Supabase dashboard (project, Restore). Free, takes a few minutes.
+- Free projects pause after 7 days with no activity. Normal weekdays keep it awake, but a week of leave or a holiday could pause it again. Free fix: a Vercel cron job (Hobby allows one run per day) that hits a tiny `/api/keepalive` route doing a single select.
+- No automatic backups on free. Cheap safety net: a weekly export of leads and activities to CSV (a GitHub Action, or a "Download backup" button on the founder page).
+
+---
+
+## 2. Where the time goes today
+
+To log one call, the caller currently:
+1. Finds the lead in a paginated table of 30 (or searches).
+2. Opens the lead page (slow: 1.5 to 2 s across the world).
+3. Taps the phone number, makes the call, comes back.
+4. Scrolls to the activity form, picks "Call" from a dropdown, picks "Answered / No answer" from a second dropdown.
+5. **Has to type a summary** (the field is required, even for a no-answer).
+6. Presses Log activity, waits for the server.
+7. If a follow-up is needed, goes to a separate Reminders block, opens a date-time picker, types a note, presses Add, waits again.
+8. If the stage changed, picks it from a third dropdown and presses Update, waits again.
+9. Goes back to the list and finds the next lead.
+
+That is roughly **60 to 90 seconds of admin per dial**, about 70 to 100 minutes a day at 70 dials. Around 60 to 75% of cold dials don't connect, and right now each of those still costs the full form.
+
+---
+
+## 3. The new logging flow: Call, come back, one tap
+
+### 3.1 One "Today" screen replaces the leads list and the reminders page
+The caller opens the CRM and sees one list, already in order:
+1. **Callbacks** with a time (shown with the time; pinned at the top when they are due)
+2. **Follow-ups due** today and overdue
+3. **Not called yet** (fresh leads, highest score first)
+
+Each row shows everything needed to decide, with no click-through: business, city, last outcome ("No answer, yesterday 4 pm"), number of tries, and the callback time if any. The full lead page still exists, but opens as a side panel over the list (no page change, no reload, no losing your place).
+
+### 3.2 Calling and logging are one motion
+1. She taps **Call** on a row. The CRM notes which lead and the time, then the phone dialer opens.
+2. When she returns to the CRM after the call, **the outcome sheet opens by itself** for that lead. She never has to find the lead again or remember to log.
+3. The app knows roughly how long she was away. A short gap (under about 25 seconds) puts "No answer" first; a long one puts the conversation outcomes first. It only reorders the buttons; she always chooses.
+4. She taps one outcome:
+
+| Outcome | Taps after the call | What happens automatically |
 |---|---|---|
-| 3.1 / 3.3 | Count dials per day (70) and per week (350), adjusted for leave (-70), half day (-35), holidays | Counts every `call` activity, no week view, no leave |
-| 3.2 | A dial = logged real attempt, same day. Same-number redial on the same day counts **only if the prospect asked for a callback** | Not enforced. Logging twice counts twice |
-| 3.4 / 5.3 | Shortfalls caused by too few leads, tool or network failure must be reported same day and not counted against her | No way to record this |
-| 3.6 | Honest numbers. Fake or inflated logs are grounds for termination | Nothing distinguishes a real attempt from a typed note |
-| 4.1 | **No lead left hanging**: every conversation ends with a follow-up date/time, a booked demo, or a closing status | Optional. A call can be logged with no next step |
-| 4.2 / 4.5 | Follow-ups first: overdue, then due today, then fresh prospects | Reminders and leads are separate pages; nothing orders the day |
-| 4.3 | A Calling Playbook: attempts per lead, timing, fresh lead release, no-answer handling | Does not exist in the product |
-| 4.4 | Do Not Call: mark immediately, never call again, respect India DND rules and calling windows | Only "Lost" stage, which does not block calling |
-| 4.6 | End-of-Day Report: dials (new vs follow-up), conversations, demos with date/time, follow-ups done, due tomorrow, overdue with reason, complaints | Written by hand |
-| 4.6 | Demo booked = lead details to the company the same day | No handoff, no alert |
-| 5.1 / 5.2 | Weekly review: dials vs minimum, follow-up completion, demo quality. Two weeks under 80% within 4 weeks = repeated failure | No weekly view, no warning history |
-| 6.2 to 6.5 | Commission only if: caller logged it, booked through the system, prospect **attended**, paid within **45 days**, on **net collected** revenue | No demo, attendance, payment or commission records |
-| 6.5 | "The Company's lead register and call records decide" disputes | Caller can delete a sheet import, which cascades and **deletes call history** |
+| No answer | 1 | Saved. Lead drops to the bottom and comes back in tomorrow's list |
+| Busy / cut | 1 | Same as no answer |
+| Switched off | 1 | Same as no answer |
+| Wrong number | 1 | Lead closed as invalid |
+| Not interested | 1 (+ optional reason chip) | Stage set to Lost, lead leaves the list |
+| Do not call | 1 | Lead closed, number hidden from future imports |
+| Call back | 2 (outcome + time chip) | Callback created at that time |
+| Interested, send details | 2 (outcome + follow-up chip) | Follow-up created; one tap opens WhatsApp with the details message prefilled |
+| Demo booked | 3 (outcome + day + time) | Stage set to Meeting booked, founders notified, demo reminder created |
 
-The theme: the CRM needs to become the system the contract points to. If the records are thin or deletable, every pay, warning, and commission conversation becomes an argument.
+5. A **5-second Undo** appears after every save instead of confirmation pop-ups. Mistakes are fixed with one tap, and any logged call can also be deleted later from the lead's history.
 
----
+What she no longer does: pick a type, pick answered/unanswered, type a summary for no-answers, open a date picker, change the stage by hand, or go back to find the next lead. The outcome fills in all of those.
 
-## 2. Findings in the current build
+### 3.3 Time chips instead of date pickers
+Callback and follow-up times are chips, not a calendar widget: **In 1 hour, This evening 6 pm, Tomorrow 11 am, Tomorrow 4 pm, Monday 11 am, Pick...** The chips adapt to the time of day (no "This evening" after 6 pm). Most callbacks become one tap.
 
-### Blocking right now
-- **The Supabase project `lead-crm` (Mumbai) is paused.** Free tier pauses after a week without traffic, so the live CRM at aperturecrm.vercel.app cannot load data until it is restored. Free tier also has no backups. Since call records now decide pay and commission, this should move to Supabase Pro (about $25/month: no pausing, daily backups).
-- **The schema is not in the repo.** Tables, RLS policies and the `import_leads` / `delete_sheet_import` RPCs live only in Supabase's migration history. One bad change and there is no version-controlled copy.
+### 3.4 Notes without typing
+- **Quick note chips** for conversations: "Owner not available", "Asked for pricing", "Send portfolio on WhatsApp", "Already has an agency", "Budget issue", "Call in English/Hindi". Tapping adds the note text. The founders can edit the list.
+- **Voice note** (already built, made lighter): hold the mic button on the outcome sheet and talk. The transcript becomes the note, and if she says a time ("call him Thursday at 4") it fills the callback chip. No separate confirm screen when it is only a note; the Undo toast covers mistakes.
+- Typing is still there for anyone who wants it, never required.
 
-### Why the site feels slow (in order of impact)
-1. **Server and database are on opposite sides of the world.** The Vercel project has no function region set, so it most likely runs in the default US East (Washington). The database is in Mumbai. Every query is a ~200 to 250 ms round trip, and pages make several in a row.
-2. **Repeated, sequential round trips per page.** Each page load does: proxy `getUser()` (network call to Supabase Auth), layout `getUser()` + profile, then the page calls `getCurrentUserAndProfile()` again (not cached), then its own queries. The lead detail page awaits lead, activities, reminders, profiles one after another. That is 6 to 8 serial trips, roughly 1.5 to 2 seconds before anything renders.
-3. **Stats are 9 separate count queries** on every "My Leads" load (`lib/callerStats.ts`), with `count: exact` over all-time history. The Team page multiplies that by the number of callers.
-4. **The pipeline funnel downloads every lead row** to count stages in JavaScript (`getStageFunnel`). Fine at 260 leads, slow at 5,000.
-5. **No optimistic UI.** Every click (done, snooze, log) waits for the server action, then a full re-render, both across the ocean.
-6. **Three web fonts** (Fraunces variable with optical-size axis, Inter, JetBrains Mono) for an internal tool.
+### 3.5 On a laptop
+If she works from a laptop as well, the same screen works with the keyboard: up/down to move between leads, Enter to open, number keys 1 to 9 for outcomes, T for time chips, V for voice. If she dials from her phone but logs on the laptop, the outcome sheet opens with "Log" instead of "Call", and the rest is identical.
 
-### Bugs and risks spotted
-- `reminders/page.tsx` groups Overdue/Today/Upcoming with the server's local clock (UTC), not IST. Anything due between midnight and 5:30 am IST lands in the wrong bucket, and "today" starts at 5:30 am.
-- Callers can delete a sheet import, which cascades through leads, activities and reminders. That erases the dial record the contract relies on.
-- `stage` mixes two different ideas: where the deal is (pipeline) and what happened on the last call (disposition). That is why "Attempted" and "Contacted" exist but tell you nothing about what to do next.
+### 3.6 Getting leads in, and adding one by hand
+- Sheet pull and file upload already work; add drag-and-drop of a file anywhere on the Today screen.
+- **Quick add**: a "+ Lead" box where she pastes or speaks "Nest Studio, Jaipur, 98xxxxxxxx". Useful for referrals and inbound callbacks.
+- **Inbound callback**: search by the last 4 digits of a phone number, then log on the result directly.
 
----
+### 3.7 Her day without extra work
+- A small counter at the top: dials today (out of 70), conversations, demos. It updates the moment she taps an outcome, so she never counts.
+- **End-of-day summary in one tap**: built from the day's logs (dials, conversations, demos with times, follow-ups done, callbacks due tomorrow). She adds a line if she wants and sends it to WhatsApp. No writing numbers by hand.
 
-## 3. The core idea: stop browsing leads, work a queue
+### 3.8 Expected time per dial
 
-At 70 to 110 dials a day the caller should never scroll a lead list to decide who to call. The system decides, the caller dials.
+| | Today | New flow |
+|---|---|---|
+| No answer / busy / off | 60 to 90 s | about 2 s (one tap after returning) |
+| Callback or follow-up | 90 s+ | 5 to 10 s |
+| Conversation with a note | 2 min+ | 10 to 20 s with chips or voice |
+| Finding the next lead | 5 to 10 s | 0 (next row is already highlighted) |
 
-### 3.1 One-tap dispositions replace the activity form
-Every dial ends with one tap (or one key) from a fixed list:
-
-| Key | Disposition | Counts as dial | Conversation | Automatic next step (Playbook) |
-|---|---|---|---|---|
-| 1 | No answer | yes | no | next attempt per cadence |
-| 2 | Busy / cut | yes | no | next attempt per cadence |
-| 3 | Switched off / not reachable | yes | no | next attempt per cadence |
-| 4 | Wrong number | yes | no | close lead (invalid) |
-| 5 | Gatekeeper / ask for owner | yes | yes | callback at time given |
-| 6 | Call back later (asked) | yes | yes | callback at the exact time given (same-day redial allowed and counted, per 3.2) |
-| 7 | Interested, send details | yes | yes | WhatsApp/email details + follow-up in 2 days |
-| 8 | Demo booked | yes | yes | demo record + founder alert + reminders |
-| 9 | Not interested | yes | yes | close lead (lost), recycle in 90 days unless DNC |
-| 0 | Do not call | yes | yes | close forever, phone blocked across all future imports |
-
-Rules enforced by the system, not by memory:
-- **A conversation cannot be saved without a next step** (clause 4.1). Choosing 5 or 6 opens a time picker with quick chips (In 2 hours, Tomorrow 11 am, Mon 4 pm). Choosing 8 opens the demo booker.
-- **Dial counting follows clause 3.2 automatically.** A second dial to the same lead on the same day only counts if the previous disposition was "Call back later". The caller sees the counter tick or not tick, so there is nothing to dispute.
-- **No-answers need zero typing.** About 60 to 75% of cold dials are non-connects. Those become one keystroke.
-- Voice notes (already built) stay, attached to conversations only.
-
-### 3.2 The Calling Playbook becomes settings, not a PDF
-A founder-editable page that drives the queue:
-- **Cadence for non-connects.** Default proposal: attempt 1 day 0, attempt 2 next day in the other half of the day (morning vs afternoon), attempt 3 day 3, attempt 4 day 7, attempt 5 day 14. After 5 non-connects: move to Nurture, recycle in 60 days. No same-day retries, because under 3.2 they would not count anyway.
-- **Calling windows** (for example 10:00 to 19:00 IST, no Sundays). Leads are not offered outside the window, which also covers DND/TRAI hygiene.
-- **Fresh lead release.** Each morning: fresh slots = daily target + buffer (default 70 + 30%) minus follow-ups due. If 30 follow-ups are due, about 61 fresh leads unlock. The rest stay in the pool, invisible. This is the main anti-clutter lever: the caller only ever sees today's work.
-- **Priority.** Fresh leads are ordered by the sheet's score/priority, so the best prospects get called first.
-
-### 3.3 The day, in order (matches clause 4.5)
-The queue is built in this exact order and the UI shows it as sections:
-1. Overdue follow-ups (with how late)
-2. Callbacks with a fixed time (pinned, surfaced 5 minutes before)
-3. Follow-ups due today
-4. Fresh leads released today
-
-Overdue items must carry a reason if they roll over at end of day, because the EOD report asks for it.
+At 70 dials that is roughly **an hour or more back every day**, which is what makes 110 dials realistic.
 
 ---
 
-## 4. Caller features
+## 4. Small data changes this needs
+Kept minimal, no new subsystems:
+- `activities`: add `outcome` (the list above) and `call_started_at`. `answered` gets filled from the outcome automatically.
+- `leads`: add `last_outcome`, `last_called_at`, `attempt_count`, `next_call_at`. These are what the Today screen sorts and displays, so it is one fast query instead of joins.
+- One simple built-in rule, no settings page: a non-connect sets `next_call_at` to tomorrow morning. Everything else comes from her taps.
+- `reminders` stays as is for callbacks and follow-ups; the Today screen just reads it together with leads.
+- One database function, `log_call(lead, outcome, note, callback_at)`, does the whole save (activity, lead update, callback, stage change) in a single round trip.
+- Deleting a call removes its activity row and recalculates the lead's last outcome.
 
-1. **Call Mode (the main screen).** One lead at a time: business name, city, attempt number ("Attempt 3 of 5"), the pitch opener / hook / discovery question pulled to the top from the sheet's extra fields, the last 3 touches, and one big Call button. After the disposition, the next lead loads instantly (it is prefetched while she is on the current call). Keyboard: Enter to call, 1 to 0 for outcomes, N for voice note, S to skip with reason, / to search.
-2. **Dial meter.** Always visible: dials today out of 70, split new vs follow-up, and pace ("on pace", "8 behind for 3 pm"). Weekly progress to 350 one click away, with leave already subtracted.
-3. **Instant search (Cmd+K).** By name, city, or the last 4 digits of a phone number. Needed for inbound callbacks: "someone from 98xxx called back" should be one search.
-4. **WhatsApp in one tap.** Approved message templates (intro, details after call, demo confirmation) opened as a `wa.me` link with the text prefilled. Free, manual send from her own WhatsApp, no Twilio involved.
-5. **Blocker button.** "Not enough leads", "network down", "CRM down", "asked to do other work" with time stamps. Feeds clause 3.4 automatically so shortfalls are recorded the same day.
-6. **End-of-Day Report in one click.** Generated from the logs with every field clause 4.6 asks for. She adds complaints/notes, presses Send, and it goes to the founders (WhatsApp text or email) and is stored. No more writing numbers by hand.
-7. **Morning brief.** On first open of the day: "12 follow-ups due, 3 overdue, 2 fixed callbacks, 58 fresh leads released."
-8. **Mobile layout that actually works for calling.** If she dials from her phone, Call Mode becomes a single column with a sticky bottom bar: Call, then the disposition sheet slides up after the call.
-
-## 5. Founder features
-
-1. **Today board (live).** Dials vs pace, connect rate, conversations, demos booked, overdue count, minutes since the last logged dial (idle signal), blockers raised. Refreshes live.
-2. **Weekly scorecard per contract.** Dials vs 350 (adjusted for leave), percent of minimum, follow-up completion rate, EOD reports sent, demos booked vs attended. Auto-flags under 80% and keeps the warning history (clause 5.2: second week under 80% within 4 weeks is highlighted).
-3. **Leave and holiday calendar.** Mark leave / half day / public holiday; targets adjust automatically.
-4. **Demo pipeline.** Booked, then Attended / No-show / Rescheduled, then Proposal, Won, Paid. Each demo shows who booked it and when.
-5. **Commission ledger.** For each won client: net collected amount (ex-GST, refunds), payment date, whether it is within 45 days of the attended demo, 15% commission, paid/unpaid, clawbacks. This is clause 6 as a table, so payouts are mechanical.
-6. **Campaign (sheet) performance.** Per imported sheet: leads, % worked, connect rate, conversation rate, demo rate. This tells you which sheet sources and verticals to feed back into `ops/prospecting` scoring.
-7. **Lead distribution.** Founder pulls go into a pool; assign in bulk by campaign or count. Ready for a second caller without redesign.
-8. **Audit trail.** Who changed what and when. Nothing a caller does can delete call history; imports are archived, never cascade-deleted.
-
-## 6. Demo booking (where commission is decided)
-
-- Booking a demo picks a slot from the founders' Google Calendar free/busy, creates the event with a Meet link, and records `booked_by`.
-- Instant alert to founders with the lead's full context (clause 4.6 handoff).
-- Prospect gets a WhatsApp confirmation (template) and reminders: day before and 1 hour before. No-shows are the biggest leak, and attendance is what triggers commission, so reminders protect both sides.
-- After the slot, the founder marks Attended / No-show in one tap. No-show automatically creates a reschedule task for the caller.
-
-## 7. Keeping 110 dials a day uncluttered
-
-Volume math: 110 dials a day is about 2,300 a month and several thousand leads in the system. What keeps that manageable:
-- **The queue is the home screen.** The full lead list becomes a founder/search tool, not the caller's workspace.
-- **Every lead is always in exactly one state:** Pool (not released), Active (has a next attempt), Scheduled (callback/follow-up at a time), Demo, Closed (won, lost, invalid, DNC), Nurture (recycle date). Closed and Nurture are hidden by default.
-- **An integrity check runs nightly:** any open lead without a next step is flagged ("hanging leads: 3"), so clause 4.1 is enforced by the system.
-- **Saved views** for the founder: by campaign, city, last disposition, attempt count, score.
-- **DNC and dedup by phone across all imports.** A number marked DNC once is never offered again, whichever sheet it comes back in.
-
-## 8. Architecture changes
-
-### Data model (proposed)
-- `call_attempts`: one row per dial. lead, caller, started_at (when Call was pressed), logged_at, disposition, connected, is_follow_up, attempt_number, counts_toward_minimum, note, voice transcript, later: duration and recording URL.
-- `tasks` (replaces `reminders`): kind (callback, follow_up, demo_prep, reschedule), due_at, fixed_time flag, status, source rule, resolution.
-- `leads` gains denormalised fields for fast queues: `state`, `next_action_at`, `attempt_count`, `last_disposition`, `last_contacted_at`, `campaign_id`, `recycle_at`, `is_dnc`. Partial index on `(assigned_to, next_action_at) where state is open`.
-- `stage` becomes pipeline only: Prospect, Conversation, Demo booked, Demo attended, Proposal, Won, Lost.
-- `campaigns` (from sheet imports, with release settings and archive instead of delete).
-- `demos`, `payments`, `commissions`.
-- `work_days` (per caller per date: working, leave, half, holiday, target, blockers).
-- `eod_reports` (snapshot + sent_at), `playbook_settings`, `dnc_numbers`, `audit_log`.
-
-### Server logic
-- **One RPC per caller action.** `log_dial` inserts the attempt, applies counting rules, updates the lead, creates the next task, all in one round trip and one transaction. Same for `book_demo`, `get_queue`, `get_day_stats`, `get_week_scorecard`.
-- **Stats from one query, not nine.** A single RPC (or a small daily rollup table) returns the whole dial meter and scorecard.
-- **Migrations move into the repo** (`supabase/migrations`), so the schema is version-controlled and reviewable.
-
-### Speed plan
-| Fix | Expected effect |
+## 5. Speed fixes in the code
+| Fix | Effect |
 |---|---|
-| Set Vercel function region to Mumbai (`bom1`), next to the database | Each query drops from ~220 ms to ~5 to 10 ms |
-| Verify the session locally (`getClaims()` with asymmetric JWT keys) instead of `getUser()` on every request; put role in the JWT; cache profile per request | Removes 2 to 3 network calls per page |
-| Run independent queries in parallel; one RPC per page where possible | Pages render in one round trip |
-| Optimistic UI on every disposition, done, snooze | Clicks feel instant |
-| Prefetch the next lead in Call Mode | Zero wait between dials |
-| Paginate activity history; funnel counts via SQL `group by` | Stays fast at 10x volume |
-| One font family, self-hosted via `next/font` | Smaller first load |
-| Supabase Pro (no pausing) | No cold or dead database |
+| Region `bom1` (section 1) | Each query from ~220 ms to a few ms |
+| Check the login once per request (cache it) instead of 2 to 3 times; verify the session locally instead of calling Supabase Auth on every navigation | 2 to 3 fewer network trips per page |
+| Run a page's queries in parallel; the Today screen as one query | Pages render after one trip |
+| Optimistic saves: the row updates the moment she taps, the server catches up in the background | Logging feels instant |
+| Replace the 9 separate stats queries with one | Counter loads instantly |
+| Lead details as a side panel, prefetched for the next few rows | No waiting between calls |
+| Stage funnel counted in the database, not by downloading all leads | Stays fast at thousands of leads |
+| One font family instead of three | Lighter first load |
 
-Target: any screen under 300 ms from India, logging a dial feels instant.
+## 6. UI direction
+Unchanged from the first draft, with the playbook parts removed:
+- Drop the cream background, display serif and identical-card look (the most common generated-app style) for a calm, dense working screen.
+- One font (IBM Plex Sans) with tabular figures so numbers and phone numbers line up.
+- Colour only for meaning: green for Call and conversations, amber for callbacks, blue for demos, red for lost/do-not-call, everything else neutral.
+- The one memorable element: the dial counter as a thin bar of 70 ticks across the top that fills as she logs. The only animation: a tick filling and the finished row sliding down the list.
+- Mobile first for the Today screen and outcome sheet (big tap targets, sticky Call button), dense tables for founder screens.
 
-Rough time saved: today a call takes about 60 to 90 seconds of admin (open lead from list, wait for a slow page, pick type, pick outcome, type a summary because it is required, separately add a reminder with a date picker, go back, find the next lead). With Call Mode, a non-connect is about 3 seconds and a conversation about 20 to 30 seconds with a voice note. At 70 dials with ~70% non-connects, that is roughly 45 to 60 minutes back per day, which is what makes 110 realistic.
-
-## 9. UI direction
-
-### What is wrong now
-- The look is warm cream background + Fraunces serif headings + dark sidebar + green accent. That is the single most common generated-app style, and a display serif wastes space in a tool where density and numbers matter.
-- Everything is a rounded white card with the same shadow, and small uppercase tracked labels sit above every block. The eye has nowhere to land.
-- Primary work (who to call next) is not on any screen. The home screen is a paginated table of 30 leads.
-- Forms are dropdown + Update button pairs. Each action is 2 to 4 clicks.
-
-### Proposed direction: "Switchboard"
-A working instrument, not a dashboard. Calm, dense, number-forward, built around one daily object: the 70-dial meter.
-
-- **The one memorable element:** a full-width meter of 70 ticks across the top of every caller screen. Each logged dial fills a tick (ink for non-connect, green for conversation, blue for demo). By evening the bar is a picture of her day. The only animation in the product: a tick filling and the finished row sliding out of the queue when a disposition is logged.
-- **Palette** (cool, functional, colour means status only):
-  - Canvas `#EEF1F4` cool grey
-  - Surface `#FFFFFF`
-  - Ink `#1A2230` blue-black text and non-connect ticks
-  - Muted `#5E6878`
-  - Call green `#12805C` (Call button, conversations, used nowhere else)
-  - Status: callback amber `#A86A12`, demo blue `#2851D6`, lost/DNC red `#B83A2A`
-- **Type:** one family, IBM Plex Sans, with tabular figures for every number and phone, so columns of digits line up and the dial count never jitters. No display serif, no mono font.
-- **Layout (desktop):**
 ```
-+------------------------------------------------------------------+
-| |||||||||||||||||||||||||||||||||||||||.......   41 of 70  on pace |
-+---------------+--------------------------------------------------+
-| Overdue    3  |  Studio Kadiwa                 Jaipur  Attempt 2/5|
-| Callbacks  2  |  +91 98xxx xxx21          [ Call  Enter ] [ WA ]  |
-| Due today 12  |                                                   |
-| Fresh     58  |  Opener: Saw you run Meta ads for modular...      |
-|               |  Discovery: Who handles your site enquiries?      |
-| Up next       |                                                   |
-|  Ark Interiors|  12 Nov 4:10 pm  No answer                        |
-|  Nest Studio  |  11 Nov 11:30 am No answer                        |
-|  ...          |                                                   |
-|               |  1 No answer  2 Busy  3 Off  4 Wrong number       |
-|               |  5 Gatekeeper 6 Call back 7 Send details          |
-|               |  8 Demo booked 9 Not interested 0 Do not call     |
-+---------------+--------------------------------------------------+
++---------------------------------------------------------------+
+| ||||||||||||||||||||||||||||||||.......  41 of 70   6 talks  1 demo |
++---------------------------------------------------------------+
+| Callbacks                                                     |
+|  Ark Interiors      Jaipur   Asked for pricing     4:00 pm [Call] |
+| Follow-ups due                                                |
+|  Nest Studio        Pune     No answer, yesterday  try 3   [Call] |
+| Not called yet                                                |
+|  Studio Kadiwa      Jaipur   score 82                     [Call] |
++---------------------------------------------------------------+
+
+After returning from a call (bottom sheet on mobile):
++---------------------------------------------------------------+
+| Studio Kadiwa  .  away 0:14                                   |
+| [No answer] [Busy] [Switched off] [Wrong number]              |
+| [Call back] [Interested] [Demo booked] [Not interested] [DNC] |
+| (hold) mic   .  Owner not available  Asked for pricing ...     |
++---------------------------------------------------------------+
 ```
-- **Mobile:** single column, the meter collapses to a thin bar, sticky bottom bar with Call; the disposition grid opens as a bottom sheet after the call.
-- **Founder screens:** proper dense tables (40 px rows), sentence-case headings, no card-in-card, no uppercase eyebrow labels.
-- **Copy:** buttons say exactly what happens ("Book demo", "Send report", "Mark attended").
-- Quality floor: visible keyboard focus everywhere, works at 360 px wide, respects reduced motion.
 
-## 10. Build order
+## 7. Build order
+1. **Stabilise (about half a day):** restore Supabase, region `bom1`, keepalive cron, login caching, fix the Reminders page using UTC instead of IST for Today/Overdue.
+2. **Logging flow:** outcome list, `log_call`, Today screen, auto-open outcome sheet after a call, time chips, note chips, Undo, optimistic saves, counter.
+3. **Polish:** voice note on the outcome sheet, quick add, last-4-digit search, end-of-day summary, new visual design applied across founder pages.
 
-**Phase 0: stabilise (about 1 day)**
-Restore Supabase and move to Pro, set Vercel region to Mumbai, pull schema into `supabase/migrations`, stop callers from deleting imports (archive instead), fix the IST bug on Reminders, cache auth/profile per request.
+## 8. Open question
+Does she dial from her phone with the CRM open on the same phone, or dial from her phone while logging on a laptop? The flow supports both, but the first one gets the automatic "outcome sheet opens when you come back" behaviour, which is the biggest single time saver.
 
-**Phase 1: the calling loop (biggest win)**
-Dispositions, `call_attempts`, Playbook settings, queue with fresh-lead release, Call Mode, dial meter with clause 3.2 counting, mandatory next step, DNC, Cmd+K search, new UI shell and design tokens.
-
-**Phase 2: reporting and founder control**
-EOD report one-click, blockers, leave calendar, weekly scorecard with warnings, live Today board, campaign performance, bulk assignment, audit log.
-
-**Phase 3: demos to money**
-Google Calendar booking, demo reminders, attended/no-show, payments, commission ledger, WhatsApp templates, nurture recycling.
-
-**Optional later: telephony.** A click-to-call provider (for example Exotel or a similar Indian cloud telephony service) would log every dial automatically with duration and a recording. That removes manual dial logging, makes clause 3.6 (honest numbers) and 4.7 (recordings) automatic, and gives call duration for coaching. It has a per-minute cost, so it is worth it once the manual flow is proven.
-
-## 11. Decisions needed from Sanidhya
-
-1. Does the caller dial from her own mobile phone, from a laptop with a softphone, or both? This decides whether Call Mode is mobile-first.
-2. Supabase Pro (about $25/month) approved?
-3. Where should the EOD report and demo alerts land: WhatsApp, email, or Telegram?
-4. Playbook numbers: 5 attempts over 14 days, calling window 10:00 to 19:00, fresh release = 70 + 30% buffer. Keep or change?
-5. Demo booking against which calendar (Sanidhya's, Atharva's, or a shared one)?
-6. Telephony integration now, or after Phase 2?
+## Parked (not now)
+Calling Playbook and cadence settings, fresh-lead release limits, Supabase Pro, delete restrictions and audit log, weekly scorecard with warnings, commission ledger, Google Calendar demo booking, telephony integration (auto-logged calls with recordings).
