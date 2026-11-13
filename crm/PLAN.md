@@ -643,3 +643,17 @@ messy real-world cell doesn't recur on future pulls.
   layer if that need comes up.
 - Worth a pass over other `extra_fields` values across existing leads
   for similar multi-value-cell artifacts, now that one's been found.
+
+## 18. CRM v2 calling system plan (2026-11-13, proposal, no code yet)
+
+Driven by the caller agreement (70 dials/day, 350/week, follow-ups first,
+EOD report, demo attendance and 45-day paid window for 15% commission).
+Full plan: [CALLING_SYSTEM_PLAN.md](CALLING_SYSTEM_PLAN.md). Key points:
+queue-based Call Mode with one-key dispositions, a founder-editable Calling
+Playbook (cadence, calling windows, daily fresh-lead release), clause 3.2
+dial counting, mandatory next step, DNC, auto EOD report, weekly scorecard,
+demo and commission ledger, "Switchboard" UI with a 70-tick dial meter.
+Found: Supabase `lead-crm` is paused (free tier), Vercel functions likely
+run in US East while the DB is in Mumbai (main slowness cause), schema not
+in repo, callers can cascade-delete call history via import delete,
+Reminders page buckets by UTC not IST.
