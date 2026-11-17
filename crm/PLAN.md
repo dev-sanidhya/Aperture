@@ -704,3 +704,19 @@ At Sanidhya's request all lead data was deleted: 966 leads, 367 calls, 14
 follow-ups, 6 import records. Kept: the 3 accounts (Diksha, Sanidhya,
 Sanidhya & Atharva) and the 8 saved sheet layouts. A full copy was saved first
 to `Agency/data/crm-backup-2026-11-14/` (JSON + CSVs, gitignored, local only).
+
+## 21. "Deck / details sent" category (2026-11-18)
+Prospects often ask for the deck mid-call; Diksha had been logging these as
+Callback or Not interested (closing them). Added:
+- Outcome `details_sent` ("Deck / details sent", key 0, purple): asks for a
+  follow-up time, optional WhatsApp deck message (she attaches the PDF), stage
+  at least Spoke, stamps `leads.details_sent_at` (kept even after later calls).
+- Today: "Deck sent, follow up" section (due follow-ups on stamped leads),
+  purple badge on rows; meter counts decks; EOD report lists decks sent.
+- Leads list "Deck sent" filter; lead page badge + Mark/Unmark toggle;
+  Team: decks today, this week, open deck follow-ups.
+- Backfilled 4 leads whose notes said "asked for details" (2 of them were
+  closed as Not interested and stay closed unless reopened).
+- Migration `20261117120000_deck_sent_category.sql` applied in two steps so
+  the live app never saw an unknown section. First save after a schema change
+  is slow once (~6.5 s, PostgREST cache reload); normal saves 60 to 77 ms.
