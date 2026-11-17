@@ -463,3 +463,8 @@ separate repo: https://github.com/dev-sanidhya/CRM. Full design doc:
 - Story: problem, three layers (Instagram concierge and Lead Desk CRM live, Nia PA in pilot, WhatsApp and website feed as next phase), flow, safety rules, Glad U Came proof (35% to 97% in six days), counts, rollout, about, close.
 - Decisions: Maddie and Glad U Came are one client, shown as Glad U Came. No price in the deck. Screenshots are demo data. Left an empty Slides artifact created by mistake (https://claude.ai/artifact/1qMcGq8xYYhciiXjjL32FE), delete it from the claude.ai gallery.
 - Next: confirm Glad U Came may be named, confirm live vs pilot status, add pricing slide if wanted.
+
+## Deck v2 redesign (2026-11-17)
+- Sanidhya found v1 too text-heavy and the CRM screenshot ugly. Rebuilt `deck/deck.html` and `deck/Aperture_Pitch_Deck.pdf` in the style of `Aperture_Ops_Pitch_Deck_v2.pdf` (cream, black, orange #F26A21, Archivo Black headings, JetBrains Mono labels, hard offset shadows, shutter logo).
+- 14 slides, one short headline plus 3 or 4 tiny lines each. Product visuals (DM chat, Lead Desk kanban, Telegram PA, reply check, counts dashboard) are drawn in HTML as stylised mockups with sample data, replacing the raw screenshots. Only the Glad U Came proof numbers are real.
+- Render: headless Chrome print-to-pdf of deck.html. Next: confirm Glad U Came may be named, live vs pilot tags, pricing slide.
