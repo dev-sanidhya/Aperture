@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Aperture Pitch Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+@page { size: 1920px 1080px; margin: 0; }
+:root{--bg:#09090B;--bg2:#141417;--panel:#1B1B1F;--line:rgba(255,255,255,.12);--text:#FAFAFA;--dim:#A1A1AA;--amber:#F59E0B;--amber2:#FBBF24;--ink:#09090B}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg)}
+body{font-family:'Manrope',sans-serif;color:var(--text);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.s{width:1920px;height:1080px;position:relative;overflow:hidden;page-break-after:always;break-after:page;padding:112px 128px 150px;background:var(--bg);display:flex;flex-direction:column}
+.s.alt{background:var(--bg2)}
+.s.acc{background:var(--amber);color:var(--ink)}
+.eyebrow{font-size:26px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);margin-bottom:28px}
+.acc .eyebrow{color:var(--ink)}
+h1{font-size:150px;line-height:1;font-weight:800;letter-spacing:-.03em}
+h2{font-size:78px;line-height:1.06;font-weight:800;letter-spacing:-.02em;max-width:1500px}
+h3{font-size:38px;font-weight:700;line-height:1.2;margin-bottom:14px}
+p,li{font-size:32px;line-height:1.42;color:var(--dim)}
+.acc p{color:#2a1d02}
+em{font-style:normal;color:var(--amber2)}
+.foot{position:absolute;left:128px;right:128px;bottom:60px;display:flex;justify-content:space-between;font-size:24px;color:#71717A;font-weight:600}
+.acc .foot{color:#4a3406}
+.grid{display:grid;gap:32px;margin-top:64px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:40px}
+.card .n{font-size:26px;font-weight:700;color:var(--amber);letter-spacing:.1em;margin-bottom:22px}
+.tag{display:inline-block;font-size:24px;font-weight:700;padding:6px 18px;border-radius:999px;margin-bottom:22px}
+.live{background:var(--amber);color:var(--ink)}
+.next{border:2px solid var(--amber);color:var(--amber)}
+.big{font-size:140px;font-weight:800;line-height:1;color:var(--amber2);letter-spacing:-.03em}
+.shot{border-radius:20px;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.6);background:#fff;display:block}
+.row{display:flex;gap:64px;align-items:center;margin-top:48px;flex:1}
+.step{position:relative}
+.step .n{width:64px;height:64px;border-radius:50%;background:var(--amber);color:var(--ink);font-weight:800;font-size:32px;display:flex;align-items:center;justify-content:center;margin-bottom:22px}
+.step h3{font-size:32px}
+.step p{font-size:27px}
+table{border-collapse:collapse;width:100%;margin-top:48px}
+th,td{text-align:left;font-size:30px;padding:14px 24px;border-bottom:1px solid var(--line)}
+th{color:var(--amber);font-weight:700;font-size:26px;letter-spacing:.08em;text-transform:uppercase}
+td{color:var(--text)}
+td.dim{color:var(--dim)}
+.tight .card{padding:32px 40px}.tight p{font-size:29px;line-height:1.35}
+</style></head><body>
+
+<!-- 1 COVER -->
+<section class="s" style="justify-content:space-between;background:radial-gradient(1200px 700px at 85% 15%,rgba(245,158,11,.22),transparent 60%),var(--bg)">
+  <div class="eyebrow" style="margin:0">APERTURE &nbsp;·&nbsp; GURUGRAM, INDIA</div>
+  <div>
+    <h1>The system behind<br>your <em>influencer</em><br>agency.</h1>
+    <p style="margin-top:44px;font-size:38px;max-width:1300px">Every DM answered in seconds, every enquiry in one place, every task chased. Built for influencer marketing and management agencies.</p>
+  </div>
+  <div style="font-size:28px;color:#71717A;font-weight:600">aperturecm.in &nbsp;·&nbsp; Sanidhya Shishodia &nbsp;·&nbsp; Atharva Singh</div>
+</section>
+
+<!-- 2 PROBLEM -->
+<section class="s alt">
+  <div class="eyebrow">The problem</div>
+  <h2>Your agency runs on DMs, and DMs do not scale.</h2>
+  <div class="grid g3">
+    <div class="card"><h3>Brands wait</h3><p>A brand asks about a campaign at 11 pm. The reply comes the next afternoon, and by then they have messaged someone else.</p></div>
+    <div class="card"><h3>Everyone lands in one inbox</h3><p>Brands, creators asking about paid or barter, vendors, press and job seekers. Your team sorts them by hand.</p></div>
+    <div class="card"><h3>Nobody has the numbers</h3><p>How many brands wrote this week? Which channel sends the most? Who went quiet? Today, that means counting by hand.</p></div>
+  </div>
+  <div class="foot"><span>Aperture</span><span>02</span></div>
+</section>
+
+<!-- 3 SYSTEM -->
+<section class="s">
+  <div class="eyebrow">What we build</div>
+  <h2>One system, three layers, built around your agency.</h2>
+  <div class="grid g3" style="margin-top:48px">
+    <div class="card"><span class="tag live">LIVE</span><h3>Instagram concierge</h3><p>An AI agent on your agency’s Instagram. It replies in your voice, qualifies brands, sorts creators and press, books the intro call, and steps back when your team joins the chat.</p></div>
+    <div class="card"><span class="tag live">LIVE</span><h3>Lead Desk CRM</h3><p>One profile per brand or creator, with the full chat, budget, city, timeline, stage and booked call. Your team opens it each morning and knows who to call first.</p></div>
+    <div class="card"><span class="tag next">PILOT</span><h3>Nia, the founder’s PA</h3><p>A Telegram assistant that turns the founder’s instructions into tasks, assigns them by working hours, chases the team and flags anything running late.</p></div>
+  </div>
+  <p style="margin-top:36px;font-size:28px">Next phase: WhatsApp, website chat and website form feed the same CRM, so every enquiry is counted in one place.</p>
+  <div class="foot"><span>Aperture</span><span>03</span></div>
+</section>
+
+<!-- 4 FLOW -->
+<section class="s alt">
+  <div class="eyebrow">How an enquiry moves</div>
+  <h2>From first message to booked call, without your team touching it.</h2>
+  <div class="grid g4" style="margin-top:80px;gap:40px">
+    <div class="step"><div class="n">1</div><h3>A brand DMs</h3><p>Any hour, any day. A reply goes out in about 11 seconds.</p></div>
+    <div class="step"><div class="n">2</div><h3>It is qualified</h3><p>Project type, city, budget and timeline, asked one question at a time.</p></div>
+    <div class="step"><div class="n">3</div><h3>It is sorted</h3><p>Brand, creator, press or existing client. Each goes to the right person.</p></div>
+    <div class="step"><div class="n">4</div><h3>A call is booked</h3><p>Inside your call hours. Your team gets a short summary and closes it.</p></div>
+  </div>
+  <div class="card" style="margin-top:72px;display:flex;gap:48px;align-items:center">
+    <h3 style="margin:0;color:var(--amber2);white-space:nowrap">No guessing</h3>
+    <p style="color:var(--text);font-size:30px">It never quotes fees, confirms times it was not given or promises results. When unsure, it says your team will confirm and raises a task.</p>
+  </div>
+  <div class="foot"><span>Aperture</span><span>04</span></div>
+</section>
+
+<!-- 5 CRM SHOT -->
+<section class="s">
+  <div class="eyebrow">The Lead Desk</div>
+  <h2>Every enquiry, sorted by where it is in the journey.</h2>
+  <div class="row" style="justify-content:space-between;align-items:flex-start;gap:72px">
+    <img class="shot" src="img/board.png" style="width:860px;height:538px;object-fit:cover;object-position:top left">
+    <div style="flex:1;display:flex;flex-direction:column;gap:30px;padding-top:12px">
+      <div><h3>Needs you now</h3><p>Anyone who asked for a person floats to the top in red.</p></div>
+      <div><h3>Booked calls</h3><p>Time, owner and a one-line brief on every card.</p></div>
+      <div><h3>Works on a phone</h3><p>Built mobile first, so the team can use it between meetings.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Aperture &nbsp;·&nbsp; Lead Desk, shown with demo data</span><span>05</span></div>
+</section>
+
+<!-- 6 TRUST -->
+<section class="s alt">
+  <div class="eyebrow">Built for brand safety</div>
+  <h2>It sounds like your team, and it knows when to stay quiet.</h2>
+  <div class="grid g3 tight" style="gap:24px;margin-top:44px">
+    <div class="card"><h3>Your voice</h3><p>Tone, phrases and emojis tuned from your own DMs. A second AI proofreads every reply before it sends.</p></div>
+    <div class="card"><h3>Team first</h3><p>If someone asks for a human, or your team has replied, the agent stops on that chat.</p></div>
+    <div class="card"><h3>Paid or barter</h3><p>Creators are tagged paid, barter or undecided, and handled inside the limits you set.</p></div>
+    <div class="card"><h3>No guessing</h3><p>It only cites facts you approved: pricing, campaigns, awards. Nothing invented.</p></div>
+    <div class="card"><h3>Remembers everyone</h3><p>It reads the full chat history before each reply, so nobody repeats themselves.</p></div>
+    <div class="card"><h3>Honest reporting</h3><p>A daily record of chats handled, mistakes caught and fixes shipped.</p></div>
+  </div>
+  <div class="foot"><span>Aperture</span><span>06</span></div>
+</section>
+
+<!-- 7 NIA -->
+<section class="s">
+  <div class="eyebrow">Beyond the inbox</div>
+  <h2>Nia keeps the founder’s team moving.</h2>
+  <div class="grid g2" style="margin-top:56px;gap:56px;grid-template-columns:1.1fr 1fr">
+    <div style="display:flex;flex-direction:column;gap:30px">
+      <p style="color:var(--text)">The founder talks to Nia on Telegram, in plain language. Nia turns it into tasks and runs the follow-through.</p>
+      <p>Assigns each task to the right person by working hours.</p>
+      <p>Checks in about every three working hours, and again before a deadline.</p>
+      <p>Handles blockers by looking in the shared business notes first.</p>
+      <p>Closes a task only after proof is checked: a photo, PDF or link.</p>
+    </div>
+    <div class="card" style="align-self:start">
+      <div class="n">THE FOUNDER GETS</div>
+      <p style="color:var(--text);margin-bottom:18px">A live board of what is done, what is late and why.</p>
+      <p style="color:var(--text);margin-bottom:18px">An alert within a minute of a missed deadline.</p>
+      <p style="color:var(--text)">Each team member sees only their own context.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Aperture &nbsp;·&nbsp; In pilot with a live influencer agency</span><span>07</span></div>
+</section>
+
+<!-- 8 PROOF -->
+<section class="s acc">
+  <div class="eyebrow">Proof, from a live agency</div>
+  <h2 style="color:var(--ink)">Glad U Came went from 35% to 97% clean handling in six days.</h2>
+  <div class="grid g4" style="margin-top:72px">
+    <div><div class="big" style="color:var(--ink);font-size:120px">11s</div><p style="margin-top:12px;font-size:28px">median reply time on Instagram</p></div>
+    <div><div class="big" style="color:var(--ink);font-size:120px">401</div><p style="margin-top:12px;font-size:28px">customer messages read in six days</p></div>
+    <div><div class="big" style="color:var(--ink);font-size:120px">2,658</div><p style="margin-top:12px;font-size:28px">past chats loaded as the agent’s memory</p></div>
+    <div><div class="big" style="color:var(--ink);font-size:120px">198</div><p style="margin-top:12px;font-size:28px">automatic tests run before every update</p></div>
+  </div>
+  <p style="margin-top:64px;font-size:30px;max-width:1500px">Glad U Came is a PR and influencer agency in Mumbai. We measured every conversation honestly, fixed each slip within a day, and report the same record daily.</p>
+  <div class="foot"><span>Source: Glad U Came performance record, 30 Oct to 4 Nov 2026, live @gladucamepr account</span><span>08</span></div>
+</section>
+
+<!-- 9 COUNTS -->
+<section class="s">
+  <div class="eyebrow">Know your numbers</div>
+  <h2>Enquiries counted by day, week and month.</h2>
+  <div class="row" style="justify-content:space-between;align-items:flex-start;gap:72px">
+    <div style="flex:1">
+      <table style="margin-top:8px">
+        <tr><th>By</th><th>Examples</th></tr>
+        <tr><td>Channel</td><td class="dim">Instagram, WhatsApp, website chat, form</td></tr>
+        <tr><td>Type</td><td class="dim">Brand, creator, press, other</td></tr>
+        <tr><td>Stage</td><td class="dim">New, in conversation, active, won, nurture</td></tr>
+        <tr><td>Period</td><td class="dim">Per day, week and month</td></tr>
+      </table>
+      <p style="margin-top:40px;font-size:28px">So “how many brands wrote this week?” takes a second to answer.</p>
+    </div>
+    <img class="shot" src="img/today.png" style="width:900px;height:459px;object-fit:cover;object-position:top left">
+  </div>
+  <div class="foot"><span>Aperture &nbsp;·&nbsp; Today view, shown with demo data</span><span>09</span></div>
+</section>
+
+<!-- 10 ROLLOUT -->
+<section class="s alt">
+  <div class="eyebrow">Rollout</div>
+  <h2>Live in weeks, not quarters.</h2>
+  <div class="grid g4" style="margin-top:72px;gap:28px">
+    <div class="card"><div class="n">WEEK 1</div><h3>Tune</h3><p>Your pricing, barter rules, tone and call hours go into the agent. Past chats become the first CRM profiles.</p></div>
+    <div class="card"><div class="n">WEEK 2</div><h3>Go live</h3><p>The Instagram agent and Lead Desk run on your account, with a daily report.</p></div>
+    <div class="card"><div class="n">WEEKS 3 TO 4</div><h3>Extend</h3><p>WhatsApp, website chat and form join the same CRM. Team walkthrough.</p></div>
+    <div class="card"><div class="n">EVERY MONTH</div><h3>Improve</h3><p>A review call, fixes within the same week, and the record of what changed.</p></div>
+  </div>
+  <p style="margin-top:56px;font-size:28px">What we need from you: access to your Instagram business account, one short questionnaire, and a 30 minute call.</p>
+  <div class="foot"><span>Aperture</span><span>10</span></div>
+</section>
+
+<!-- 11 ABOUT -->
+<section class="s">
+  <div class="eyebrow">Who we are</div>
+  <h2>Two founders, both on the work.</h2>
+  <div class="grid g3" style="margin-top:56px">
+    <div><div class="big">26+</div><p style="margin-top:10px;font-size:28px">clients across 6 industries</p></div>
+    <div><div class="big">1,200+</div><p style="margin-top:10px;font-size:28px">hours saved for clients every month</p></div>
+    <div><div class="big">₹5Cr+</div><p style="margin-top:10px;font-size:28px">saved for our clients</p></div>
+  </div>
+  <div class="grid g3" style="margin-top:56px;gap:28px">
+    <div class="card"><h3>Calling 24o7</h3><p>One operating system for a 700-person BPO, from the dialer to client reporting.</p></div>
+    <div class="card"><h3>CapxAI</h3><p>The full mainnet product behind ZERO, a zero-person company.</p></div>
+    <div class="card"><h3>InterioArty</h3><p>A website assistant that answers from the studio’s own facts and hands qualified leads to the team.</p></div>
+  </div>
+  <div class="foot"><span>Aperture &nbsp;·&nbsp; Automations ship in 2 to 3 days</span><span>11</span></div>
+</section>
+
+<!-- 12 CLOSE -->
+<section class="s" style="justify-content:space-between;background:radial-gradient(1100px 700px at 15% 90%,rgba(245,158,11,.22),transparent 60%),var(--bg)">
+  <div class="eyebrow" style="margin:0">Next step</div>
+  <div>
+    <h1 style="font-size:130px">Bring us the<br><em>messy bit.</em></h1>
+    <p style="margin-top:40px;font-size:38px;max-width:1300px">Give us a week of your Instagram DMs. We will show you what the system would have replied, and what it would have counted.</p>
+  </div>
+  <div style="display:flex;gap:120px;font-size:30px;font-weight:600">
+    <div>Atharva Singh<br><span style="color:var(--dim);font-weight:500">+91 99900 52074</span></div>
+    <div>Sanidhya Shishodia<br><span style="color:var(--dim);font-weight:500">+91 93683 22072</span></div>
+    <div>aperturecm.in<br><span style="color:var(--dim);font-weight:500">Gurugram, India</span></div>
+  </div>
+</section>
+</body></html>

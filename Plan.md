@@ -441,3 +441,25 @@ separate repo: https://github.com/dev-sanidhya/CRM. Full design doc:
 - Instagram token incident (2026-10-18): replies failed because Meta invalidated the interioarty session; a stale refreshed token in kv (ig_token) also overrode the new env token. Fixed: env token wins when it changes (fingerprint), kv cleared.
 - Added "Connect Instagram" in the CRM (core/igconnect.js): status chip + red banner with Reconnect button, OAuth via Instagram business login, long-lived token saved in DB (no redeploy). Redirect URI https://interioarty-funnel.vercel.app/crm/instagram/callback registered in the Meta app (Aperture Lead Funnel, kept as the single app for now).
 - Instagram automation handles DMs only; comment events are received but ignored.
+- Production (2026-10-20): 3D-Website live at https://www.chpluspartners.com (Vercel project chplus-3d-rebrand, Sanidhya's Hobby team). GoDaddy DNS: A @ -> 76.76.21.21, CNAME www -> cname.vercel-dns.com; apex 308s to www. Old WordPress (160.153.0.105) no longer served. Leftover _acme-challenge / _cf-custom-hostname records from old setup are harmless. No env vars needed (static site). Project sits on Sanidhya's own Vercel account, not the client's.
+- Work page update (2026-10-21): removed 15 unfinished photos (debris, workers, cartons, plastic-wrapped theatre seating, bare niches); Architecture section now first, Interiors heading added; 208 images total. Pushed b50c5d6. Plastic-wrapped TVs in original walnut-album photos (07-11, 15, 19, 20, 22) left in, flagged to user.
+- Brand (2026-10-21): client name is written CH+Partners (capital C, H and P) everywhere on the site: titles, meta, wordmark, hero, footer, aria labels. Email address chpluspartners@gmail.com unchanged.
+- Footer (2026-10-22): added Instagram link (@chpluspartners_) to the footer on home and Work pages; clean profile URL without invite tracking params. Deployed.
+- Footer (2026-10-22): Instagram text link replaced by a circular outline Instagram icon button (aria-label, hover fill). Deployed.
+
+## CRM v2 calling system plan (2026-11-13)
+- CRM repo located at crm/app (github.com/dev-sanidhya/CRM). Read the caller agreement (70 dials/day) and the full codebase.
+- Wrote crm/CALLING_SYSTEM_PLAN.md: queue-based Call Mode, one-key dispositions, Calling Playbook settings, contract-accurate dial counting, EOD report, weekly scorecard, demo and commission ledger, speed plan, new "Switchboard" UI direction. No code yet.
+- Blocking: Supabase lead-crm project is paused; Vercel region likely US East vs DB in Mumbai.
+- Next: user answers the 6 decisions in section 11 of that plan, then Phase 0 (stabilise) and Phase 1 (calling loop).
+- Revised same day: Playbook dropped, Supabase free tier kept (plus daily keepalive cron), caller may delete calls. Plan now centres on fast call logging (Call, come back, one tap). Vercel Hobby can use region bom1 via vercel.json "regions": ["bom1"].
+
+## CRM v2 built (2026-11-14)
+- Lead CRM (crm/app, github.com/dev-sanidhya/CRM) rebuilt around fast call logging: Today screen, one-tap outcome sheet, undo, dial meter, EOD report, quick add, search, redesign. Details and timings in crm/PLAN.md section 19.
+- Supabase lead-crm restored; Vercel region moved to bom1 (Mumbai); daily keepalive cron so the free tier does not pause.
+
+## Agency pitch deck (2026-11-17)
+- Built a 12 slide PDF pitch deck for influencer marketing and management agencies: `deck/Aperture_Pitch_Deck.pdf` (source `deck/deck.html`, rendered with headless Chrome, 1920x1080 pages).
+- Story: problem, three layers (Instagram concierge and Lead Desk CRM live, Nia PA in pilot, WhatsApp and website feed as next phase), flow, safety rules, Glad U Came proof (35% to 97% in six days), counts, rollout, about, close.
+- Decisions: Maddie and Glad U Came are one client, shown as Glad U Came. No price in the deck. Screenshots are demo data. Left an empty Slides artifact created by mistake (https://claude.ai/artifact/1qMcGq8xYYhciiXjjL32FE), delete it from the claude.ai gallery.
+- Next: confirm Glad U Came may be named, confirm live vs pilot status, add pricing slide if wanted.
