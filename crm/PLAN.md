@@ -720,3 +720,20 @@ Callback or Not interested (closing them). Added:
 - Migration `20261117120000_deck_sent_category.sql` applied in two steps so
   the live app never saw an unknown section. First save after a schema change
   is slow once (~6.5 s, PostgREST cache reload); normal saves 60 to 77 ms.
+
+## 22. Lists (categories), Activity history, lead versions (2026-11-19)
+- **Lists**: `lead_categories` table (Influencer management, Partnership calls;
+  a new list is one row). `leads.category` (all 60 existing = influencer),
+  `sheet_imports.category`. Import asks "which list" first and tags every
+  lead (re-importing a number into another list moves it there). List tabs
+  (remembered via `crm.cat` cookie) on Today, Leads and Activity; list tag on
+  rows; list selector on the lead page; Add lead picks a list; EOD report and
+  Team show per-list numbers (`get_category_stats`). Dial meter stays total.
+- **Activity** (`/activity`): Google-history style feed, newest first, grouped
+  by day with a summary per day, "Show older days", search (company, number,
+  note), list filter, caller filter for founders. `get_activity_feed`.
+  A call's own stage change is folded into the call line.
+- **Lead versions**: `lead_history` + trigger on leads records every change
+  (who, when, source call/import/added by hand/edit, old to new) with a full
+  snapshot; dial bookkeeping fields excluded. Existing leads got v1
+  "baseline". Shown as "Versions" on the lead page.
