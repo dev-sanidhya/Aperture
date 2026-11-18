@@ -760,3 +760,11 @@ Code: `crm/app/bot/` (Claude Agent SDK, same pattern as Maddie PA). Founders lin
   (rootDir bot). Telegram webhook registered. Keep-awake pings live (bot_state.render_url set).
   Railway was not possible (trial expired, paid plan required). Render API key `crm-bot-deploy`
   is in bot/.env (local only). Sanidhya linked; group "Signal Room" enabled. Mac copy stopped.
+- Daily update schedule (2026-11-19): every day at 19:00 IST. Primary sender = Render bot's own
+  scheduler (BOT_SCHEDULER=1, checks every minute, retries on failure until 23:00). Backup =
+  GitHub Actions daily-update.yml at ~19:10 IST. Atomic `claimState('last_digest_day')` means only
+  one sends per day (tested: 3 simultaneous claims, 1 winner). Sunday sends a short look-ahead
+  (SUNDAY_TASK: demos, Monday follow-ups, deck leads, hot leads, risks, one line on the week).
+- Keep-awake verified: pg_cron ran every 5 min, ping to Render returned 200.
+- Render does not auto-deploy (repo linked by URL); `deploy-bot.yml` triggers a Render deploy on
+  pushes touching bot/ (secret RENDER_API_KEY). Verified working.
