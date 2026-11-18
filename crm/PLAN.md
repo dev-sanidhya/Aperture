@@ -755,3 +755,8 @@ Code: `crm/app/bot/` (Claude Agent SDK, same pattern as Maddie PA). Founders lin
 - Keep-awake (2026-11-19): Supabase pg_cron job `keep-bot-awake` pings `<render_url>/health` every
   5 min via pg_net (function `ops.ping_bot()`, private schema). Inactive until `bot_state.render_url`
   is set. One always-awake free Render service uses ~720-744 of the 750 free hours/month.
+- Deployed (2026-11-19): Render free web service `aperture-crm-bot` (srv-dbv1f23rjlhs73ajeuf0,
+  Singapore) at https://aperture-crm-bot.onrender.com, webhook mode, auto-deploys from main
+  (rootDir bot). Telegram webhook registered. Keep-awake pings live (bot_state.render_url set).
+  Railway was not possible (trial expired, paid plan required). Render API key `crm-bot-deploy`
+  is in bot/.env (local only). Sanidhya linked; group "Signal Room" enabled. Mac copy stopped.
