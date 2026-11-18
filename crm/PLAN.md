@@ -737,3 +737,18 @@ Callback or Not interested (closing them). Added:
   (who, when, source call/import/added by hand/edit, old to new) with a full
   snapshot; dial bookkeeping fields excluded. Existing leads got v1
   "baseline". Shown as "Versions" on the lead page.
+
+## 23. Telegram CRM analyst bot (2026-11-19, in progress)
+Code: `crm/app/bot/` (Claude Agent SDK, same pattern as Maddie PA). Founders link with
+`/start <BOT_LINK_CODE>`; asks anything about the CRM; daily update 7:00 pm IST Mon to Sat.
+- DB: Postgres role `crm_bot` (bypassrls, SELECT only, default read-only transactions, 20 s
+  timeout) via the Supavisor pooler `aws-0-ap-south-1.pooler.supabase.com:6543`. Writes only
+  `bot_state` and `bot_messages`. Tools: day_overview, day_activity, lead_signals, find_lead,
+  run_sql (read-only), get_time. Knowledge in `bot/agent/AGENT.md`.
+- Hosting (free only): Vercel is impossible (Agent SDK's Linux Claude Code binary is 356 MB,
+  over the 250 MB function limit). 7 pm update = GitHub Actions `daily-update.yml` (repo is
+  public, so minutes are free; trial run passed). Chat = Render free web service via
+  `render.yaml` (webhook mode; sleeps when idle). Peak RAM per answer ~360 MB (fits 512 MB).
+- Repo secrets set: CLAUDE_CODE_OAUTH_TOKEN, BOT_DB_PASSWORD, BOT_LINK_CODE. Still needed:
+  TELEGRAM_BOT_TOKEN (user creating bot via @BotFather) and the Render service.
+- Local test answered "how did yesterday go + 3 hottest leads" from live data in 37 s.
