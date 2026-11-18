@@ -752,3 +752,6 @@ Code: `crm/app/bot/` (Claude Agent SDK, same pattern as Maddie PA). Founders lin
 - Repo secrets set: CLAUDE_CODE_OAUTH_TOKEN, BOT_DB_PASSWORD, BOT_LINK_CODE. Still needed:
   TELEGRAM_BOT_TOKEN (user creating bot via @BotFather) and the Render service.
 - Local test answered "how did yesterday go + 3 hottest leads" from live data in 37 s.
+- Keep-awake (2026-11-19): Supabase pg_cron job `keep-bot-awake` pings `<render_url>/health` every
+  5 min via pg_net (function `ops.ping_bot()`, private schema). Inactive until `bot_state.render_url`
+  is set. One always-awake free Render service uses ~720-744 of the 750 free hours/month.
