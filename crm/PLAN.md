@@ -768,3 +768,7 @@ Code: `crm/app/bot/` (Claude Agent SDK, same pattern as Maddie PA). Founders lin
 - Keep-awake verified: pg_cron ran every 5 min, ping to Render returned 200.
 - Render does not auto-deploy (repo linked by URL); `deploy-bot.yml` triggers a Render deploy on
   pushes touching bot/ (secret RENDER_API_KEY). Verified working.
+- Incident (2026-11-20): GitHub ran the 19:10 IST backup 8 hours late (03:16 IST, a new IST date)
+  and sent a second update at 3 am; it also claimed 20 Nov, which would have skipped that
+  evening's real update. Fixed: sendDailyUpdate only sends 19:00-23:00 IST (any trigger, unless
+  forced); state reset to 2026-11-19. Verified the backup now skips outside the window.
