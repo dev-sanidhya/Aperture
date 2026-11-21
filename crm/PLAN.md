@@ -772,3 +772,8 @@ Code: `crm/app/bot/` (Claude Agent SDK, same pattern as Maddie PA). Founders lin
   and sent a second update at 3 am; it also claimed 20 Nov, which would have skipped that
   evening's real update. Fixed: sendDailyUpdate only sends 19:00-23:00 IST (any trigger, unless
   forced); state reset to 2026-11-19. Verified the backup now skips outside the window.
+- Incident (2026-11-21, 21:11-21:16 IST): Atharva's "hi" (group) and "Hello" (private) got no reply.
+  The agent answered, but sending to Telegram failed with ETIMEDOUT (Render to api.telegram.org;
+  Node's 250 ms IPv6/IPv4 auto-select cut-off) and there was no retry. Atharva is linked and was
+  answered fine at 21:29. Fixed: tg() retries network errors, 5xx and 429 with backoff (~40 s),
+  prefers IPv4 and gives each connection 3 s. Tested with stubbed failures; deployed (5e17b64).
