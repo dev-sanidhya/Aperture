@@ -783,4 +783,8 @@ Code: `crm/app/bot/` (Claude Agent SDK, same pattern as Maddie PA). Founders lin
 - Writes go through private `botw.*` security definer functions (crm_bot only), which set `crm.source = 'telegram'` and record `requested_by` (the founder who asked) on activities, reminders and lead_history.
 - Write tools are only given when a founder is speaking, never for the automatic daily update.
 - CRM UI: Telegram changes get a teal tag ("Telegram, asked by X") and a teal left edge in lead history, versions and the Activity feed.
-- STATUS: code committed, NOT pushed. Migration 20261124120000_bot_write_actions.sql must be applied first (Supabase MCP lost access to project rkkhxquriakwtzeylhar; dashboard needs sign-in). Then push (Render + Vercel deploy) and test on a test lead.
+- STATUS (2026-11-24, live): migrations 20261124120000_bot_write_actions and 20261124130000_feed_telegram_for_caller applied through the Supabase dashboard SQL editor (Chrome, signed in). Bot on Render and CRM on Vercel deployed from 5edc0aa / 8969b46.
+- Tested end to end with a dummy lead: Sanidhya asked for note + deck sent + follow-up, Atharva asked for a stage change; each row tagged with the right founder; teal rows on lead page and Activity; dummy lead deleted (157 leads, unchanged).
+- Diksha's Activity page also shows Telegram changes on leads assigned to her (she otherwise only sees her own actions).
+- Local test: cd crm/app/bot && node --env-file-if-exists=.env scripts/try-write.js "request" [Speaker]
+- Supabase access note: lead-crm lives in the Supabase org "Aperture". The Supabase MCP connector only sees the other org (iConfess, Cultivate, aperture-lead-funnel...), so it returns "permission denied" for rkkhxquriakwtzeylhar. Reconnect the connector with the Aperture org ticked to use it again; until then use the dashboard SQL editor.
