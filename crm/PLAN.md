@@ -777,3 +777,10 @@ Code: `crm/app/bot/` (Claude Agent SDK, same pattern as Maddie PA). Founders lin
   Node's 250 ms IPv6/IPv4 auto-select cut-off) and there was no retry. Atharva is linked and was
   answered fine at 21:29. Fixed: tg() retries network errors, 5xx and 429 with backoff (~40 s),
   prefers IPv4 and gives each connection 3 s. Tested with stubbed failures; deployed (5e17b64).
+
+## 24. Telegram bot can update the CRM (2026-11-24)
+- Founders can ask the bot to add notes, change stage, schedule follow-ups / callbacks / demos, mark follow-ups done, mark deck sent, move list, fix contact details, close or reopen a lead. No deletes, no call logging.
+- Writes go through private `botw.*` security definer functions (crm_bot only), which set `crm.source = 'telegram'` and record `requested_by` (the founder who asked) on activities, reminders and lead_history.
+- Write tools are only given when a founder is speaking, never for the automatic daily update.
+- CRM UI: Telegram changes get a teal tag ("Telegram, asked by X") and a teal left edge in lead history, versions and the Activity feed.
+- STATUS: code committed, NOT pushed. Migration 20261124120000_bot_write_actions.sql must be applied first (Supabase MCP lost access to project rkkhxquriakwtzeylhar; dashboard needs sign-in). Then push (Render + Vercel deploy) and test on a test lead.
