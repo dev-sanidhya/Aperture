@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Aperture Client Results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+@page{size:1920px 1080px;margin:0}
+:root{--cream:#F2EEE7;--card:#FAF8F3;--ink:#0B0B0A;--or:#F26A21;--gray:#55514B;--dk:#151512}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--ink)}
+body{font-family:'Archivo',sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.s{width:1920px;height:1080px;position:relative;overflow:hidden;break-after:page;page-break-after:always;background:var(--cream);color:var(--ink);padding:150px 104px 0}
+.s.dark{background:var(--ink);color:#F2EEE7}
+.hd,.ft{position:absolute;left:104px;right:104px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:20px;letter-spacing:.16em;text-transform:uppercase}
+.hd{top:44px;color:#5b564f}.ft{bottom:44px;color:#5b564f}
+.hd b{color:var(--ink);font-weight:700}.dark .hd b{color:#fff}.dark .hd,.dark .ft{color:#8a857c}
+.ey{display:flex;align-items:center;gap:18px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:22px;letter-spacing:.14em;text-transform:uppercase;color:var(--or);margin-bottom:22px}
+.ey:before{content:"";width:36px;height:4px;background:var(--or)}
+h1,h2{font-family:'Archivo Black',sans-serif;text-transform:uppercase;letter-spacing:-.01em;line-height:1.04}
+h2{font-size:100px}
+.hl{background:var(--or);color:var(--ink);padding:0 16px;margin-left:-16px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.or{color:var(--or)}
+.sub{font-size:32px;line-height:1.4;color:var(--gray);margin-top:26px;max-width:1000px}
+.dark .sub{color:#cfc9bf}
+.box{background:var(--card);border:3px solid var(--ink);box-shadow:10px 10px 0 var(--ink)}
+.dark .box{background:var(--dk);border-color:#F2EEE7;box-shadow:10px 10px 0 var(--or)}
+.mono{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.12em}
+.ico{width:64px;height:64px;border:3px solid var(--ink);display:flex;align-items:center;justify-content:center;flex:none;background:transparent}
+.ico svg{width:34px;height:34px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ico.f{background:var(--or)}
+.dark .ico{border-color:#F2EEE7}
+.dark .ico.f{border-color:var(--ink)}
+.li{display:flex;gap:26px;align-items:center;margin-bottom:26px}
+.li h3{font-size:36px;font-weight:700;line-height:1.1}
+.li p{font-size:26px;color:var(--gray);margin-top:4px}
+.dark .li p{color:#bdb7ad}
+.split{display:flex;gap:80px;align-items:flex-start;margin-top:10px}
+.cols{display:grid;gap:28px;margin-top:56px}
+.big{font-family:'Archivo Black',sans-serif;line-height:1}
+.tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:20px;letter-spacing:.12em;padding:6px 14px;border:2.5px solid var(--ink);text-transform:uppercase}
+.tag.o{background:var(--or)}
+.chip{font-family:'JetBrains Mono',monospace;font-size:22px;letter-spacing:.1em;text-transform:uppercase;border:3px solid var(--ink);padding:14px 22px;background:var(--card)}
+.win{display:flex;align-items:center;gap:12px;padding:16px 24px;border-bottom:3px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:20px;letter-spacing:.12em;text-transform:uppercase}
+.dot{width:16px;height:16px;border-radius:50%;background:var(--ink)}
+.dot.o{background:var(--or)}.dot.r{border:3px solid var(--ink);background:none}
+
+.ph{border:3px dashed var(--or)!important;background:repeating-linear-gradient(135deg,transparent 0 14px,rgba(242,106,33,.07) 14px 28px)!important}
+.stamp{position:absolute;right:104px;top:92px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:20px;letter-spacing:.14em;text-transform:uppercase;background:var(--or);color:var(--ink);padding:8px 16px;border:3px solid var(--ink);transform:rotate(2deg);z-index:5}
+.st .big{font-size:104px}
+.lbl{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.12em;font-size:21px;color:var(--gray);margin-top:16px;line-height:1.35}
+.dark .lbl{color:#bdb7ad}
+.bar{width:112px;border:3px solid var(--ink);background:var(--or);box-shadow:8px 8px 0 var(--ink);position:relative}
+.bar span{position:absolute;top:-52px;left:0;right:0;text-align:center;font-family:'Archivo Black';font-size:38px}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-5.4A8 8 0 1 1 21 12z"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14a6.5 6.5 0 0 1 3.5 6"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+<symbol id="i-eyeoff" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path d="M4 4l16 16"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5"/><rect x="13.5" y="4" width="6.5" height="6.5"/><rect x="4" y="13.5" width="6.5" height="6.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h8l5 5v13H6z"/><path d="M9 13h7M9 17h7"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6z"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+<symbol id="i-bars" viewBox="0 0 24 24"><path d="M5 20v-7M12 20V5M19 20v-11"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 3 10.5l6.5 2.5L12 20z"/><path d="M9.5 13 21 3"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
+<symbol id="shutter" viewBox="0 0 100 100"><g fill="none" stroke="#0B0B0A" stroke-width="3.6"><circle cx="50" cy="50" r="44"/><path d="M50 32l15.6 9v18L50 68 34.4 59V41z"/><path d="M50 6c7 12 10 19 12 26"/><path d="M88 28 68 40"/><path d="M88 72 68 60"/><path d="M50 94c-7-12-10-19-12-26"/><path d="M12 72l20-12"/><path d="M12 28l20 12"/></g><circle cx="50" cy="50" r="3.6" fill="#0B0B0A"/></symbol>
+</defs></svg>
+<section class="s dark" style="padding:0"><div class="hd"><b>Aperture</b><span>Client results</span><span>aperturecm.in</span></div>
+<div style="position:absolute;left:104px;top:190px;width:1100px"><div class="ey">Client results / 2026</div>
+<h1 style="font-size:132px;line-height:.98;color:#F2EEE7">EVERY CALL<br>TAKEN.<br><span class="or">MORE CLIENTS<br>WON.</span></h1>
+<p style="font-size:34px;line-height:1.4;color:#d8d2c8;margin-top:36px;width:860px">What happens when no enquiry waits. Three businesses, three cities, one result.</p></div>
+<div style="position:absolute;right:-200px;top:90px;width:800px;height:800px;background:var(--or);transform:rotate(7deg);display:flex;align-items:center;justify-content:center"><svg style="width:640px;height:640px;transform:rotate(-7deg)"><use href="#shutter"/></svg></div>
+<div class="ft"><span>Prepared by Aperture</span><span>November 2026</span></div></section>
+<section class="s"><div class="hd"><b>Aperture</b><span>The pattern</span><span>aperturecm.in</span></div><div class="ey">The pattern</div>
+<h2 style="font-size:88px">Enquiries kept coming.<br>The team <span class="hl">could not keep up.</span></h2>
+<p class="sub" style="margin-top:20px;font-size:30px">Calls and messages arrived faster than people could answer. Some got a late reply. Some got none. Now every one is picked up, answered and counted.</p>
+<div class="cols" style="grid-template-columns:repeat(3,1fr);gap:40px;margin-top:60px">
+<div class="box" style="padding:40px 44px"><div class="mono" style="font-size:20px;color:var(--or);font-weight:700">01</div><h3 style="font-family:'Archivo Black';font-size:50px;line-height:1.05;text-transform:uppercase;margin:16px 0 14px">Glad U Came</h3><p style="font-size:28px;color:var(--gray)">PR and influencer agency</p><div class="mono" style="font-size:21px;margin-top:22px">Mumbai</div></div><div class="box" style="padding:40px 44px"><div class="mono" style="font-size:20px;color:var(--or);font-weight:700">02</div><h3 style="font-family:'Archivo Black';font-size:50px;line-height:1.05;text-transform:uppercase;margin:16px 0 14px">ROCCS&rsquo; Accounts Academy</h3><p style="font-size:28px;color:var(--gray)">Accounts coaching institute</p><div class="mono" style="font-size:21px;margin-top:22px">Gurgaon</div></div><div class="box" style="padding:40px 44px"><div class="mono" style="font-size:20px;color:var(--or);font-weight:700">03</div><h3 style="font-family:'Archivo Black';font-size:50px;line-height:1.05;text-transform:uppercase;margin:16px 0 14px">Tanu Locks</h3><p style="font-size:28px;color:var(--gray)">Lock manufacturer</p><div class="mono" style="font-size:21px;margin-top:22px">Kolkata</div></div></div><div class="ft"><span>Aperture</span><span>01</span></div></section>
+<section class="s dark"><div class="hd"><b>Aperture</b><span>Glad U Came</span><span>aperturecm.in</span></div>
+<div class="ey">Case 01 / Glad U Came / Mumbai</div>
+<h2 style="font-size:96px">Brands were writing.<br><span class="or">Nobody could</span><br>answer all of them.</h2>
+<div class="cols" style="grid-template-columns:repeat(3,1fr);gap:36px;margin-top:64px">
+<div class="box" style="padding:34px 38px"><div class="ico f" style="margin-bottom:24px"><svg><use href="#i-clock"/></svg></div><h3 style="font-size:38px">Late replies</h3><p style="font-size:27px;color:#bdb7ad;margin-top:8px">Brands waited hours on Instagram.</p></div>
+<div class="box" style="padding:34px 38px"><div class="ico f" style="margin-bottom:24px"><svg><use href="#i-users"/></svg></div><h3 style="font-size:38px">One mixed inbox</h3><p style="font-size:27px;color:#bdb7ad;margin-top:8px">Brands, creators, vendors, spam.</p></div>
+<div class="box" style="padding:34px 38px"><div class="ico f" style="margin-bottom:24px"><svg><use href="#i-eyeoff"/></svg></div><h3 style="font-size:38px">Lost chances</h3><p style="font-size:27px;color:#bdb7ad;margin-top:8px">Potential clients never got reached.</p></div></div>
+<div class="ft"><span>Aperture</span><span>02</span></div></section>
+<section class="s"><div class="hd"><b>Aperture</b><span>Glad U Came</span><span>aperturecm.in</span></div><div class="ey">Case 01 / The numbers</div>
+<h2 style="font-size:84px">Six days. Every chat <span class="hl">handled.</span></h2>
+<div class="cols" style="grid-template-columns:repeat(3,1fr);gap:30px;margin-top:40px">
+<div class="box st" style="padding:30px 44px"><div class="big">401</div><div class="lbl">Customer messages read</div></div><div class="box st" style="padding:30px 44px"><div class="big">123</div><div class="lbl">Conversations handled</div></div><div class="box st" style="padding:30px 44px"><div class="big">252</div><div class="lbl">Replies sent</div></div>
+<div class="box st" style="padding:30px 44px"><div class="big">11s</div><div class="lbl">Median reply time</div></div><div class="box st" style="padding:30px 44px"><div class="big">0</div><div class="lbl">Failed sends since 1 Nov</div></div><div class="box st" style="padding:30px 44px"><div class="big">2,658</div><div class="lbl">Past chats in its memory</div></div></div>
+<div class="mono" style="position:absolute;left:104px;bottom:92px;font-size:19px;color:var(--gray)">Live @gladucamepr account / 30 Oct to 4 Nov 2026 / measured, not estimated</div><div class="ft"><span>Aperture</span><span>03</span></div></section>
+<section class="s dark"><div class="hd"><b>Aperture</b><span>Glad U Came</span><span>aperturecm.in</span></div>
+<div class="split" style="justify-content:space-between;align-items:flex-end">
+<div style="width:760px"><div class="ey">Case 01 / Getting better daily</div>
+<h2 style="font-size:100px">35%<br>to <span class="or">97%</span></h2>
+<p class="sub">Of chats handled cleanly. Each slip fixed within a day, reported every morning.</p></div>
+<div style="display:flex;gap:30px;align-items:flex-end;height:640px;padding:60px 20px 6px;border-bottom:3px solid #F2EEE7;margin-bottom:30px;width:860px;justify-content:space-between;padding-top:60px"><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:16px"><div class="bar" style="height:189px;"><span>35%</span></div><div class="mono" style="font-size:20px;color:#bdb7ad">Fri 30</div></div><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:16px"><div class="bar" style="height:291px;"><span>54%</span></div><div class="mono" style="font-size:20px;color:#bdb7ad">Sat 31</div></div><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:16px"><div class="bar" style="height:448px;"><span>83%</span></div><div class="mono" style="font-size:20px;color:#bdb7ad">Sun 1</div></div><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:16px"><div class="bar" style="height:437px;"><span>81%</span></div><div class="mono" style="font-size:20px;color:#bdb7ad">Mon 2</div></div><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:16px"><div class="bar" style="height:513px;"><span>95%</span></div><div class="mono" style="font-size:20px;color:#bdb7ad">Tue 3</div></div><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:16px"><div class="bar" style="height:523px;"><span>97%</span></div><div class="mono" style="font-size:20px;color:#bdb7ad">Wed 4</div></div></div></div>
+<div class="mono" style="position:absolute;left:104px;bottom:96px;font-size:19px;color:#8a857c">Share of chats handled cleanly per day. Day 6 is partial.</div><div class="ft"><span>Aperture</span><span>04</span></div></section>
+<section class="s"><div class="hd"><b>Aperture</b><span>ROCCS&rsquo; Accounts Academy</span><span>aperturecm.in</span></div><div class="stamp">Draft / figures to confirm</div>
+<div class="ey">Case 02 / ROCCS&rsquo; Accounts Academy / Gurgaon</div>
+<h2>Every student enquiry<br><span class="hl">picked up.</span></h2>
+<p class="sub">Parents and students called and messaged at all hours. Counsellors could not get to everyone. Now every enquiry gets an answer and a counselling slot.</p>
+<div class="box ph" style="margin-top:56px;padding:0;display:grid;grid-template-columns:repeat(4,1fr)">
+<div style="padding:44px;border-right:3px dashed var(--or)"><div class="big" style="font-size:112px">XX</div><div class="lbl">Enquiries answered each month</div></div>
+<div style="padding:44px;border-right:3px dashed var(--or)"><div class="big" style="font-size:112px">XXs</div><div class="lbl">Median reply time</div></div>
+<div style="padding:44px;border-right:3px dashed var(--or)"><div class="big" style="font-size:112px">XX%</div><div class="lbl">Enquiries answered, was XX%</div></div>
+<div style="padding:44px"><div class="big" style="font-size:112px">+XX%</div><div class="lbl">More admissions</div></div></div>
+<div class="ft"><span>Aperture</span><span>05</span></div></section>
+<section class="s dark"><div class="hd"><b>Aperture</b><span>Tanu Locks</span><span>aperturecm.in</span></div><div class="stamp">Draft / figures to confirm</div>
+<div class="split" style="justify-content:space-between;gap:60px">
+<div style="width:640px"><div class="ey">Case 03 / Tanu Locks / Kolkata</div>
+<h2 style="font-size:92px">Dealers call.<br><span class="or">Now someone<br>always picks up.</span></h2>
+<p class="sub">Dealer and buyer enquiries used to go unanswered when the team was busy. Now none do.</p></div>
+<div class="box ph" style="width:1060px;padding:0;margin-top:20px">
+<div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;padding:24px 36px" class="mono"><span style="font-size:20px"></span><span style="font-size:20px;color:#8a857c">Before</span><span style="font-size:20px;color:var(--or)">With Aperture</span></div>
+<div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;align-items:center;padding:26px 36px;border-top:3px dashed #F2EEE7"><div class="mono" style="font-size:22px;color:#bdb7ad">Enquiries answered</div><div class="big" style="font-size:64px;color:#8a857c">XX%</div><div class="big" style="font-size:64px;color:var(--or)">XX%</div></div><div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;align-items:center;padding:26px 36px;border-top:3px dashed #F2EEE7"><div class="mono" style="font-size:22px;color:#bdb7ad">Reply time</div><div class="big" style="font-size:64px;color:#8a857c">X hrs</div><div class="big" style="font-size:64px;color:var(--or)">XX sec</div></div><div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;align-items:center;padding:26px 36px;border-top:3px dashed #F2EEE7"><div class="mono" style="font-size:22px;color:#bdb7ad">Enquiries / month</div><div class="big" style="font-size:64px;color:#8a857c">XX</div><div class="big" style="font-size:64px;color:var(--or)">XX</div></div><div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;align-items:center;padding:26px 36px;border-top:3px dashed #F2EEE7"><div class="mono" style="font-size:22px;color:#bdb7ad">New dealers / orders</div><div class="big" style="font-size:64px;color:#8a857c">XX</div><div class="big" style="font-size:64px;color:var(--or)">+XX%</div></div></div></div>
+<div class="ft"><span>Aperture</span><span>06</span></div></section>
+<section class="s"><div class="hd"><b>Aperture</b><span>At a glance</span><span>aperturecm.in</span></div><div class="stamp">Draft / figures to confirm</div><div class="ey">At a glance</div>
+<h2>Same result.<br><span class="hl">Three businesses.</span></h2>
+<div class="box" style="margin-top:50px;padding:0"><div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;padding:22px 40px" class="mono"><span></span><span style="font-size:19px;color:var(--gray)">Replies</span><span style="font-size:19px;color:var(--gray)">Reply time</span><span style="font-size:19px;color:var(--or)">Outcome</span></div>
+<div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;align-items:center;padding:30px 40px;border-top:3px solid var(--ink)"><div><div style="font-family:'Archivo Black';font-size:36px;text-transform:uppercase;line-height:1.1">Glad U Came</div><div class="mono" style="font-size:18px;color:var(--gray);margin-top:6px">Mumbai / PR agency</div></div><div class="big" style="font-size:56px">252</div><div class="big" style="font-size:56px">11s</div><div class="big" style="font-size:56px;color:var(--or)">97%</div></div>
+<div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;align-items:center;padding:30px 40px;border-top:3px solid var(--ink)"><div><div style="font-family:'Archivo Black';font-size:36px;text-transform:uppercase;line-height:1.1">ROCCS&rsquo; Accounts Academy</div><div class="mono" style="font-size:18px;color:var(--gray);margin-top:6px">Gurgaon / coaching</div></div><div class="big" style="font-size:56px">XX</div><div class="big" style="font-size:56px">XXs</div><div class="big" style="font-size:56px;color:var(--or)">+XX%</div></div>
+<div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;align-items:center;padding:30px 40px;border-top:3px solid var(--ink)"><div><div style="font-family:'Archivo Black';font-size:36px;text-transform:uppercase;line-height:1.1">Tanu Locks</div><div class="mono" style="font-size:18px;color:var(--gray);margin-top:6px">Kolkata / manufacturing</div></div><div class="big" style="font-size:56px">XX</div><div class="big" style="font-size:56px">XXs</div><div class="big" style="font-size:56px;color:var(--or)">+XX%</div></div></div><div class="ft"><span>Aperture</span><span>07</span></div></section>
+<section class="s dark" style="padding:0"><div class="hd"><b>Aperture</b><span>Next step</span><span>aperturecm.in</span></div>
+<div style="position:absolute;left:104px;top:260px;width:1100px"><div class="ey">Your turn</div>
+<h1 style="font-size:124px;line-height:1">NO ENQUIRY<br><span class="or">LEFT WAITING.</span></h1>
+<p style="font-size:34px;line-height:1.4;color:#d8d2c8;margin-top:40px;width:820px">Tell us where your enquiries pile up. We will show you what it looks like when every one is answered.</p>
+<div class="mono" style="margin-top:50px;font-size:26px;color:var(--or);font-weight:700">aperturecm.in</div></div>
+<div style="position:absolute;right:-200px;top:90px;width:800px;height:800px;background:var(--or);transform:rotate(-7deg);display:flex;align-items:center;justify-content:center"><svg style="width:640px;height:640px;transform:rotate(7deg)"><use href="#shutter"/></svg></div>
+<div class="ft"><span>Aperture</span><span>08</span></div></section>
+</body></html>
