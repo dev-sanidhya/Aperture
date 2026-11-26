@@ -788,3 +788,10 @@ Code: `crm/app/bot/` (Claude Agent SDK, same pattern as Maddie PA). Founders lin
 - Diksha's Activity page also shows Telegram changes on leads assigned to her (she otherwise only sees her own actions).
 - Local test: cd crm/app/bot && node --env-file-if-exists=.env scripts/try-write.js "request" [Speaker]
 - Supabase access note: lead-crm lives in the Supabase org "Aperture". The Supabase MCP connector only sees the other org (iConfess, Cultivate, aperture-lead-funnel...), so it returns "permission denied" for rkkhxquriakwtzeylhar. Reconnect the connector with the Aperture org ticked to use it again; until then use the dashboard SQL editor.
+
+## 25. Telegram bot understands voice notes (2026-11-26)
+- Claude cannot take audio, so voice notes (and audio files, round videos) are transcribed first in bot/src/voice.js: Whisper large-v3-turbo on Cloudflare Workers AI (free tier, same CF account as lead-funnel), Groq whisper-large-v3-turbo as automatic backup. Keys CF_ACCOUNT_ID, CF_API_TOKEN, GROQ_API_KEY in bot/.env and Render env.
+- Whisper gets a hint with "Jas", CRM words and the team names, so names and Hinglish come out right (tested: English and Hinglish notes, 2 to 5 s on Cloudflare, 0.3 s on Groq).
+- Private chat: every voice note is answered. Group: only if it replies to the bot or says "Jas" (bot privacy mode is off, so it sees all group messages).
+- Each voice reply starts with Heard: "..." so a mishearing is visible; the agent is told the text came from a voice note and to ask before changing anything if unsure. Max 10 minutes per note.
+- Deployed 8a6c0eb on Render.
