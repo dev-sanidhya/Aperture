@@ -795,3 +795,4 @@ Code: `crm/app/bot/` (Claude Agent SDK, same pattern as Maddie PA). Founders lin
 - Private chat: every voice note is answered. Group: only if it replies to the bot or says "Jas" (bot privacy mode is off, so it sees all group messages).
 - Each voice reply starts with Heard: "..." so a mishearing is visible; the agent is told the text came from a voice note and to ask before changing anything if unsure. Max 10 minutes per note.
 - Deployed 8a6c0eb on Render.
+- 2026-11-26 fix (df649f9): a text reply to a voice note ("@bot listen to this") now transcribes the quoted voice note too; first version only read voice in the message itself. AGENT.md now tells the agent voice notes reach it as text, so it stops saying it can't take them. Atharva's first voice note (before 7:33 pm IST) arrived before the voice deploy, so it was never transcribed.
