@@ -797,9 +797,14 @@ Code: `crm/app/bot/` (Claude Agent SDK, same pattern as Maddie PA). Founders lin
 - Deployed 8a6c0eb on Render.
 - 2026-11-26 fix (df649f9): a text reply to a voice note ("@bot listen to this") now transcribes the quoted voice note too; first version only read voice in the message itself. AGENT.md now tells the agent voice notes reach it as text, so it stops saying it can't take them. Atharva's first voice note (before 7:33 pm IST) arrived before the voice deploy, so it was never transcribed.
 
-## 26. Bot books calls on Google Calendar (2026-11-27, in progress)
+## 26. Bot books calls on Google Calendar (2026-11-27, live)
 - Asked: Jas schedules calls on the agency Google account (aperturecmservices@gmail.com), founders as guests, sensible title, on the asked date and time.
 - Research: Google has an official remote Calendar MCP server (calendarmcp.googleapis.com/mcp/v1), but it is a Workspace Developer Preview and can pause for approval forms that a headless bot cannot answer. Chosen instead: our own in-process MCP tools (bot/src/calendarTools.js) on the stable Calendar API v3 with one OAuth refresh token. Free.
 - Tools (founder speakers only, only when GOOGLE_* env is set): calendar_schedule_call (Meet link, invites sent, lead details + CRM link in description), calendar_list_calls, calendar_update_call, calendar_cancel_call. AGENT.md section "Google Calendar" sets titles ("Demo: X x Aperture"), 30 min default, both founders default, clash check, also crm_schedule for lead demos/callbacks.
 - Env: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN, GOOGLE_CALENDAR_ID=primary, CALENDAR_GUESTS=Name:email,...
 - Setup left: Google Cloud project on the agency account, Calendar API on, consent screen External and published to Production (Testing mode refresh tokens die after 7 days), OAuth client "Desktop app"; then `node --env-file=.env scripts/google-auth.js`, sign in as the agency account; copy env to Render; test a booking.
+- DONE 2026-11-27: Google Cloud project "My First Project" (snappy-storm-508007-p7) on aperturecmservices@gmail.com: Calendar API on, consent app "Aperture Outbound Ops" External and In production (unverified, fine for our own account; no payment or verification needed), OAuth client "Jas CRM Bot (Calendar)" (Desktop). Sign-in done, refresh token in bot/.env and on Render. CALENDAR_GUESTS = Sanidhya + Atharva gmail.
+- Production needed a privacy policy on the authorized domain, so www.aperturecm.in/privacy was built in the LIVE site repo wannabeaquant/Aperture (Next.js under website/, Atharva's; commits cf5a3ff, 9572cfb). Local Agency/Aperture/website and Agency/aperture-site are stale copies; working clone is Agency/Aperture/.live (git-excluded). The page must stay true to what the site and tools do (see the comment at the top of app/privacy/page.tsx).
+- Tested through the agent: booked a 15 min test call (only Sanidhya invited, Meet link, IST correct), then cancelled it. Render deploy 62294b7 live with the GOOGLE_* env.
+- If bookings ever fail with "Google sign-in failed", re-run `node --env-file=.env scripts/google-auth.js` in crm/app/bot and copy GOOGLE_REFRESH_TOKEN to Render.
+
