@@ -1,6 +1,6 @@
 # Aperture System: pricing notes (internal, not for clients)
 
-Deck: `Aperture_System_Deck_v1.pdf`, source in `source/deck.html`. Pricing sits on slide 19 (page 20 of the PDF).
+Deck: `Aperture_System_Deck_v1.pdf`, source in `source/deck.html`. Pricing is on page 9 of the v2 deck (slide 19 of v1).
 
 ## Proposed monthly prices (excl. GST)
 | Plan | Price | Includes |
