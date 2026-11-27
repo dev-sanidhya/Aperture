@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Aperture System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+Devanagari:wght@500;700&family=Noto+Sans+Bengali:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 @page{size:1920px 1080px;margin:0}
 :root{--cream:#F2EEE7;--card:#FAF8F3;--ink:#0B0B0A;--or:#F26A21;--gray:#55514B;--dk:#151512}
@@ -51,8 +51,7 @@ h2{font-size:100px}
 .bar{width:112px;border:3px solid var(--ink);background:var(--or);box-shadow:8px 8px 0 var(--ink);position:relative}
 .bar span{position:absolute;top:-52px;left:0;right:0;text-align:center;font-family:'Archivo Black';font-size:38px}
 
-.dev{font-family:'Noto Sans Devanagari','Archivo',sans-serif}
-.ben{font-family:'Noto Sans Bengali','Archivo',sans-serif}
+.chip.dk{background:var(--dk);border-color:#F2EEE7;color:#F2EEE7}
 </style></head><body>
 <svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-5.4A8 8 0 1 1 21 12z"/></symbol>
@@ -70,374 +69,157 @@ h2{font-size:100px}
 <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
 <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
 <symbol id="shutter" viewBox="0 0 100 100"><g fill="none" stroke="#0B0B0A" stroke-width="3.6"><circle cx="50" cy="50" r="44"/><path d="M50 32l15.6 9v18L50 68 34.4 59V41z"/><path d="M50 6c7 12 10 19 12 26"/><path d="M88 28 68 40"/><path d="M88 72 68 60"/><path d="M50 94c-7-12-10-19-12-26"/><path d="M12 72l20-12"/><path d="M12 28l20 12"/></g><circle cx="50" cy="50" r="3.6" fill="#0B0B0A"/></symbol>
-
-<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3.2 3.2 3.2 14.8 0 18M12 3c-3.2 3.2-3.2 14.8 0 18"/></symbol>
-<symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12"/><path d="M8 20h8M12 16v4"/></symbol>
-<symbol id="i-sliders" viewBox="0 0 24 24"><path d="M5 4v16M12 4v16M19 4v16"/><path d="M3 9h4M10 15h4M17 8h4"/></symbol>
-<symbol id="i-branch" viewBox="0 0 24 24"><circle cx="6" cy="5" r="2.5"/><circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="9" r="2.5"/><path d="M6 7.5v9M18 11.5c0 4-12 2-12 5"/></symbol>
-<symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12"/><path d="M3 10h18"/></symbol>
-<symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
-<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
-<symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="5.5"/><path d="M8.5 13.5 7 21l5-3 5 3-1.5-7.5"/></symbol>
-<symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 5h13l-2.5 4 2.5 4H5"/></symbol>
-<symbol id="i-pulse" viewBox="0 0 24 24"><path d="M2 12h5l2.5-6 4 12 2.5-6H22"/></symbol>
-<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20z"/><path d="M12 10v5M12 17.5v.5"/></symbol>
-<symbol id="i-msg" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
 </defs></svg>
 <section class="s dark" style="padding:0">
-  <div class="hd"><b>Aperture</b><span>AI automation and software studio</span><span>aperturecm.in</span></div>
-  <div style="position:absolute;left:104px;top:190px;width:1050px">
-    <div class="ey">Platform overview</div>
+  <div class="hd"><b>Aperture</b><span>AI automation studio</span><span>aperturecm.in</span></div>
+  <div style="position:absolute;left:104px;top:200px;width:1050px">
+    <div class="ey">Proposal</div>
     <h1 style="font-size:150px;line-height:.98;color:#F2EEE7">APERTURE<br><span class="or">ONE<br>SYSTEM</span></h1>
-    <p style="font-size:34px;line-height:1.4;color:#d8d2c8;margin-top:36px;width:900px">Instant replies, one CRM, a micro-operation agent that chases tasks, AI calling in your customer's language and a score on every call.</p>
+    <p style="font-size:36px;line-height:1.4;color:#d8d2c8;margin-top:36px;width:880px">Answers your customers. Keeps your team on track. Calls when you need it to.</p>
   </div>
   <div style="position:absolute;right:-200px;top:90px;width:800px;height:800px;background:var(--or);transform:rotate(7deg);display:flex;align-items:center;justify-content:center"><svg style="width:640px;height:640px;transform:rotate(-7deg)"><use href="#shutter"/></svg></div>
   <div class="ft"><span>Prepared for your business</span><span>November 2026</span></div>
 </section>
 
 <section class="s">
-  <div class="hd"><b>Aperture</b><span>Who we are</span><span>aperturecm.in</span></div>
-  <div class="ey">Who is behind this</div>
-  <h2>Built by a studio<br>that <span class="hl">ships fast.</span></h2>
-  <p class="sub">Two founders, hands-on, building AI systems for agencies, BPOs and product teams from Gurugram.</p>
+  <div class="hd"><b>Aperture</b><span>The problem</span><span>aperturecm.in</span></div>
+  <div class="ey">The problem</div>
+  <h2>Messages get missed.<br><span class="hl">Tasks slip.</span></h2>
   <div class="cols" style="grid-template-columns:repeat(3,1fr);gap:40px;margin-top:70px">
-    <div class="box" style="padding:44px 48px"><div class="big" style="font-size:112px">1,200+</div><div class="mono" style="font-size:22px;margin-top:20px;color:var(--gray)">Hours saved every month</div></div>
-    <div class="box" style="padding:44px 48px"><div class="big" style="font-size:112px">&#8377;5Cr+</div><div class="mono" style="font-size:22px;margin-top:20px;color:var(--gray)">Saved for our clients</div></div>
-    <div class="box" style="padding:44px 48px"><div class="big" style="font-size:112px">26+</div><div class="mono" style="font-size:22px;margin-top:20px;color:var(--gray)">Clients across 6 industries</div></div>
+    <div class="box" style="padding:40px 38px"><div class="ico f" style="margin-bottom:30px"><svg><use href="#i-clock"/></svg></div><h3 style="font-size:42px;line-height:1.1">Customers wait</h3><p style="font-size:28px;color:var(--gray);margin-top:14px;line-height:1.35">Replies come hours late, so some people go elsewhere.</p></div><div class="box" style="padding:40px 38px"><div class="ico f" style="margin-bottom:30px"><svg><use href="#i-doc"/></svg></div><h3 style="font-size:42px;line-height:1.1">Tasks get forgotten</h3><p style="font-size:28px;color:var(--gray);margin-top:14px;line-height:1.35">You end up chasing your team for everything.</p></div><div class="box" style="padding:40px 38px"><div class="ico f" style="margin-bottom:30px"><svg><use href="#i-eyeoff"/></svg></div><h3 style="font-size:42px;line-height:1.1">Calls go unchecked</h3><p style="font-size:28px;color:var(--gray);margin-top:14px;line-height:1.35">Nobody knows how most calls really went.</p></div>
   </div>
-  <div class="mono" style="margin-top:46px;font-size:20px;color:var(--gray)">Trusted by teams in AI, finance, education, property, interiors and operations.</div>
   <div class="ft"><span>Aperture</span><span>01</span></div>
 </section>
 
 <section class="s">
-  <div class="hd"><b>Aperture</b><span>The problem</span><span>aperturecm.in</span></div>
-  <div class="ey">The problem</div>
-  <h2>Running it by hand<br>is <span class="hl">slow and blind.</span></h2>
-  <div class="cols" style="grid-template-columns:repeat(2,1fr);gap:36px 44px;margin-top:64px">
-    <div class="box" style="padding:34px 38px;display:flex;gap:30px;align-items:center"><div class="ico"><svg><use href="#i-clock"/></svg></div><div><h3 style="font-size:40px">Enquiries wait.</h3><p style="font-size:28px;color:var(--gray);margin-top:6px">Replies come hours late.</p></div></div><div class="box" style="padding:34px 38px;display:flex;gap:30px;align-items:center"><div class="ico"><svg><use href="#i-doc"/></svg></div><div><h3 style="font-size:40px">Tasks slip.</h3><p style="font-size:28px;color:var(--gray);margin-top:6px">The founder chases everyone.</p></div></div><div class="box" style="padding:34px 38px;display:flex;gap:30px;align-items:center"><div class="ico"><svg><use href="#i-eyeoff"/></svg></div><div><h3 style="font-size:40px">Calls go unchecked.</h3><p style="font-size:28px;color:var(--gray);margin-top:6px">Most are never reviewed.</p></div></div><div class="box" style="padding:34px 38px;display:flex;gap:30px;align-items:center"><div class="ico"><svg><use href="#i-bars"/></svg></div><div><h3 style="font-size:40px">No numbers.</h3><p style="font-size:28px;color:var(--gray);margin-top:6px">Counted by hand, if at all.</p></div></div>
+  <div class="hd"><b>Aperture</b><span>What you get</span><span>aperturecm.in</span></div>
+  <div class="ey">What you get</div>
+  <h2>Three parts.<br><span class="hl">Take one or all.</span></h2>
+  <div class="cols" style="grid-template-columns:repeat(3,1fr);gap:40px;margin-top:64px">
+    <div class="box" style="padding:40px 38px"><div class="mono" style="font-size:20px;color:var(--or);font-weight:700">Part 1</div><div class="big" style="font-size:64px;margin:16px 0 20px">Inbox</div><p style="font-size:29px;color:var(--gray);line-height:1.4;min-height:200px">Replies to every enquiry for you, day and night, and saves each one in a single list.</p><span class="tag o">Live</span></div><div class="box" style="padding:40px 38px"><div class="mono" style="font-size:20px;color:var(--or);font-weight:700">Part 2</div><div class="big" style="font-size:64px;margin:16px 0 20px">Team</div><p style="font-size:29px;color:var(--gray);line-height:1.4;min-height:200px">A helper on Telegram that gives out tasks, reminds people and checks the work is done.</p><span class="tag">Pilot</span></div><div class="box" style="padding:40px 38px"><div class="mono" style="font-size:20px;color:var(--or);font-weight:700">Part 3</div><div class="big" style="font-size:64px;margin:16px 0 20px">Calls</div><p style="font-size:29px;color:var(--gray);line-height:1.4;min-height:200px">An AI that phones your customers in their language. Every call is checked and scored.</p><span class="tag o">Live</span></div>
   </div>
   <div class="ft"><span>Aperture</span><span>02</span></div>
 </section>
 
-<section class="s">
-  <div class="hd"><b>Aperture</b><span>One system</span><span>aperturecm.in</span></div>
-  <div class="ey">One system</div>
-  <h2>Everything lives<br><span class="hl">in one place.</span></h2>
-  <div class="cols" style="grid-template-columns:repeat(3,1fr);gap:30px;margin-top:50px">
-    <div class="box" style="padding:30px 34px;display:flex;gap:26px;align-items:flex-start;min-height:200px"><div class="ico f"><svg><use href="#i-chat"/></svg></div><div><h3 style="font-size:34px;line-height:1.1">Inbound Agent</h3><p style="font-size:24px;color:var(--gray);margin-top:8px;line-height:1.3">Every channel, in seconds.</p><span class="tag o" style="margin-top:16px">Live</span></div></div><div class="box" style="padding:30px 34px;display:flex;gap:26px;align-items:flex-start;min-height:200px"><div class="ico f"><svg><use href="#i-grid"/></svg></div><div><h3 style="font-size:34px;line-height:1.1">Lead Desk CRM</h3><p style="font-size:24px;color:var(--gray);margin-top:8px;line-height:1.3">Every enquiry, sorted.</p><span class="tag o" style="margin-top:16px">Live</span></div></div><div class="box" style="padding:30px 34px;display:flex;gap:26px;align-items:flex-start;min-height:200px"><div class="ico f"><svg><use href="#i-bars"/></svg></div><div><h3 style="font-size:34px;line-height:1.1">Enquiry Counts</h3><p style="font-size:24px;color:var(--gray);margin-top:8px;line-height:1.3">Day, week, month.</p><span class="tag o" style="margin-top:16px">Live</span></div></div><div class="box" style="padding:30px 34px;display:flex;gap:26px;align-items:flex-start;min-height:200px"><div class="ico f"><svg><use href="#i-send"/></svg></div><div><h3 style="font-size:34px;line-height:1.1">Micro-Operation Agent</h3><p style="font-size:24px;color:var(--gray);margin-top:8px;line-height:1.3">Tasks and follow-ups on Telegram.</p><span class="tag" style="margin-top:16px">Pilot</span></div></div><div class="box" style="padding:30px 34px;display:flex;gap:26px;align-items:flex-start;min-height:200px"><div class="ico f"><svg><use href="#i-phone"/></svg></div><div><h3 style="font-size:34px;line-height:1.1">AI Voice Calling</h3><p style="font-size:24px;color:var(--gray);margin-top:8px;line-height:1.3">Hindi, English and regional languages.</p><span class="tag o" style="margin-top:16px">Live</span></div></div><div class="box" style="padding:30px 34px;display:flex;gap:26px;align-items:flex-start;min-height:200px"><div class="ico f"><svg><use href="#i-pulse"/></svg></div><div><h3 style="font-size:34px;line-height:1.1">Floor Suite</h3><p style="font-size:24px;color:var(--gray);margin-top:8px;line-height:1.3">Call scores, rewards and a client portal.</p></div></div>
+<section class="s dark">
+  <div class="hd"><b>Aperture</b><span>Part 1: Inbox</span><span>aperturecm.in</span></div>
+  <div class="split" style="justify-content:space-between">
+    <div style="width:860px">
+      <div class="ey">Part 1 / Inbox</div>
+      <h2 style="font-size:80px">Every message<br>answered in<br><span class="or">seconds.</span></h2>
+      <p class="sub" style="margin-bottom:44px">Works on Instagram and your other message channels.</p>
+      <div class="li"><div class="ico"><svg><use href="#i-chat"/></svg></div><div><h3>Replies in your style</h3><p>Day and night</p></div></div><div class="li"><div class="ico"><svg><use href="#i-doc"/></svg></div><div><h3>Asks the right questions</h3><p>Budget, city, timing</p></div></div><div class="li"><div class="ico"><svg><use href="#i-phone"/></svg></div><div><h3>Books the call</h3><p>Your team takes over from there</p></div></div>
+    </div>
+    <div class="box" style="width:780px;height:790px;padding:0;position:relative">
+      <div style="display:flex;justify-content:space-between;padding:24px 30px 0" class="mono"><span style="font-size:19px;color:#8a857c">Instagram message / sample</span><span style="font-size:19px;color:var(--or)">&#9679; Live</span></div>
+      <div style="padding:16px 30px">
+        <div style="background:#F2EEE7;color:var(--ink);width:560px;padding:20px 24px;margin-left:auto"><div class="mono" style="font-size:16px;color:#6b665e">Customer</div><div style="font-size:27px;margin-top:6px;line-height:1.3">Hi! We launch a new product next month. Can you help?</div></div>
+        <div style="border:3px solid var(--or);background:#2a1c12;width:560px;padding:16px 24px;margin-top:14px"><div class="mono" style="font-size:16px;color:var(--or)">Aperture</div><div style="font-size:27px;margin-top:6px;line-height:1.3">Happy to help. What is your budget?</div></div>
+        <div style="background:#F2EEE7;color:var(--ink);width:420px;padding:20px 24px;margin:14px 0 0 auto"><div class="mono" style="font-size:16px;color:#6b665e">Customer</div><div style="font-size:27px;margin-top:6px">About &#8377;8L, in Mumbai.</div></div>
+        <div style="border:3px solid var(--or);background:#2a1c12;width:600px;padding:16px 24px;margin-top:14px"><div class="mono" style="font-size:16px;color:var(--or)">Aperture</div><div style="font-size:27px;margin-top:6px;line-height:1.3">Can our team call you tomorrow at 3 PM?</div></div>
+      </div>
+      <div style="position:absolute;left:30px;right:30px;bottom:70px;background:var(--or);color:var(--ink);padding:16px 24px;display:flex;gap:16px;align-items:center;font-weight:700;font-size:28px"><div class="ico" style="width:46px;height:46px;border-color:var(--ink);color:var(--ink)"><svg style="width:26px;height:26px"><use href="#i-check"/></svg></div>Call booked / tomorrow 3:00 PM</div>
+      <div class="mono" style="position:absolute;left:30px;bottom:26px;font-size:17px;color:#8a857c">Sample conversation</div>
+    </div>
   </div>
-  <div class="mono" style="margin-top:44px;font-size:22px;color:var(--gray)">Next: WhatsApp / Website chat / Website form &rarr; same CRM</div>
   <div class="ft"><span>Aperture</span><span>03</span></div>
 </section>
 
-<section class="s dark">
-  <div class="hd"><b>Aperture</b><span>Inbound agent</span><span>aperturecm.in</span></div>
-  <div class="split" style="justify-content:space-between">
-    <div style="width:880px">
-      <div class="ey">Inbound agent / Instagram</div>
-      <h2 style="font-size:92px">Every DM<br>answered in<br><span class="or">11 seconds.</span></h2>
-      <p class="sub" style="margin-bottom:44px">In your voice. Day and night.</p>
-      <div class="li"><div class="ico"><svg><use href="#i-chat"/></svg></div><div><h3>Qualifies the brand</h3><p>Budget, city, timeline</p></div></div><div class="li"><div class="ico"><svg><use href="#i-phone"/></svg></div><div><h3>Books the intro call</h3><p>Inside your call hours</p></div></div><div class="li"><div class="ico"><svg><use href="#i-users"/></svg></div><div><h3>Steps back for your team</h3><p>The moment a human joins</p></div></div>
-    </div>
-    <div class="box" style="width:780px;height:790px;padding:0;position:relative">
-      <div style="display:flex;justify-content:space-between;padding:24px 30px 0" class="mono"><span style="font-size:19px;color:#8a857c">Instagram DM / sample</span><span style="font-size:19px;color:var(--or)">&#9679; Live</span></div>
-      <div style="padding:16px 30px">
-        <div style="background:#F2EEE7;color:var(--ink);width:560px;padding:20px 24px;margin-left:auto"><div class="mono" style="font-size:16px;color:#6b665e">Brand</div><div style="font-size:27px;margin-top:6px;line-height:1.3">Hi! We launch a skincare line next month. Need 20 creators.</div></div>
-        <div style="border:3px solid var(--or);background:#2a1c12;width:560px;padding:16px 24px;margin-top:14px"><div class="mono" style="font-size:16px;color:var(--or)">Aperture agent</div><div style="font-size:27px;margin-top:6px;line-height:1.3">Love it. What budget range are you working with?</div></div>
-        <div style="background:#F2EEE7;color:var(--ink);width:420px;padding:20px 24px;margin:14px 0 0 auto"><div class="mono" style="font-size:16px;color:#6b665e">Brand</div><div style="font-size:27px;margin-top:6px">Around &#8377;8L, in Mumbai.</div></div>
-        <div style="border:3px solid var(--or);background:#2a1c12;width:600px;padding:16px 24px;margin-top:14px"><div class="mono" style="font-size:16px;color:var(--or)">Aperture agent</div><div style="font-size:27px;margin-top:6px;line-height:1.3">Tomorrow 3 PM for a call with our team?</div></div>
-      </div>
-      <div style="position:absolute;left:30px;right:30px;bottom:70px;background:var(--or);color:var(--ink);padding:16px 24px;display:flex;gap:16px;align-items:center;font-weight:700;font-size:28px"><div class="ico" style="width:46px;height:46px;border-color:var(--ink);color:var(--ink)"><svg style="width:26px;height:26px"><use href="#i-check"/></svg></div>Call booked / tomorrow 3:00 PM</div>
-      <div class="mono" style="position:absolute;left:30px;bottom:26px;font-size:17px;color:#8a857c">Replied in 11 sec / sample conversation</div>
-    </div>
-  </div>
-  <div class="ft"><span>Aperture</span><span>04</span></div>
-</section>
-
 <section class="s">
-  <div class="hd"><b>Aperture</b><span>Lead Desk</span><span>aperturecm.in</span></div>
-  <div style="display:flex;justify-content:space-between;align-items:flex-end">
-    <div><div class="ey">Lead Desk CRM</div><h2 style="font-size:92px">Your whole inbox<br><span class="hl">on one board.</span></h2></div>
-    <div style="display:flex;gap:18px;padding-bottom:8px"><div class="chip">Brand</div><div class="chip">Creator</div><div class="chip">Press</div></div>
-  </div>
-  <div class="box" style="margin-top:34px;height:500px;padding:0;overflow:hidden">
-    <div class="win"><span class="dot"></span><span class="dot o"></span><span class="dot r"></span><span style="margin-left:14px">Lead desk / sample data</span></div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:26px 30px">
-      <div><div class="mono" style="font-size:19px;font-weight:700;display:flex;justify-content:space-between;border-bottom:3px solid var(--ink);padding-bottom:12px"><span>Needs you now</span><span class="or">1</span></div><div style="background:var(--or);border:3px solid var(--ink);padding:18px 20px;margin-top:18px"><div style="font-weight:800;font-size:28px">Kabir M.</div><div style="font-size:22px;margin-top:4px">Public relations, Mumbai</div><div class="mono" style="font-size:16px;margin-top:14px;border-top:2px solid var(--ink);padding-top:10px">Asked for a person</div></div></div><div><div class="mono" style="font-size:19px;font-weight:700;display:flex;justify-content:space-between;border-bottom:3px solid var(--ink);padding-bottom:12px"><span>New</span><span>2</span></div><div style="background:#fff;border:3px solid var(--ink);padding:18px 20px;margin-top:18px"><div style="font-weight:800;font-size:28px">Dev M.</div><div style="font-size:22px;margin-top:4px">Campaign strategy, Mumbai</div><div class="mono" style="font-size:16px;margin-top:14px;color:var(--gray)">&#8377;3L / Instagram</div></div><div style="background:#fff;border:3px solid var(--ink);padding:18px 20px;margin-top:18px"><div style="font-weight:800;font-size:28px">Meera J.</div><div style="font-size:22px;margin-top:4px">Celebrity gifting, Delhi</div><div class="mono" style="font-size:16px;margin-top:14px;color:var(--gray)">&#8377;5L / Instagram</div></div></div><div><div class="mono" style="font-size:19px;font-weight:700;display:flex;justify-content:space-between;border-bottom:3px solid var(--ink);padding-bottom:12px"><span>Active</span><span>2</span></div><div style="background:#fff;border:3px solid var(--ink);padding:18px 20px;margin-top:18px"><div style="font-weight:800;font-size:28px">Riya K.</div><div style="font-size:22px;margin-top:4px">Influencer marketing</div><div class="mono" style="font-size:16px;margin-top:14px;background:var(--ink);color:#fff;padding:8px 10px;display:inline-block">Call tomorrow 3 PM</div></div><div style="background:#fff;border:3px solid var(--ink);padding:18px 20px;margin-top:18px"><div style="font-weight:800;font-size:28px">Arjun N.</div><div style="font-size:22px;margin-top:4px">Events and launches</div><div class="mono" style="font-size:16px;margin-top:14px;color:var(--gray)">&#8377;15L / Instagram</div></div></div><div><div class="mono" style="font-size:19px;font-weight:700;display:flex;justify-content:space-between;border-bottom:3px solid var(--ink);padding-bottom:12px"><span>Nurture</span><span>1</span></div><div style="background:#fff;border:3px solid var(--ink);padding:18px 20px;margin-top:18px"><div style="font-weight:800;font-size:28px">Sana S.</div><div style="font-size:22px;margin-top:4px">Creator enquiry, Pune</div><div class="mono" style="font-size:16px;margin-top:14px;color:var(--gray)">Agent follows up</div></div></div>
+  <div class="hd"><b>Aperture</b><span>Part 1: Inbox</span><span>aperturecm.in</span></div>
+  <div class="ey">Part 1 / Inbox</div>
+  <h2 style="font-size:92px">Every enquiry<br><span class="hl">in one list.</span></h2>
+  <p class="sub" style="margin-top:20px">No more hunting through chats.</p>
+  <div class="box" style="margin-top:34px;padding:0;overflow:hidden">
+    <div class="win"><span class="dot"></span><span class="dot o"></span><span class="dot r"></span><span style="margin-left:14px">Your list / sample data</span></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:22px 30px 30px">
+      <div><div class="mono" style="font-size:19px;font-weight:700;display:flex;justify-content:space-between;border-bottom:3px solid var(--ink);padding-bottom:12px"><span>Needs you</span><span class="or">1</span></div><div style="background:var(--or);border:3px solid var(--ink);padding:18px 20px;margin-top:18px"><div style="font-weight:800;font-size:28px">Kabir M.</div><div style="font-size:22px;margin-top:4px">Wants a person, Mumbai</div><div class="mono" style="font-size:16px;margin-top:14px;border-top:2px solid var(--ink);padding-top:10px">Asked to talk to you</div></div></div><div><div class="mono" style="font-size:19px;font-weight:700;display:flex;justify-content:space-between;border-bottom:3px solid var(--ink);padding-bottom:12px"><span>New</span><span>2</span></div><div style="background:#fff;border:3px solid var(--ink);padding:18px 20px;margin-top:18px"><div style="font-weight:800;font-size:28px">Dev M.</div><div style="font-size:22px;margin-top:4px">Campaign, Mumbai</div><div class="mono" style="font-size:16px;margin-top:14px;color:var(--gray)">&#8377;3L / Instagram</div></div></div><div><div class="mono" style="font-size:19px;font-weight:700;display:flex;justify-content:space-between;border-bottom:3px solid var(--ink);padding-bottom:12px"><span>In talks</span><span>1</span></div><div style="background:#fff;border:3px solid var(--ink);padding:18px 20px;margin-top:18px"><div style="font-weight:800;font-size:28px">Riya K.</div><div style="font-size:22px;margin-top:4px">Marketing help</div><div class="mono" style="font-size:16px;margin-top:14px;color:var(--gray)">Call tomorrow 3 PM</div></div></div><div><div class="mono" style="font-size:19px;font-weight:700;display:flex;justify-content:space-between;border-bottom:3px solid var(--ink);padding-bottom:12px"><span>Later</span><span>1</span></div><div style="background:#fff;border:3px solid var(--ink);padding:18px 20px;margin-top:18px"><div style="font-weight:800;font-size:28px">Sana S.</div><div style="font-size:22px;margin-top:4px">Just exploring, Pune</div><div class="mono" style="font-size:16px;margin-top:14px;color:var(--gray)">Agent follows up</div></div></div>
     </div>
   </div>
-  <div class="ft"><span>Aperture &nbsp;/&nbsp; Sample data</span><span>05</span></div>
-</section>
-
-<section class="s">
-  <div class="hd"><b>Aperture</b><span>Smart sorting and safety</span><span>aperturecm.in</span></div>
-  <div class="split" style="justify-content:space-between">
-    <div style="width:900px">
-      <div class="ey">Smart sorting / brand safety</div>
-      <h2 style="font-size:76px">The right reply,<br><span class="hl">checked first.</span></h2>
-      <p class="sub" style="margin-bottom:40px">A second AI proofreads before anything sends.</p>
-      <div class="li"><div class="ico"><svg><use href="#i-chat"/></svg></div><div><h3>Qualifies brands</h3><p>Budget, city, timeline, then a call</p></div></div><div class="li"><div class="ico"><svg><use href="#i-doc"/></svg></div><div><h3>Tags creators</h3><p>Paid, barter or undecided</p></div></div><div class="li"><div class="ico"><svg><use href="#i-branch"/></svg></div><div><h3>Routes press and clients</h3><p>To your PR team or account manager</p></div></div><div class="li"><div class="ico"><svg><use href="#i-lock"/></svg></div><div><h3>Never quotes fees</h3><p>Your team does that</p></div></div>
-    </div>
-    <div class="box" style="width:730px;padding:36px 40px;margin-top:10px">
-      <div class="mono" style="font-size:19px;color:var(--gray)">Reply check / sample</div>
-      <div style="margin-top:22px;border-top:3px solid var(--ink)">
-      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ccc;padding:20px 0"><span style="font-size:28px">Matches the chat history</span><span class="mono" style="font-weight:700;font-size:22px">Pass</span></div><div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ccc;padding:20px 0"><span style="font-size:28px">Your team not already replying</span><span class="mono" style="font-weight:700;font-size:22px">Pass</span></div><div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ccc;padding:20px 0"><span style="font-size:28px">Sounds like your agency</span><span class="mono" style="font-weight:700;font-size:22px">Pass</span></div><div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--ink);padding:20px 0"><span style="font-size:28px">Draft quoted a fee</span><span class="mono" style="font-weight:700;font-size:22px;background:var(--or);padding:6px 14px">Rewritten</span></div>
-      </div>
-      <div style="border:3px dashed var(--ink);padding:20px 24px;margin-top:28px;font-size:25px;line-height:1.35">Fee removed. Sent: "Our team will confirm pricing on the call."</div>
-      <div class="mono" style="font-size:17px;margin-top:22px;color:var(--gray)">Only approved facts. Human on request.</div>
-    </div>
-  </div>
-  <div class="ft"><span>Aperture</span><span>06</span></div>
-</section>
-
-<section class="s">
-  <div class="hd"><b>Aperture</b><span>Enquiry counts</span><span>aperturecm.in</span></div>
-  <div class="split" style="justify-content:space-between">
-    <div style="width:820px">
-      <div class="ey">Enquiry counts</div>
-      <h2 style="font-size:92px">Know your<br><span class="hl">numbers.</span></h2>
-      <p class="sub" style="margin-bottom:44px">Counted automatically.</p>
-      <div class="li"><div class="ico"><svg><use href="#i-layers"/></svg></div><div><h3>By channel</h3><p>Instagram, WhatsApp, website</p></div></div><div class="li"><div class="ico"><svg><use href="#i-users"/></svg></div><div><h3>By type</h3><p>Brand, creator, press</p></div></div><div class="li"><div class="ico"><svg><use href="#i-bars"/></svg></div><div><h3>By day, week, month</h3><p>See what is working</p></div></div>
-    </div>
-    <div class="box" style="width:860px;padding:0">
-      <div class="win"><span class="dot"></span><span class="dot o"></span><span class="dot r"></span><span style="margin-left:14px">Enquiries / this week / sample</span></div>
-      <div style="padding:28px 34px">
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
-          <div style="border:3px solid var(--ink);padding:18px 22px"><div class="big" style="font-size:60px">64</div><div class="mono" style="font-size:16px;margin-top:6px">Enquiries</div></div>
-          <div style="border:3px solid var(--ink);padding:18px 22px;background:var(--or)"><div class="big" style="font-size:60px">38</div><div class="mono" style="font-size:16px;margin-top:6px">Brands</div></div>
-          <div style="border:3px solid var(--ink);padding:18px 22px"><div class="big" style="font-size:60px">9</div><div class="mono" style="font-size:16px;margin-top:6px">Calls booked</div></div>
-        </div>
-        <div class="mono" style="font-size:17px;margin:28px 0 14px;color:var(--gray)">By channel</div>
-        <div style="display:flex;align-items:center;gap:18px;margin-bottom:14px"><span style="width:150px;font-size:24px">Instagram</span><div style="flex:1;height:30px;border:3px solid var(--ink)"><div style="width:72%;height:100%;background:var(--ink)"></div></div><b style="font-size:24px;width:44px">46</b></div><div style="display:flex;align-items:center;gap:18px;margin-bottom:14px"><span style="width:150px;font-size:24px">WhatsApp</span><div style="flex:1;height:30px;border:3px solid var(--ink)"><div style="width:42%;height:100%;background:var(--ink)"></div></div><b style="font-size:24px;width:44px">27</b></div><div style="display:flex;align-items:center;gap:18px;margin-bottom:14px"><span style="width:150px;font-size:24px">Website</span><div style="flex:1;height:30px;border:3px solid var(--ink)"><div style="width:28%;height:100%;background:var(--or)"></div></div><b style="font-size:24px;width:44px">18</b></div>
-        <div class="mono" style="font-size:17px;margin:26px 0 14px;color:var(--gray)">By type</div>
-        <div style="display:flex;align-items:center;gap:18px;margin-bottom:14px"><span style="width:150px;font-size:24px">Brand</span><div style="flex:1;height:30px;border:3px solid var(--ink)"><div style="width:60%;height:100%;background:var(--or)"></div></div><b style="font-size:24px;width:44px">38</b></div><div style="display:flex;align-items:center;gap:18px;margin-bottom:14px"><span style="width:150px;font-size:24px">Creator</span><div style="flex:1;height:30px;border:3px solid var(--ink)"><div style="width:33%;height:100%;background:var(--ink)"></div></div><b style="font-size:24px;width:44px">21</b></div>
-      </div>
-    </div>
-  </div>
-  <div class="ft"><span>Aperture &nbsp;/&nbsp; Numbers shown are sample data</span><span>07</span></div>
+  <div class="ft"><span>Aperture &nbsp;/&nbsp; Sample data</span><span>04</span></div>
 </section>
 
 <section class="s dark">
-  <div class="hd"><b>Aperture</b><span>Micro-operation agent</span><span>aperturecm.in</span></div>
+  <div class="hd"><b>Aperture</b><span>Part 2: Team</span><span>aperturecm.in</span></div>
   <div class="split" style="justify-content:space-between">
     <div style="width:860px">
-      <div class="ey">Micro-operation agent / the founder's PA</div>
-      <h2 style="font-size:92px">Tasks that<br><span class="or">chase</span><br>themselves.</h2>
-      <p class="sub" style="margin-bottom:40px">Lives on Telegram. Pilot with a live agency.</p>
-      <div class="li"><div class="ico"><svg><use href="#i-send"/></svg></div><div><h3>Assigns by working hours</h3><p>Every task, every person</p></div></div><div class="li"><div class="ico"><svg><use href="#i-clock"/></svg></div><div><h3>Follows up and flags late</h3><p>Alert within a minute</p></div></div><div class="li"><div class="ico"><svg><use href="#i-check"/></svg></div><div><h3>Closes on proof</h3><p>Photo, PDF or link</p></div></div>
+      <div class="ey">Part 2 / Team</div>
+      <h2 style="font-size:92px">A helper that<br><span class="or">chases tasks</span><br>for you.</h2>
+      <p class="sub" style="margin-bottom:40px">Lives on Telegram. Being tried with a live agency.</p>
+      <div class="li"><div class="ico"><svg><use href="#i-send"/></svg></div><div><h3>Gives out the work</h3><p>To the right person, at the right time</p></div></div><div class="li"><div class="ico"><svg><use href="#i-clock"/></svg></div><div><h3>Reminds and warns</h3><p>You hear within a minute if something is late</p></div></div><div class="li"><div class="ico"><svg><use href="#i-check"/></svg></div><div><h3>Marks it done</h3><p>Only after the team sends proof</p></div></div>
     </div>
     <div class="box" style="width:780px;height:780px;padding:0;position:relative">
       <div style="padding:24px 30px 0;display:flex;justify-content:space-between" class="mono"><span style="font-size:19px;color:#8a857c">Telegram / sample</span><span style="font-size:19px;color:var(--or)">&#9679; Live</span></div>
       <div style="padding:24px 30px">
-        <div style="background:#F2EEE7;color:var(--ink);width:580px;padding:20px 24px;margin-left:auto"><div class="mono" style="font-size:16px;color:#6b665e">Founder</div><div style="font-size:27px;margin-top:6px;line-height:1.3">Get the campaign deck to the client by 6 PM.</div></div>
-        <div style="border:3px solid var(--or);background:#2a1c12;width:600px;padding:20px 24px;margin-top:20px"><div class="mono" style="font-size:16px;color:var(--or)">Assistant</div><div style="font-size:27px;margin-top:6px;line-height:1.3">Assigned to the design team. I will check in at 3 PM.</div></div>
-        <div style="background:#F2EEE7;color:var(--ink);width:480px;padding:20px 24px;margin:20px 0 0 auto"><div class="mono" style="font-size:16px;color:#6b665e">Team member</div><div style="font-size:27px;margin-top:6px">Deck done. Sent the PDF.</div></div>
+        <div style="background:#F2EEE7;color:var(--ink);width:580px;padding:20px 24px;margin-left:auto"><div class="mono" style="font-size:16px;color:#6b665e">You</div><div style="font-size:27px;margin-top:6px;line-height:1.3">Send the deck to the client by 6 PM.</div></div>
+        <div style="border:3px solid var(--or);background:#2a1c12;width:600px;padding:20px 24px;margin-top:20px"><div class="mono" style="font-size:16px;color:var(--or)">Helper</div><div style="font-size:27px;margin-top:6px;line-height:1.3">Given to the design team. I will check in at 3 PM.</div></div>
+        <div style="background:#F2EEE7;color:var(--ink);width:480px;padding:20px 24px;margin:20px 0 0 auto"><div class="mono" style="font-size:16px;color:#6b665e">Team member</div><div style="font-size:27px;margin-top:6px">Done. Sent the PDF.</div></div>
       </div>
-      <div style="position:absolute;left:30px;right:30px;bottom:74px;background:var(--or);color:var(--ink);padding:20px 24px;display:flex;gap:16px;align-items:center;font-weight:700;font-size:28px"><div class="ico" style="width:46px;height:46px;border-color:var(--ink);color:var(--ink)"><svg style="width:26px;height:26px"><use href="#i-check"/></svg></div>Task closed / proof verified</div>
+      <div style="position:absolute;left:30px;right:30px;bottom:74px;background:var(--or);color:var(--ink);padding:20px 24px;display:flex;gap:16px;align-items:center;font-weight:700;font-size:28px"><div class="ico" style="width:46px;height:46px;border-color:var(--ink);color:var(--ink)"><svg style="width:26px;height:26px"><use href="#i-check"/></svg></div>Task closed / proof checked</div>
       <div class="mono" style="position:absolute;left:30px;bottom:26px;font-size:17px;color:#8a857c">Sample conversation</div>
     </div>
   </div>
-  <div class="ft"><span>Aperture</span><span>08</span></div>
+  <div class="ft"><span>Aperture</span><span>05</span></div>
 </section>
 
 <section class="s">
-  <div class="hd"><b>Aperture</b><span>AI voice calling</span><span>aperturecm.in</span></div>
+  <div class="hd"><b>Aperture</b><span>Part 3: Calls</span><span>aperturecm.in</span></div>
   <div class="split" style="justify-content:space-between">
     <div style="width:900px">
-      <div class="ey">AI voice calling</div>
-      <h2 style="font-size:78px">AI that calls in<br><span class="hl">your customer's<br>language.</span></h2>
-      <p class="sub" style="margin-bottom:34px;font-size:30px">Inbound and outbound, on the same platform as your team.</p>
-      <div class="li" style="margin-bottom:18px;gap:22px"><div class="ico" style="width:56px;height:56px"><svg><use href="#i-globe"/></svg></div><div><h3 style="font-size:30px">Full calls, regional languages</h3><p style="font-size:23px">No separate team per language</p></div></div><div class="li" style="margin-bottom:18px;gap:22px"><div class="ico" style="width:56px;height:56px"><svg><use href="#i-shield"/></svg></div><div><h3 style="font-size:30px">Only verified facts</h3><p style="font-size:23px">Dates, amounts and names come from your CRM</p></div></div><div class="li" style="margin-bottom:18px;gap:22px"><div class="ico" style="width:56px;height:56px"><svg><use href="#i-phone"/></svg></div><div><h3 style="font-size:30px">Human handoff when unsure</h3><p style="font-size:23px">Hard usage limits per call and per day</p></div></div>
+      <div class="ey">Part 3 / Calls</div>
+      <h2 style="font-size:88px">An AI that<br><span class="hl">makes the calls.</span></h2>
+      <p class="sub" style="margin-bottom:40px">Hindi, English, Marathi, Bengali and more.</p>
+      <div class="li"><div class="ico"><svg><use href="#i-phone"/></svg></div><div><h3>Talks in your customer's language</h3><p>Hands over to a person if it is unsure</p></div></div><div class="li"><div class="ico"><svg><use href="#i-bars"/></svg></div><div><h3>Scores every call</h3><p>Not just a small sample</p></div></div><div class="li"><div class="ico"><svg><use href="#i-users"/></svg></div><div><h3>Shows you the whole floor</h3><p>Live view, staff bonuses and a login for your clients</p></div></div>
     </div>
-    <div class="box" style="width:720px;padding:0;margin-top:10px;background:var(--ink);color:#F2EEE7;border-color:#F2EEE7;box-shadow:10px 10px 0 var(--or)">
-      <div style="padding:24px 30px 0;display:flex;justify-content:space-between" class="mono"><span style="font-size:19px;color:#8a857c">Live call / sample</span><span style="font-size:19px;color:var(--or)">&#9679; Rec</span></div>
-      <div style="padding:22px 30px 0">
-        <div style="border:3px solid var(--or);background:#2a1c12;width:600px;padding:18px 24px"><div class="mono" style="font-size:16px;color:var(--or)">AI agent</div><div class="dev" style="font-size:27px;margin-top:8px;line-height:1.45">आपका भुगतान 15 तारीख को बाकी है। क्या मैं आज रिमाइंडर भेज दूँ?</div></div>
-        <div style="background:#F2EEE7;color:var(--ink);width:520px;padding:18px 24px;margin:18px 0 0 auto"><div class="mono" style="font-size:16px;color:#6b665e">Customer</div><div class="dev" style="font-size:27px;margin-top:8px;line-height:1.45">होय, उद्या संध्याकाळी करतो.</div></div>
-      </div>
-      <div style="margin:26px 30px 0;background:var(--or);color:var(--ink);padding:18px 24px;display:flex;gap:16px;align-items:center;font-weight:700;font-size:27px"><div class="ico" style="width:46px;height:46px;border-color:var(--ink);color:var(--ink)"><svg style="width:26px;height:26px"><use href="#i-phone"/></svg></div>Transferring to Priya, human agent</div>
-      <div class="mono" style="padding:30px 30px 28px;font-size:17px;color:#8a857c">Confidence check passed / CRM verified</div>
-    </div>
-  </div>
-  <div style="position:absolute;left:104px;bottom:96px;display:flex;gap:28px;align-items:center">
-    <div style="border:3px solid var(--ink);background:var(--or);box-shadow:8px 8px 0 var(--ink);padding:18px 30px;font-size:38px;font-weight:700;min-width:210px;text-align:center" class="dev">हिन्दी</div><div style="border:3px solid var(--ink);background:var(--or);box-shadow:8px 8px 0 var(--ink);padding:18px 30px;font-size:38px;font-weight:700;min-width:210px;text-align:center" class="">English</div><div style="border:3px solid var(--ink);background:var(--card);box-shadow:8px 8px 0 var(--ink);padding:18px 30px;font-size:38px;font-weight:700;min-width:210px;text-align:center" class="dev">मराठी</div><div style="border:3px solid var(--ink);background:var(--card);box-shadow:8px 8px 0 var(--ink);padding:18px 30px;font-size:38px;font-weight:700;min-width:210px;text-align:center" class="ben">বাংলা</div><div style="border:3px solid var(--ink);background:var(--ink);color:#F2EEE7;padding:18px 30px;font-size:38px;font-weight:700;box-shadow:8px 8px 0 var(--or);font-family:'Archivo Black'">+ MORE</div><span class="mono" style="font-size:19px;color:var(--gray);margin-left:6px">Regional, on request</span>
-  </div>
-  <div class="ft"><span>Aperture</span><span>09</span></div>
-</section>
-
-<section class="s">
-  <div class="hd"><b>Aperture</b><span>Quality</span><span>aperturecm.in</span></div>
-  <div class="split" style="justify-content:space-between">
-    <div style="width:880px">
-      <div class="ey">Call quality</div>
-      <h2 style="font-size:92px">Every call scored.<br><span class="hl">Not a sample.</span></h2>
-      <p class="sub" style="margin-bottom:40px">Automatic scoring on every single call. No blind spots.</p>
-      <div class="li"><div class="ico"><svg><use href="#i-bolt"/></svg></div><div><h3>Auto-scored in minutes</h3><p>Results land after the customer hangs up</p></div></div><div class="li"><div class="ico"><svg><use href="#i-alert"/></svg></div><div><h3>Fatal findings need confirmation</h3><p>A supervisor confirms, the original score is kept</p></div></div><div class="li"><div class="ico"><svg><use href="#i-clock"/></svg></div><div><h3>Long calls get explanations</h3><p>Agents give the reason, supervisors approve</p></div></div><div class="li"><div class="ico"><svg><use href="#i-award"/></svg></div><div><h3>Exceptions feed coaching</h3><p>And they feed the rewards system</p></div></div>
-    </div>
-    <div class="box" style="width:780px;padding:36px 40px;margin-top:10px">
-      <div class="mono" style="font-size:19px;color:var(--gray)">Call #48213 / sample</div>
+    <div class="box" style="width:740px;padding:36px 40px;margin-top:10px">
+      <div class="mono" style="font-size:19px;color:var(--gray)">Call score / sample</div>
       <div style="display:flex;align-items:center;gap:36px;margin:24px 0 26px">
         <div style="position:relative;width:190px;height:190px;flex:none">
           <svg viewBox="0 0 140 140" style="width:190px;height:190px"><circle cx="70" cy="70" r="58" fill="none" stroke="#F26A21" stroke-width="13"/><circle cx="70" cy="70" r="58" fill="none" stroke="#0B0B0A" stroke-width="13" stroke-dasharray="335 365" transform="rotate(-90 70 70)"/></svg>
           <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><div class="big" style="font-size:66px">92</div><div class="mono" style="font-size:14px;color:var(--gray)">Score</div></div>
         </div>
-        <div style="font-size:26px;line-height:1.4;color:var(--gray)">Scored automatically.<br>One fatal finding flagged.</div>
+        <div style="font-size:26px;line-height:1.4;color:var(--gray)">Scored a few minutes<br>after the call ended.</div>
       </div>
       <div style="border-top:3px solid var(--ink)">
-      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ccc;padding:17px 0"><span style="font-size:26px">Greeting and verification</span><span class="mono" style="font-weight:700;font-size:20px">Pass</span></div><div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ccc;padding:17px 0"><span style="font-size:26px">Compliance disclosure</span><span class="mono" style="font-weight:700;font-size:20px">Pass</span></div><div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ccc;padding:17px 0"><span style="font-size:26px">Resolution offered</span><span class="mono" style="font-weight:700;font-size:20px">Pass</span></div><div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--ink);padding:17px 0"><span style="font-size:26px">Fatal: refund amount misstated</span><span class="mono" style="font-weight:700;font-size:20px;background:var(--or);padding:6px 12px">Flagged</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ccc;padding:17px 0"><span style="font-size:26px">Greeted the customer</span><span class="mono" style="font-weight:700;font-size:20px">Pass</span></div><div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ccc;padding:17px 0"><span style="font-size:26px">Explained the offer</span><span class="mono" style="font-weight:700;font-size:20px">Pass</span></div><div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--ink);padding:17px 0"><span style="font-size:26px">Answered the question</span><span class="mono" style="font-weight:700;font-size:20px">Pass</span></div>
       </div>
-      <div style="border:3px dashed var(--ink);padding:18px 22px;margin-top:26px;font-size:23px;line-height:1.35">Supervisor confirmed. Score preserved at 92, coaching note attached.</div>
     </div>
   </div>
-  <div class="ft"><span>Aperture &nbsp;/&nbsp; Sample data</span><span>10</span></div>
-</section>
-
-<section class="s">
-  <div class="hd"><b>Aperture</b><span>Management</span><span>aperturecm.in</span></div>
-  <div class="split" style="justify-content:space-between">
-    <div style="width:880px">
-      <div class="ey">Management</div>
-      <h2 style="font-size:76px">Your whole floor<br><span class="hl">on one screen.</span></h2>
-      <p class="sub" style="margin-bottom:40px">Live visibility. No spreadsheets required.</p>
-      <div class="li"><div class="ico"><svg><use href="#i-pulse"/></svg></div><div><h3>Live agent states</h3><p>Occupancy and calls per logged hour</p></div></div><div class="li"><div class="ico"><svg><use href="#i-bars"/></svg></div><div><h3>Leaderboard with trends</h3><p>Friendly competition that runs itself</p></div></div><div class="li"><div class="ico"><svg><use href="#i-flag"/></svg></div><div><h3>Exception desk</h3><p>Review, save and flag any call</p></div></div><div class="li"><div class="ico"><svg><use href="#i-msg"/></svg></div><div><h3>Coaching on real calls</h3><p>Notes attach to the call itself</p></div></div>
-    </div>
-    <div class="box" style="width:750px;padding:36px 40px;margin-top:10px">
-      <div style="display:flex;justify-content:space-between" class="mono"><span style="font-size:19px;color:var(--gray)">Floor overview / sample</span><span style="font-size:19px;color:var(--or)">&#9679; Live</span></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-top:24px">
-        <div style="border:3px solid var(--ink);padding:18px 22px"><div class="big" style="font-size:54px">86%</div><div class="mono" style="font-size:16px;margin-top:6px">Occupancy</div></div>
-        <div style="border:3px solid var(--ink);padding:18px 22px;background:var(--or)"><div class="big" style="font-size:54px">312</div><div class="mono" style="font-size:16px;margin-top:6px">Active calls</div></div>
-        <div style="border:3px solid var(--ink);padding:18px 22px"><div class="big" style="font-size:54px">4.7</div><div class="mono" style="font-size:16px;margin-top:6px">Calls / hr</div></div>
-      </div>
-      <div class="mono" style="font-size:17px;margin:34px 0 18px;color:var(--gray)">Leaderboard</div>
-      <div style="display:flex;align-items:center;gap:20px;margin-bottom:16px"><span style="width:200px;font-size:24px">Riya Sharma</span><div style="flex:1;height:30px;border:3px solid var(--ink)"><div style="width:94%;height:100%;background:var(--ink)"></div></div><b style="font-size:24px;width:44px">94</b></div><div style="display:flex;align-items:center;gap:20px;margin-bottom:16px"><span style="width:200px;font-size:24px">Amit Kulkarni</span><div style="flex:1;height:30px;border:3px solid var(--ink)"><div style="width:87%;height:100%;background:var(--ink)"></div></div><b style="font-size:24px;width:44px">87</b></div><div style="display:flex;align-items:center;gap:20px;margin-bottom:16px"><span style="width:200px;font-size:24px">Priya Nair</span><div style="flex:1;height:30px;border:3px solid var(--ink)"><div style="width:79%;height:100%;background:var(--ink)"></div></div><b style="font-size:24px;width:44px">79</b></div>
-    </div>
-  </div>
-  <div class="ft"><span>Aperture &nbsp;/&nbsp; Sample data</span><span>11</span></div>
+  <div class="ft"><span>Aperture &nbsp;/&nbsp; Sample data</span><span>06</span></div>
 </section>
 
 <section class="s dark">
-  <div class="hd"><b>Aperture</b><span>Performance pay</span><span>aperturecm.in</span></div>
-  <div class="split" style="justify-content:space-between">
-    <div style="width:860px">
-      <div class="ey">Performance pay</div>
-      <h2 style="font-size:92px">Bonuses that<br><span class="or">calculate<br>themselves.</span></h2>
-      <p class="sub" style="margin-bottom:34px;font-size:30px">A transparent, audit-proof engine that turns performance into pay.</p>
-      <div class="li" style="margin-bottom:18px;gap:22px"><div class="ico" style="width:56px;height:56px"><svg><use href="#i-sliders"/></svg></div><div><h3 style="font-size:30px">You design the plan</h3><p style="font-size:23px">Change any split, anytime</p></div></div><div class="li" style="margin-bottom:18px;gap:22px"><div class="ico" style="width:56px;height:56px"><svg><use href="#i-branch"/></svg></div><div><h3 style="font-size:30px">Plans version safely</h3><p style="font-size:23px">Revise rules without touching past payouts</p></div></div><div class="li" style="margin-bottom:18px;gap:22px"><div class="ico" style="width:56px;height:56px"><svg><use href="#i-lock"/></svg></div><div><h3 style="font-size:30px">Approvals become ledger entries</h3><p style="font-size:23px">Permanent and audit-proof</p></div></div><div class="li" style="margin-bottom:18px;gap:22px"><div class="ico" style="width:56px;height:56px"><svg><use href="#i-card"/></svg></div><div><h3 style="font-size:30px">Flows straight into payroll</h3><p style="font-size:23px">Agents watch their bonus grow live</p></div></div>
-    </div>
-    <div class="box" style="width:780px;padding:36px 40px;margin-top:10px">
-      <div class="mono" style="font-size:19px;color:var(--or);margin-bottom:26px">Reward plan / sample</div>
-      <div style="margin-bottom:22px"><div style="display:flex;justify-content:space-between;font-size:26px"><span>Quality</span><span class="or mono" style="font-weight:700">35%</span></div><div style="height:20px;border:3px solid #F2EEE7;margin-top:8px"><div style="width:100%;height:100%;background:var(--or)"></div></div></div><div style="margin-bottom:22px"><div style="display:flex;justify-content:space-between;font-size:26px"><span>Productivity</span><span class="or mono" style="font-weight:700">30%</span></div><div style="height:20px;border:3px solid #F2EEE7;margin-top:8px"><div style="width:86%;height:100%;background:var(--or)"></div></div></div><div style="margin-bottom:22px"><div style="display:flex;justify-content:space-between;font-size:26px"><span>Outcomes</span><span class="or mono" style="font-weight:700">25%</span></div><div style="height:20px;border:3px solid #F2EEE7;margin-top:8px"><div style="width:71%;height:100%;background:var(--or)"></div></div></div><div style="margin-bottom:22px"><div style="display:flex;justify-content:space-between;font-size:26px"><span>Occupancy</span><span class="or mono" style="font-weight:700">10%</span></div><div style="height:20px;border:3px solid #F2EEE7;margin-top:8px"><div style="width:29%;height:100%;background:var(--or)"></div></div></div>
-      <div style="background:var(--or);color:var(--ink);padding:26px 30px;margin-top:30px"><div class="mono" style="font-size:17px">This month, one agent</div><div class="big" style="font-size:76px;margin:8px 0">&#8377;3,420</div><div class="mono" style="font-size:17px">&#9650; +18% vs last month</div></div>
-    </div>
+  <div class="hd"><b>Aperture</b><span>Results</span><span>aperturecm.in</span></div>
+  <div class="ey">Real results</div>
+  <h2 style="color:#F2EEE7">Already working<br>for <span class="or">3 businesses.</span></h2>
+  <div class="cols" style="grid-template-columns:repeat(3,1fr);gap:40px;margin-top:56px">
+    <div class="box" style="padding:38px 38px 34px"><div class="mono" style="font-size:19px;color:var(--or);font-weight:700">Glad U Came</div><div style="font-size:24px;color:#bdb7ad;margin-top:6px">PR agency, Mumbai</div><div class="big" style="font-size:96px;margin:26px 0 10px;color:#F2EEE7">11 sec</div><div style="font-size:28px;line-height:1.3;font-weight:700">Time to reply to a message</div><div style="font-size:24px;line-height:1.4;color:#bdb7ad;margin-top:16px">97% of chats handled with no mistakes, up from 35% on day one.</div></div><div class="box" style="padding:38px 38px 34px"><div class="mono" style="font-size:19px;color:var(--or);font-weight:700">ROCCS&rsquo; Accounts Academy</div><div style="font-size:24px;color:#bdb7ad;margin-top:6px">Coaching, Gurgaon</div><div class="big" style="font-size:96px;margin:26px 0 10px;color:#F2EEE7">+64%</div><div style="font-size:28px;line-height:1.3;font-weight:700">More students, same team</div><div style="font-size:24px;line-height:1.4;color:#bdb7ad;margin-top:16px">About 85 messages answered every day.</div></div><div class="box" style="padding:38px 38px 34px"><div class="mono" style="font-size:19px;color:var(--or);font-weight:700">Tanu Locks</div><div style="font-size:24px;color:#bdb7ad;margin-top:6px">Lock maker, Kolkata</div><div class="big" style="font-size:96px;margin:26px 0 10px;color:#F2EEE7">+62%</div><div style="font-size:28px;line-height:1.3;font-weight:700">More sales closed</div><div style="font-size:24px;line-height:1.4;color:#bdb7ad;margin-top:16px">Calls answered went from about 20 to 50 a day.</div></div>
   </div>
-  <div class="ft"><span>Aperture &nbsp;/&nbsp; Sample data</span><span>12</span></div>
+  <div class="mono" style="position:absolute;left:104px;bottom:92px;font-size:18px;color:#8a857c">Glad U Came: live account, 30 Oct to 4 Nov 2026. Tanu Locks earlier figures are worked out from the 2.5x call volume.</div>
+  <div class="ft"><span>Aperture</span><span>07</span></div>
 </section>
 
 <section class="s">
-  <div class="hd"><b>Aperture</b><span>Client transparency</span><span>aperturecm.in</span></div>
-  <div class="split" style="justify-content:space-between">
-    <div style="width:820px">
-      <div class="ey">Client transparency</div>
-      <h2 style="font-size:88px">Your clients log in.<br><span class="hl">Reports send<br>themselves.</span></h2>
-      <p class="sub" style="margin-bottom:34px;font-size:30px">A secure window into performance, for every client.</p>
-      <div class="li" style="margin-bottom:18px;gap:22px"><div class="ico" style="width:56px;height:56px"><svg><use href="#i-eye"/></svg></div><div><h3 style="font-size:30px">Each client sees only their own</h3><p style="font-size:23px">Campaigns, volumes and outcomes, live</p></div></div><div class="li" style="margin-bottom:18px;gap:22px"><div class="ico" style="width:56px;height:56px"><svg><use href="#i-download"/></svg></div><div><h3 style="font-size:30px">Export-ready</h3><p style="font-size:23px">Download whenever they want</p></div></div><div class="li" style="margin-bottom:18px;gap:22px"><div class="ico" style="width:56px;height:56px"><svg><use href="#i-shield"/></svg></div><div><h3 style="font-size:30px">Internal data stays internal</h3><p style="font-size:23px">Blocked at the server, not just hidden</p></div></div>
-    </div>
-    <div class="box" style="width:900px;padding:0;margin-top:10px">
-      <div class="win"><span class="dot"></span><span class="dot o"></span><span class="dot r"></span><span style="margin-left:14px">Client portal / nova-retail / sample</span></div>
-      <div style="padding:28px 36px">
-        <div class="mono" style="font-size:17px;color:var(--gray)">Campaign overview</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:18px">
-          <div style="border:3px solid var(--ink);padding:18px 24px"><div class="big" style="font-size:60px">18,204</div><div class="mono" style="font-size:16px;margin-top:8px">Calls this month</div></div>
-          <div style="border:3px solid var(--ink);padding:18px 24px;background:var(--or)"><div class="big" style="font-size:60px">91%</div><div class="mono" style="font-size:16px;margin-top:8px">Avg. quality</div></div>
-        </div>
-        <div style="display:grid;grid-template-columns:1.4fr 1fr 1.2fr;margin-top:30px;border-bottom:3px solid var(--ink);padding-bottom:12px" class="mono"><span style="font-size:16px;color:var(--gray)">Campaign</span><span style="font-size:16px;color:var(--gray)">Volume</span><span style="font-size:16px;color:var(--gray)">Outcome</span></div>
-        <div style="display:grid;grid-template-columns:1.4fr 1fr 1.2fr;padding:15px 0;border-bottom:2px solid #ccc;font-size:24px"><span>Winback Q3</span><span>4,120</span><b>32% saved</b></div><div style="display:grid;grid-template-columns:1.4fr 1fr 1.2fr;padding:15px 0;border-bottom:2px solid #ccc;font-size:24px"><span>Renewal reminders</span><span>6,880</span><b>61% paid</b></div><div style="display:grid;grid-template-columns:1.4fr 1fr 1.2fr;padding:15px 0;font-size:24px"><span>New customer onboarding</span><span>7,204</span><b>4.6 / 5 CSAT</b></div>
-        <div class="mono" style="background:var(--ink);color:#F2EEE7;padding:20px 24px;margin-top:26px;font-size:20px">&darr; Export full report (.csv / .pdf)</div>
-      </div>
-    </div>
+  <div class="hd"><b>Aperture</b><span>Price</span><span>aperturecm.in</span></div>
+  <div class="ey">Price</div>
+  <h2 style="font-size:80px">Simple monthly<br><span class="hl">pricing.</span></h2>
+  <div class="cols" style="grid-template-columns:repeat(3,1fr);gap:36px;margin-top:34px;align-items:stretch">
+    <div class="box" style="padding:34px 38px 26px;"><div class="mono" style="font-size:20px;color:var(--or);font-weight:700">Inbox</div><div class="big" style="font-size:74px;margin:14px 0 4px">&#8377;22,222</div><div class="mono" style="font-size:17px;color:var(--gray);margin-bottom:20px">per month</div><div style="font-size:26px;padding:12px 0;border-top:2px solid #cfc9be;line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; Replies to every enquiry</div><div style="font-size:26px;padding:12px 0;border-top:2px solid #cfc9be;line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; All enquiries in one list</div><div style="font-size:26px;padding:12px 0;border-top:2px solid #cfc9be;line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; Daily count of enquiries</div></div><div class="box" style="padding:34px 38px 26px;"><div class="mono" style="font-size:20px;color:var(--or);font-weight:700">Inbox + Team</div><div class="big" style="font-size:74px;margin:14px 0 4px">&#8377;33,333</div><div class="mono" style="font-size:17px;color:var(--gray);margin-bottom:20px">per month</div><div style="font-size:26px;padding:12px 0;border-top:2px solid #cfc9be;line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; Everything in Inbox</div><div style="font-size:26px;padding:12px 0;border-top:2px solid #cfc9be;line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; Task helper on Telegram</div><div style="font-size:26px;padding:12px 0;border-top:2px solid #cfc9be;line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; Up to 10 people</div></div><div class="box" style="padding:34px 38px 26px;background:var(--ink);color:#F2EEE7;box-shadow:10px 10px 0 var(--or);"><div class="mono" style="font-size:20px;color:var(--or);font-weight:700">All three</div><div class="big" style="font-size:74px;margin:14px 0 4px">&#8377;44,444</div><div class="mono" style="font-size:17px;color:#bdb7ad;margin-bottom:20px">per month</div><div style="font-size:26px;padding:12px 0;border-top:2px solid #3a3731;line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; Everything above</div><div style="font-size:26px;padding:12px 0;border-top:2px solid #3a3731;line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; AI phone calls, 1,500 min</div><div style="font-size:26px;padding:12px 0;border-top:2px solid #3a3731;line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; Every call scored</div><div style="font-size:26px;padding:12px 0;border-top:2px solid #3a3731;line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; Manager screen, client login</div></div>
   </div>
-  <div class="ft"><span>Aperture &nbsp;/&nbsp; Sample data</span><span>13</span></div>
-</section>
-
-<section class="s dark"><div class="hd"><b>Aperture</b><span>Glad U Came</span><span>aperturecm.in</span></div>
-<div class="split" style="justify-content:space-between;align-items:flex-end">
-<div style="width:760px"><div class="ey">Proof / Glad U Came, Mumbai</div>
-<h2 style="font-size:100px">35%<br>to <span class="or">97%</span></h2>
-<p class="sub">Share of chats with no wrong, repeated or missed reply. We fixed what went wrong each day and sent a report every morning.</p><div style="display:flex;gap:26px;margin-top:40px"><div class="box" style="padding:18px 24px;flex:1"><div class="big" style="font-size:60px">11s</div><div class="lbl" style="font-size:16px;margin-top:10px">Median reply</div></div><div class="box" style="padding:18px 24px;flex:1"><div class="big" style="font-size:60px">123</div><div class="lbl" style="font-size:16px;margin-top:10px">Chats, six days</div></div><div class="box" style="padding:18px 24px;flex:1"><div class="big" style="font-size:60px">0</div><div class="lbl" style="font-size:16px;margin-top:10px">Failed sends</div></div></div></div>
-<div style="display:flex;gap:30px;align-items:flex-end;height:640px;padding:60px 20px 6px;border-bottom:3px solid #F2EEE7;margin-bottom:30px;width:860px;justify-content:space-between;padding-top:60px"><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:16px"><div class="bar" style="height:189px;"><span>35%</span></div><div class="mono" style="font-size:20px;color:#bdb7ad">Fri 30</div></div><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:16px"><div class="bar" style="height:291px;"><span>54%</span></div><div class="mono" style="font-size:20px;color:#bdb7ad">Sat 31</div></div><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:16px"><div class="bar" style="height:448px;"><span>83%</span></div><div class="mono" style="font-size:20px;color:#bdb7ad">Sun 1</div></div><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:16px"><div class="bar" style="height:437px;"><span>81%</span></div><div class="mono" style="font-size:20px;color:#bdb7ad">Mon 2</div></div><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:16px"><div class="bar" style="height:513px;"><span>95%</span></div><div class="mono" style="font-size:20px;color:#bdb7ad">Tue 3</div></div><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:16px"><div class="bar" style="height:523px;"><span>97%</span></div><div class="mono" style="font-size:20px;color:#bdb7ad">Wed 4</div></div></div></div>
-<div class="mono" style="position:absolute;left:104px;bottom:96px;font-size:19px;color:#8a857c">Live account, 30 Oct to 4 Nov 2026. Share of chats handled cleanly per day. Day 6 is partial. Failed sends counted since 1 Nov.</div><div class="ft"><span>Aperture</span><span>14</span></div></section>
-
-
-<section class="s"><div class="hd"><b>Aperture</b><span>ROCCS&rsquo; Accounts Academy</span><span>aperturecm.in</span></div>
-<div class="ey">Proof / ROCCS&rsquo; Accounts Academy / Gurgaon</div>
-<h2>The counsellors were<br><span class="hl">buried in messages.</span></h2>
-<p class="sub">Students wrote in all day and not everyone got a reply. We now answer about 85 messages a day, and the same team has 64% more students to work with.</p>
-<div class="box" style="margin-top:56px;padding:0;display:grid;grid-template-columns:repeat(4,1fr)">
-<div style="padding:44px;border-right:3px solid var(--ink);"><div class="big" style="font-size:104px">85</div><div class="lbl">Messages handled every day</div></div><div style="padding:44px;border-right:3px solid var(--ink);"><div class="big" style="font-size:104px">97.5%</div><div class="lbl">Accuracy on every reply</div></div><div style="padding:44px;border-right:3px solid var(--ink);"><div class="big" style="font-size:104px">~2,550</div><div class="lbl">Messages handled a month</div></div><div style="padding:44px;"><div class="big" style="font-size:104px">+64%</div><div class="lbl">More students served, same team</div></div></div>
-<div class="mono" style="margin-top:34px;font-size:21px;color:var(--gray)">Same team, 1.64x the students.</div>
-<div class="ft"><span>Aperture</span><span>15</span></div></section>
-
-
-<section class="s dark"><div class="hd"><b>Aperture</b><span>Tanu Locks</span><span>aperturecm.in</span></div>
-<div class="split" style="justify-content:space-between;gap:60px">
-<div style="width:700px"><div class="ey">Add-on / AI calling / Kolkata</div>
-<h2 style="font-size:92px">Every call<br>gets <span class="or">picked up.</span></h2>
-<p class="sub">We built it first for a lock maker in Kolkata, where inbound calls went unanswered whenever the team was busy.</p><div style="margin-top:34px"><div class="li" style="margin-bottom:18px;gap:22px"><div class="ico" style="width:56px;height:56px"><svg><use href="#i-phone"/></svg></div><div><h3 style="font-size:30px">Picks up every inbound call</h3><p style="font-size:23px">About 50 a day</p></div></div><div class="li" style="margin-bottom:18px;gap:22px"><div class="ico" style="width:56px;height:56px"><svg><use href="#i-doc"/></svg></div><div><h3 style="font-size:30px">Notes what the caller wants</h3><p style="font-size:23px">So nobody has to ask twice</p></div></div><div class="li" style="margin-bottom:18px;gap:22px"><div class="ico" style="width:56px;height:56px"><svg><use href="#i-users"/></svg></div><div><h3 style="font-size:30px">Passes it to the team</h3><p style="font-size:23px">Who follow up and close</p></div></div></div><p style="display:none"></p></div>
-<div class="box" style="width:1000px;padding:0;margin-top:10px">
-<div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;padding:24px 40px;border-bottom:3px solid #F2EEE7" class="mono"><span></span><span style="font-size:20px;color:#8a857c">Before</span><span style="font-size:20px;color:var(--or)">With Aperture</span></div>
-<div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;align-items:center;padding:30px 40px;border-bottom:3px solid #F2EEE7;"><div class="mono" style="font-size:22px;color:#bdb7ad;line-height:1.3">Calls handled a day</div><div class="big" style="font-size:72px;color:#8a857c">~20</div><div class="big" style="font-size:72px;color:var(--or)">50</div></div><div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;align-items:center;padding:30px 40px;border-bottom:3px solid #F2EEE7;"><div class="mono" style="font-size:22px;color:#bdb7ad;line-height:1.3">Clients spoken to</div><div class="big" style="font-size:72px;color:#8a857c">1x</div><div class="big" style="font-size:72px;color:var(--or)">1.95x</div></div><div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;align-items:center;padding:30px 40px;border-bottom:3px solid #F2EEE7;"><div class="mono" style="font-size:22px;color:#bdb7ad;line-height:1.3">Close rate</div><div class="big" style="font-size:50px;color:#8a857c">Avg</div><div class="big" style="font-size:72px;color:var(--or)">+35%</div></div><div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;align-items:center;padding:30px 40px;"><div class="mono" style="font-size:22px;color:#bdb7ad;line-height:1.3">Amount closed</div><div class="big" style="font-size:72px;color:#8a857c">1x</div><div class="big" style="font-size:72px;color:var(--or)">1.62x</div></div></div></div>
-<div class="mono" style="position:absolute;left:104px;bottom:92px;font-size:19px;color:#8a857c">Calls handled is 2.5x the earlier volume. Before-figures are derived from that ratio.</div>
-<div class="ft"><span>Aperture</span><span>16</span></div></section>
-
-
-<section class="s">
-  <div class="hd"><b>Aperture</b><span>Why it wins</span><span>aperturecm.in</span></div>
-  <div class="ey">Why it wins</div>
-  <h2>Old way vs.<br><span class="hl">Aperture.</span></h2>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:44px;margin-top:52px">
-    <div class="box" style="box-shadow:none;padding:34px 44px"><div class="mono" style="font-size:20px;color:var(--gray);margin-bottom:12px">Manual setup</div>
-      <div style="font-size:30px;padding:15px 0;border-top:2px solid #cfc9be;color:var(--gray)">&#10005;&nbsp; Replies when someone is free</div><div style="font-size:30px;padding:15px 0;border-top:2px solid #cfc9be;color:var(--gray)">&#10005;&nbsp; Leads lost in DMs</div><div style="font-size:30px;padding:15px 0;border-top:2px solid #cfc9be;color:var(--gray)">&#10005;&nbsp; Founder chases every task</div><div style="font-size:30px;padding:15px 0;border-top:2px solid #cfc9be;color:var(--gray)">&#10005;&nbsp; QA reviews a small sample</div><div style="font-size:30px;padding:15px 0;border-top:2px solid #cfc9be;color:var(--gray)">&#10005;&nbsp; Counts and reports by hand</div></div>
-    <div class="box" style="background:var(--ink);color:#F2EEE7;box-shadow:10px 10px 0 var(--or);padding:34px 44px"><div class="mono" style="font-size:20px;color:var(--or);margin-bottom:12px">Aperture</div>
-      <div style="font-size:30px;font-weight:700;padding:15px 0;border-top:2px solid #3a3731"><span class="or">&#10003;</span>&nbsp; Replies in 11 seconds</div><div style="font-size:30px;font-weight:700;padding:15px 0;border-top:2px solid #3a3731"><span class="or">&#10003;</span>&nbsp; Every lead in one CRM</div><div style="font-size:30px;font-weight:700;padding:15px 0;border-top:2px solid #3a3731"><span class="or">&#10003;</span>&nbsp; The agent chases for you</div><div style="font-size:30px;font-weight:700;padding:15px 0;border-top:2px solid #3a3731"><span class="or">&#10003;</span>&nbsp; Every call scored</div><div style="font-size:30px;font-weight:700;padding:15px 0;border-top:2px solid #3a3731"><span class="or">&#10003;</span>&nbsp; Counts and reports send themselves</div></div>
-  </div>
-  <div class="ft"><span>Aperture</span><span>17</span></div>
-</section>
-
-<section class="s dark">
-  <div class="hd"><b>Aperture</b><span>Pilot proposal</span><span>aperturecm.in</span></div>
-  <div class="ey">Pilot proposal</div>
-  <h2 style="color:#F2EEE7">Start small.<br>Prove it. <span class="hl">Scale.</span></h2>
-  <div class="cols" style="grid-template-columns:repeat(4,1fr);gap:32px;margin-top:60px">
-    <div class="box" style="padding:34px"><div class="mono" style="font-size:19px;color:var(--or);font-weight:700">01 / Week 1</div><div class="big" style="font-size:44px;margin:16px 0 14px">Tune.</div><p style="font-size:26px;color:#bdb7ad;line-height:1.3">Your rules and voice go in.</p></div><div class="box" style="padding:34px"><div class="mono" style="font-size:19px;color:var(--or);font-weight:700">02 / Week 2</div><div class="big" style="font-size:44px;margin:16px 0 14px">Go live.</div><p style="font-size:26px;color:#bdb7ad;line-height:1.3">On your Instagram.</p></div><div class="box" style="padding:34px"><div class="mono" style="font-size:19px;color:var(--or);font-weight:700">03 / Weeks 3-4</div><div class="big" style="font-size:44px;margin:16px 0 14px">Extend.</div><p style="font-size:26px;color:#bdb7ad;line-height:1.3">Micro-operation agent, more channels and calling.</p></div><div class="box" style="padding:34px"><div class="mono" style="font-size:19px;color:var(--or);font-weight:700">04 / Monthly</div><div class="big" style="font-size:44px;margin:16px 0 14px">Improve.</div><p style="font-size:26px;color:#bdb7ad;line-height:1.3">Review and fixes.</p></div>
-  </div>
-  <div style="display:flex;gap:20px;margin-top:56px;align-items:center"><span class="mono" style="font-size:19px;color:#8a857c;width:260px">Messaging pilot</span><div class="chip dk">Your Instagram</div><div class="chip dk">One questionnaire</div><div class="chip dk">Daily report</div><div class="chip dk">30 min call</div></div>
-  <div style="display:flex;gap:20px;margin-top:22px;align-items:center"><span class="mono" style="font-size:19px;color:#8a857c;width:260px">Calling pilot</span><div class="chip dk">5-6 named seats</div><div class="chip dk">1 regional language, live</div><div class="chip dk">Every call scored</div></div>
-  <style>.chip.dk{background:var(--dk);border-color:#F2EEE7;color:#F2EEE7}</style>
-  <div class="ft"><span>Aperture</span><span>18</span></div>
-</section>
-
-<section class="s">
-  <div class="hd"><b>Aperture</b><span>Pricing</span><span>aperturecm.in</span></div>
-  <div class="ey">Pricing</div>
-  <h2>What it costs<br><span class="hl">each month.</span></h2>
-  <div class="cols" style="grid-template-columns:repeat(3,1fr);gap:36px;margin-top:40px">
-    <div class="box" style="padding:30px 38px 22px;display:flex;flex-direction:column;"><div class="mono" style="font-size:20px;color:var(--or);font-weight:700">Inbox</div><div class="mono" style="font-size:17px;color:var(--gray);margin-top:6px;height:24px">&nbsp;</div><div class="big" style="font-size:72px;margin:6px 0 4px">&#8377;22,222</div><div class="mono" style="font-size:17px;color:var(--gray);margin-bottom:18px">per month</div><div style="font-size:25px;padding:9px 0;border-top:2px solid #cfc9be;color:var(--ink);line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; All inbound channels automated</div><div style="font-size:25px;padding:9px 0;border-top:2px solid #cfc9be;color:var(--ink);line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; Connected to one central CRM</div><div style="font-size:25px;padding:9px 0;border-top:2px solid #cfc9be;color:var(--ink);line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; No voice. Counts and daily report</div></div><div class="box" style="padding:30px 38px 22px;display:flex;flex-direction:column;"><div class="mono" style="font-size:20px;color:var(--or);font-weight:700">Inbox + Team</div><div class="mono" style="font-size:17px;color:var(--gray);margin-top:6px;height:24px">Everything in Inbox</div><div class="big" style="font-size:72px;margin:6px 0 4px">&#8377;33,333</div><div class="mono" style="font-size:17px;color:var(--gray);margin-bottom:18px">per month</div><div style="font-size:25px;padding:9px 0;border-top:2px solid #cfc9be;color:var(--ink);line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; Micro-operation agent setup</div><div style="font-size:25px;padding:9px 0;border-top:2px solid #cfc9be;color:var(--ink);line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; Tasks, follow-ups, late alerts</div><div style="font-size:25px;padding:9px 0;border-top:2px solid #cfc9be;color:var(--ink);line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; Closes on proof, up to 10 people</div></div><div class="box" style="padding:30px 38px 22px;display:flex;flex-direction:column;background:var(--ink);color:#F2EEE7;box-shadow:10px 10px 0 var(--or);"><div class="mono" style="font-size:20px;color:var(--or);font-weight:700">Full system</div><div class="mono" style="font-size:17px;color:#bdb7ad;margin-top:6px;height:24px">Everything in Team</div><div class="big" style="font-size:72px;margin:6px 0 4px">&#8377;44,444</div><div class="mono" style="font-size:17px;color:#bdb7ad;margin-bottom:18px">per month</div><div style="font-size:25px;padding:9px 0;border-top:2px solid #3a3731;color:#F2EEE7;line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; AI calling, 1,500 minutes included</div><div style="font-size:25px;padding:9px 0;border-top:2px solid #3a3731;color:#F2EEE7;line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; Every call scored, 1,000 included</div><div style="font-size:25px;padding:9px 0;border-top:2px solid #3a3731;color:#F2EEE7;line-height:1.3"><span class="or" style="font-weight:700">+</span>&nbsp; Floor view, rewards, client portal</div></div>
-  </div>
-  <div style="display:flex;gap:18px;margin-top:34px;flex-wrap:wrap"><div class="chip">Setup quoted at scoping</div><div class="chip">Extra call minutes &#8377;10</div><div class="chip">Extra scored calls &#8377;5</div><div class="chip">Excludes GST</div></div>
-  <div class="mono" style="margin-top:16px;font-size:18px;color:var(--gray)">Phone numbers and telephony registration billed at actual cost.</div>
-  <div class="ft"><span>Aperture</span><span>19</span></div>
+  <div style="display:flex;gap:18px;margin-top:26px;flex-wrap:wrap"><div class="chip">Setup fee agreed first</div><div class="chip">Extra call minutes &#8377;10</div><div class="chip">Extra scored calls &#8377;5</div><div class="chip">GST extra</div></div>
+  <div class="ft"><span>Aperture</span><span>08</span></div>
 </section>
 
 <section class="s dark" style="padding:0">
   <div class="hd"><b>Aperture</b><span>Next step</span><span>aperturecm.in</span></div>
-  <div style="position:absolute;left:104px;top:190px;width:1500px">
+  <div style="position:absolute;left:104px;top:170px;width:1500px">
     <div class="ey">Next step</div>
-    <h1 style="font-size:124px;line-height:1;color:#F2EEE7">LET'S PUT<br>APERTURE<br><span class="or">TO WORK.</span></h1>
-    <p style="font-size:32px;line-height:1.4;color:#d8d2c8;margin-top:30px;width:880px">Give us a week of your enquiries. We will show what it would have replied.</p>
-    <div style="display:inline-block;background:var(--or);color:var(--ink);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:26px;letter-spacing:.12em;padding:20px 34px;margin-top:34px">TALK TO US &rarr; APERTURECM.IN</div>
+    <h1 style="font-size:112px;line-height:1;color:#F2EEE7">TRY IT ON A WEEK<br>OF <span class="or">YOUR MESSAGES.</span></h1>
+    <p style="font-size:32px;line-height:1.4;color:#d8d2c8;margin-top:30px;width:900px">Send us a week of your enquiries. We will show you what the system would have replied.</p>
+    <div style="display:flex;gap:20px;margin-top:40px"><div class="chip dk">Week 1: we set it up</div><div class="chip dk">Week 2: it goes live</div><div class="chip dk">Every month: we review</div></div>
+    <div style="display:inline-block;background:var(--or);color:var(--ink);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:26px;letter-spacing:.12em;padding:20px 34px;margin-top:40px">TALK TO US &rarr; APERTURECM.IN</div>
   </div>
-  <div style="position:absolute;right:104px;top:120px;width:480px;height:480px;background:var(--or);transform:rotate(-6deg);display:flex;align-items:center;justify-content:center"><svg style="width:390px;height:390px;transform:rotate(6deg)"><use href="#shutter"/></svg></div>
   <div style="position:absolute;right:104px;top:700px;text-align:right;font-size:28px;line-height:1.6;color:#d8d2c8"><b style="color:#fff">Atharva Singh</b> +91 99900 52074<br><b style="color:#fff">Sanidhya Shishodia</b> +91 93683 22072</div>
-  <div class="ft"><span>Aperture / Gurugram, India</span><span>20</span></div>
+  <div class="ft"><span>Aperture / Gurugram, India</span><span>09</span></div>
 </section>
 </body></html>

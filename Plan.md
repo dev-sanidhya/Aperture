@@ -512,3 +512,5 @@ separate repo: https://github.com/dev-sanidhya/CRM. Full design doc:
 - (2026-11-27, later) Pricing set by Sanidhya: Inbox 22,222, Inbox + Team 33,333, Full system 44,444 per month excl. GST. Inbox = all inbound/query channels automated into one central CRM, no voice. Team = micro-operation agent setup. Deck wording updated to match (Inbound Agent, Micro-Operation Agent). Committed locally, not pushed.
 
 - (2026-11-27, later) Cut the system deck to 10 pages in plain language: `decks/unified-system/Aperture_System_Deck_v2.pdf` (source `source/deck_v2.html`). Parts named Inbox, Team, Calls. Slides: cover, problem, three parts, inbox chat, one list, team, calls, results, price, next step. v1 (21 pages) kept for reference. Prices 22,222 / 33,333 / 44,444. Not pushed (public repo).
+
+- (2026-11-27, later) Renamed the system deck to `decks/unified-system/Aperture_Proposal.pdf` (source `source/deck.html`) and deleted the old 21 page v1. Not pushed.

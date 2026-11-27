@@ -1,6 +1,6 @@
 # Aperture System: pricing notes (internal, not for clients)
 
-Deck: `Aperture_System_Deck_v1.pdf`, source in `source/deck.html`. Pricing is on page 9 of the v2 deck (slide 19 of v1).
+Deck: `Aperture_Proposal.pdf`, source in `source/deck.html`. Pricing is on page 9 of the deck.
 
 ## Proposed monthly prices (excl. GST)
 | Plan | Price | Includes |
@@ -35,7 +35,7 @@ Measured vs guessed: only "about 650 Workers AI neurons per enquiry" is measured
 - Both the Instagram agent and the team assistant must run on a paid API key before a real launch. The Plan notes say the Claude Code OAuth token is in use for testing and is against Anthropic's terms in client production.
 - Scoring cost scales with call volume, not seats. A 10 seat floor can make 10,000 calls a month, so a call-centre client needs a per-call quote, not the flat Full system price.
 - Cloudflare free neurons (10,000 a day per account) do not cover production. Budget a paid plan or another provider.
-- Client names and figures in slides 14 to 16 need each client's OK before the deck goes out.
+- Client names and figures in page 8 need each client's OK before the deck goes out.
 
 ## Note (2026-11-27)
 Prices set by Sanidhya: 22,222 / 33,333 / 44,444. Full system margin is now the thinnest, and it carries the usage risk, so watch call minutes and scored calls closely.
